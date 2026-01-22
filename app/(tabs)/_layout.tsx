@@ -1,16 +1,58 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { isLiquidGlassAvailable } from 'expo-glass-effect';
+import { Tabs } from 'expo-router';
 import { Icon, Label, NativeTabs, VectorIcon } from 'expo-router/unstable-native-tabs';
 import { Platform } from 'react-native';
 
 import { colors } from '@/lib/colors';
 
+const isGlassEnabled = isLiquidGlassAvailable();
+
 export default function TabLayout() {
+  // Fallback to JavaScript Tabs if liquid glass is not available
+  if (!isGlassEnabled) {
+    return (
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarActiveTintColor: colors.gold,
+          tabBarInactiveTintColor: colors.mutedForeground,
+          tabBarStyle: {
+            backgroundColor: colors.background,
+            borderTopColor: colors.border,
+            paddingTop: 8,
+          },
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Solo',
+            tabBarIcon: ({ color }) => <FontAwesome name="bolt" size={24} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="multiplayer"
+          options={{
+            title: 'Multi',
+            tabBarIcon: ({ color }) => <FontAwesome name="users" size={24} color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="lanegap"
+          options={{
+            title: 'LaneGap',
+            tabBarIcon: ({ color }) => <FontAwesome name="book" size={24} color={color} />,
+          }}
+        />
+      </Tabs>
+    );
+  }
+
+  // NativeTabs with liquid glass effect
   return (
-    <NativeTabs
-      backgroundColor={colors.background}
-      blurEffect="none"
-      iconColor={{ selected: colors.gold, default: colors.mutedForeground }}
-    >
+    <NativeTabs tintColor={colors.gold}>
       <NativeTabs.Trigger name="index">
         <Label>Solo</Label>
         {Platform.select({

@@ -37,6 +37,36 @@
 
 ---
 
+### Git Workflow
+
+1. Create feature branch from `main`
+2. Commit with descriptive messages
+3. Test locally before pushing
+4. Submit PR with description of changes
+
+### Commit Message Convention
+
+**Format**: `<gitmoji> <type>(<scope>): <description>`
+
+**Rules**:
+
+- ✅ Use gitmoji in **text format** (`:art:` `:recycle:` `:sparkles:` etc.), NOT emoji unicode (🎨 ♻️ ✨)
+- ✅ Max 72 characters for the title
+- ✅ **NO body** (no line breaks, title only)
+- ✅ Use imperative mood ("add", "fix", "refactor", not "added", "fixed")
+- ✅ Lowercase after colon
+
+**Examples**:
+
+```bash
+:recycle: refactor(game): migrate to timestamp-based timers
+:sparkles: feat(socket): add connection status indicator
+:bug: fix(timer): prevent reset on user join
+:art: style(ui): apply kebab-case naming convention
+:memo: docs: update AGENTS.md with Phase 3.5 changes
+:zap: perf(game): optimize components with React.memo
+```
+
 ## Project Structure
 
 ```

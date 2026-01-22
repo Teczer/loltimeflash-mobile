@@ -1,7 +1,6 @@
-import { memo } from 'react';
-import { Pressable, Text, View, type PressableProps } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { Platform } from 'react-native';
+import { memo, useState } from 'react';
+import { Platform, Pressable, Text, type PressableProps } from 'react-native';
 
 import { cn } from '@/lib/utils';
 
@@ -9,7 +8,7 @@ type TButtonVariant = 'default' | 'outline' | 'ghost' | 'destructive';
 type TButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
 interface IButtonProps extends Omit<PressableProps, 'children'> {
-  children?: React.ReactNode;
+  children: string;
   variant?: TButtonVariant;
   size?: TButtonSize;
   className?: string;
@@ -17,18 +16,42 @@ interface IButtonProps extends Omit<PressableProps, 'children'> {
   icon?: React.ReactNode;
 }
 
-const variantStyles: Record<TButtonVariant, string> = {
-  default: 'bg-primary',
-  outline: 'border border-border bg-transparent',
-  ghost: 'bg-transparent',
-  destructive: 'bg-destructive',
+const variantStyles: Record<TButtonVariant, { normal: string; pressed: string }> = {
+  default: {
+    normal: 'bg-primary',
+    pressed: 'bg-primary/80',
+  },
+  outline: {
+    normal: 'border border-input bg-background',
+    pressed: 'bg-white border-white',
+  },
+  ghost: {
+    normal: 'bg-transparent',
+    pressed: 'bg-white/10',
+  },
+  destructive: {
+    normal: 'bg-destructive',
+    pressed: 'bg-destructive/80',
+  },
 };
 
-const variantTextStyles: Record<TButtonVariant, string> = {
-  default: 'text-background',
-  outline: 'text-foreground',
-  ghost: 'text-foreground',
-  destructive: 'text-foreground',
+const textStyles: Record<TButtonVariant, { normal: string; pressed: string }> = {
+  default: {
+    normal: 'text-background',
+    pressed: 'text-background',
+  },
+  outline: {
+    normal: 'text-foreground',
+    pressed: 'text-background',
+  },
+  ghost: {
+    normal: 'text-foreground',
+    pressed: 'text-foreground',
+  },
+  destructive: {
+    normal: 'text-foreground',
+    pressed: 'text-foreground',
+  },
 };
 
 const sizeStyles: Record<TButtonSize, string> = {
@@ -58,6 +81,8 @@ const ButtonComponent = (props: IButtonProps) => {
     ...rest
   } = props;
 
+  const [isPressed, setIsPressed] = useState(false);
+
   const handlePress = (e: any) => {
     if (Platform.OS === 'ios') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -65,38 +90,40 @@ const ButtonComponent = (props: IButtonProps) => {
     onPress?.(e);
   };
 
+  const currentVariantStyle = isPressed
+    ? variantStyles[variant].pressed
+    : variantStyles[variant].normal;
+
+  const currentTextStyle = isPressed
+    ? textStyles[variant].pressed
+    : textStyles[variant].normal;
+
   return (
     <Pressable
       className={cn(
-        'items-center justify-center rounded-lg',
-        variantStyles[variant],
+        'flex-row items-center justify-center gap-2 rounded-lg',
         sizeStyles[size],
+        currentVariantStyle,
         disabled && 'opacity-50',
         className
       )}
       onPress={handlePress}
+      onPressIn={() => setIsPressed(true)}
+      onPressOut={() => setIsPressed(false)}
       disabled={disabled}
       {...rest}
     >
-      {({ pressed }) => (
-        <View className={cn('flex-row items-center gap-2', pressed && 'opacity-70')}>
-          {icon}
-          {typeof children === 'string' ? (
-            <Text
-              className={cn(
-                'font-semibold',
-                variantTextStyles[variant],
-                sizeTextStyles[size],
-                textClassName
-              )}
-            >
-              {children}
-            </Text>
-          ) : (
-            children
-          )}
-        </View>
-      )}
+      {icon}
+      <Text
+        className={cn(
+          'font-sans-bold text-center',
+          sizeTextStyles[size],
+          currentTextStyle,
+          textClassName
+        )}
+      >
+        {children}
+      </Text>
     </Pressable>
   );
 };

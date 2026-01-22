@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import { useRouter } from 'expo-router';
 import { Image, Linking, Platform, Pressable, Text, View } from 'react-native';
 
@@ -6,6 +7,11 @@ import { BackgroundImage } from '@/components/background-image.component';
 import { StyledSafeAreaView } from '@/components/styled';
 import { Button, GlassButton, TitleText } from '@/components/ui';
 import { colors } from '@/lib/colors';
+
+const IS_NATIVE_TABS = isLiquidGlassAvailable();
+const FOOTER_PADDING = IS_NATIVE_TABS
+  ? Platform.OS === 'ios' ? 100 : 72  // NativeTabs: larger padding
+  : 24;  // JavaScript Tabs: minimal padding
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -45,22 +51,21 @@ export default function HomeScreen() {
           <View className="w-full">
             <Button
               variant="outline"
+              size="lg"
               onPress={handleStartGame}
-              className="w-full py-4"
+              className="w-full"
             >
-              <View className="flex-row items-center gap-2">
-                <Ionicons name="flash" size={20} color={colors.foreground} />
-                <Text className="font-sans-bold text-lg text-foreground">
-                  Start Game
-                </Text>
-              </View>
+              Solo Lobby
             </Button>
           </View>
         </View>
 
         {/* Footer */}
-        <View className="flex-row items-center justify-center gap-1 pb-24">
-          <Text className="text-xs text-muted-foreground">Made with ❤️ by</Text>
+        <View
+          className="flex-row items-center justify-center gap-1"
+          style={{ paddingBottom: FOOTER_PADDING }}
+        >
+          <Text className="text-xs font-sans-bold text-foreground">Made with ❤️ by</Text>
           <Pressable onPress={() => Linking.openURL('https://github.com/Teczer')}>
             <Text className="font-sans-bold text-xs text-foreground">@Teczer_</Text>
           </Pressable>
