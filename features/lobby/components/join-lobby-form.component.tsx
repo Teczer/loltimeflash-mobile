@@ -1,58 +1,67 @@
-import { memo, useState } from 'react';
-import { View, Text } from 'react-native';
-import { useRouter } from 'expo-router';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { memo } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { Text, View } from 'react-native';
 
 import { Button, Input } from '@/components/ui';
 import { LOBBY_CODE_LENGTH } from '@/features/game/constants/game.constants';
 import { colors } from '@/lib/colors';
 
+import { joinLobbySchema, type TJoinLobbyFormData } from '../schemas';
+
 const JoinLobbyFormComponent = () => {
   const router = useRouter();
-  const [lobbyCode, setLobbyCode] = useState('');
-  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = () => {
-    if (lobbyCode.length === LOBBY_CODE_LENGTH) {
-      router.push(`/game/${lobbyCode}`);
-    } else {
-      setError(`Code must be ${LOBBY_CODE_LENGTH} characters (${lobbyCode.length} entered)`);
-    }
-  };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TJoinLobbyFormData>({
+    resolver: zodResolver(joinLobbySchema),
+    defaultValues: {
+      lobbyCode: '',
+    },
+  });
 
-  const handleChange = (value: string) => {
-    setLobbyCode(value);
-    if (error) setError(null);
+  const onSubmit = (data: TJoinLobbyFormData) => {
+    router.push(`/game/${data.lobbyCode}`);
   };
 
   return (
     <View className="w-full items-center gap-6">
-      <Text className="text-xl font-semibold text-foreground">
-        Join a Lobby
-      </Text>
+      <Text className="font-sans-bold text-xl text-foreground">Join a Lobby</Text>
 
       <View className="w-full flex-row items-center gap-2">
         <View className="flex-1">
-          <Input
-            placeholder="Enter lobby code"
-            value={lobbyCode}
-            onChangeText={handleChange}
-            autoCapitalize="none"
-            autoCorrect={false}
-            maxLength={LOBBY_CODE_LENGTH}
-            className="text-center font-mono"
+          <Controller
+            control={control}
+            name="lobbyCode"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                placeholder="Enter lobby code"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                autoCapitalize="none"
+                autoCorrect={false}
+                maxLength={LOBBY_CODE_LENGTH}
+                className="text-center font-mono"
+              />
+            )}
           />
         </View>
         <Button
           variant="outline"
           size="icon"
-          onPress={handleSubmit}
+          onPress={handleSubmit(onSubmit)}
           icon={<Ionicons name="arrow-forward" size={18} color={colors.foreground} />}
         />
       </View>
 
-      {error && (
-        <Text className="text-sm text-destructive">{error}</Text>
+      {errors.lobbyCode && (
+        <Text className="text-sm text-destructive">{errors.lobbyCode.message}</Text>
       )}
     </View>
   );

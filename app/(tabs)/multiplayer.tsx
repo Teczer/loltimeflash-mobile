@@ -4,7 +4,7 @@ import { Platform, View } from 'react-native';
 
 import { BackgroundImage } from '@/components/background-image.component';
 import { StyledSafeAreaView } from '@/components/styled';
-import { GlassButton, TitleText } from '@/components/ui';
+import { GlassButton } from '@/components/ui';
 import { CreateLobbyForm, JoinLobbyForm } from '@/features/lobby/components';
 import { colors } from '@/lib/colors';
 
@@ -28,9 +28,7 @@ export default function MultiplayerScreen() {
 
         {/* Content */}
         <View className="flex-1 items-center justify-center gap-8">
-          <TitleText size="lg">
-            Multiplayer
-          </TitleText>
+ 
 
           <CreateLobbyForm />
 

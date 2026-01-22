@@ -1,11 +1,14 @@
-import { memo, useState } from 'react';
-import { View, Text, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { memo, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { Alert, Text, View } from 'react-native';
 
 import { Button, Input } from '@/components/ui';
-import { generateLobbyCode } from '@/lib/utils';
 import { colors } from '@/lib/colors';
+import { generateLobbyCode } from '@/lib/utils';
+
+import { type TCreateLobbyFormData } from '../schemas';
 
 // Dynamically import expo-clipboard
 let Clipboard: typeof import('expo-clipboard') | null = null;
@@ -17,12 +20,19 @@ try {
 
 const CreateLobbyFormComponent = () => {
   const router = useRouter();
-  const [lobbyCode, setLobbyCode] = useState<string>('');
   const [copied, setCopied] = useState(false);
+
+  const { control, setValue, watch } = useForm<TCreateLobbyFormData>({
+    defaultValues: {
+      lobbyCode: '',
+    },
+  });
+
+  const lobbyCode = watch('lobbyCode');
 
   const handleCreateLobby = () => {
     const code = generateLobbyCode(10);
-    setLobbyCode(code);
+    setValue('lobbyCode', code);
   };
 
   const handleCopyCode = async () => {
@@ -38,14 +48,14 @@ const CreateLobbyFormComponent = () => {
   };
 
   const handleJoinLobby = () => {
-    router.push(`/game/${lobbyCode}`);
+    if (lobbyCode) {
+      router.push(`/game/${lobbyCode}`);
+    }
   };
 
   return (
     <View className="w-full items-center gap-6">
-      <Text className="text-xl font-semibold text-foreground">
-        Create a Lobby
-      </Text>
+      <Text className="font-sans-bold text-xl text-foreground">Create a Lobby</Text>
 
       {!lobbyCode ? (
         <Button variant="outline" onPress={handleCreateLobby}>
@@ -57,7 +67,13 @@ const CreateLobbyFormComponent = () => {
 
           <View className="w-full flex-row items-center gap-2">
             <View className="flex-1">
-              <Input value={lobbyCode} editable={false} className="text-center font-mono" />
+              <Controller
+                control={control}
+                name="lobbyCode"
+                render={({ field: { value } }) => (
+                  <Input value={value} editable={false} className="text-center font-mono" />
+                )}
+              />
             </View>
             <Button
               variant="outline"

@@ -8,7 +8,7 @@ type TButtonVariant = 'default' | 'outline' | 'ghost' | 'destructive';
 type TButtonSize = 'default' | 'sm' | 'lg' | 'icon';
 
 interface IButtonProps extends Omit<PressableProps, 'children'> {
-  children: string;
+  children?: string;
   variant?: TButtonVariant;
   size?: TButtonSize;
   className?: string;
@@ -101,7 +101,8 @@ const ButtonComponent = (props: IButtonProps) => {
   return (
     <Pressable
       className={cn(
-        'flex-row items-center justify-center gap-2 rounded-lg',
+        'items-center justify-center rounded-lg',
+        children && icon ? 'flex-row gap-2' : '',
         sizeStyles[size],
         currentVariantStyle,
         disabled && 'opacity-50',
@@ -114,16 +115,18 @@ const ButtonComponent = (props: IButtonProps) => {
       {...rest}
     >
       {icon}
-      <Text
-        className={cn(
-          'font-sans-bold text-center',
-          sizeTextStyles[size],
-          currentTextStyle,
-          textClassName
-        )}
-      >
-        {children}
-      </Text>
+      {children && (
+        <Text
+          className={cn(
+            'font-sans-bold text-center',
+            sizeTextStyles[size],
+            currentTextStyle,
+            textClassName
+          )}
+        >
+          {children}
+        </Text>
+      )}
     </Pressable>
   );
 };

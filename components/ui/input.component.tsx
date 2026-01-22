@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { TextInput, type TextInputProps } from 'react-native';
 
-import { cn } from '@/lib/utils';
 import { colors } from '@/lib/colors';
+import { cn } from '@/lib/utils';
 
 interface IInputProps extends TextInputProps {
   className?: string;
@@ -14,7 +14,7 @@ const InputComponent = (props: IInputProps) => {
   return (
     <TextInput
       className={cn(
-        'rounded-lg border border-border bg-input px-4 py-3 text-base text-foreground',
+        'rounded-lg border border-input bg-background px-4 pb-4 pt-2 text-base text-foreground',
         className
       )}
       placeholderTextColor={colors.mutedForeground}
