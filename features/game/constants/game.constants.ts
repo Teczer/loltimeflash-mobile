@@ -74,9 +74,9 @@ export const AUDIO_VOLUME = 0.15;
 export const LOBBY_CODE_LENGTH = 10;
 
 /**
- * Item icon URLs (Cloudinary)
+ * Item icons (local assets)
  */
 export const ITEM_ICONS = {
-  cosmicInsight: 'https://res.cloudinary.com/dw3mwclgk/image/upload/v1717152630/LolTimeFlash/rune-cdr.webp',
-  lucidityBoots: 'https://res.cloudinary.com/dw3mwclgk/image/upload/v1717152629/LolTimeFlash/lucidity-boots.png',
+  cosmicInsight: require('@/assets/images/roles/rune-cdr.webp'),
+  lucidityBoots: require('@/assets/images/roles/lucidity-boots.png'),
 } as const;

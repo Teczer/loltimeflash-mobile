@@ -51,14 +51,14 @@ const RoleCardComponent = (props: IRoleCardProps) => {
       <View className="flex-row items-center gap-6">
         <ItemToggle
           itemName="Cosmic Insight"
-          iconUrl={ITEM_ICONS.cosmicInsight}
+          iconSource={ITEM_ICONS.cosmicInsight}
           isActive={data.cosmicInsight}
           onPress={onToggleRune}
         />
 
         <ItemToggle
           itemName="Lucidity Boots"
-          iconUrl={ITEM_ICONS.lucidityBoots}
+          iconSource={ITEM_ICONS.lucidityBoots}
           isActive={data.lucidityBoots}
           onPress={onToggleBoots}
         />
