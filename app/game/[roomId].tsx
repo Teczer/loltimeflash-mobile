@@ -1,14 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import { BackgroundImage } from '@/components/background-image.component';
 import { StyledSafeAreaView } from '@/components/styled';
+import { GlassButton } from '@/components/ui';
 import { RoleCard } from '@/features/game/components';
 import { LEAGUE_ROLES } from '@/features/game/constants/game.constants';
 import { GameProvider, useGameContext } from '@/features/game/contexts';
 import type { TRole } from '@/features/game/types/game.types';
 import { colors } from '@/lib/colors';
+import { useUserStore } from '@/stores/user.store';
 
 const MultiplayerGameContent = () => {
   const router = useRouter();
@@ -20,6 +22,7 @@ const MultiplayerGameContent = () => {
     toggleItem,
     adjustTimer,
     audio,
+    isConnected,
   } = useGameContext();
 
   const handleFlashPress = (role: TRole) => {
@@ -36,21 +39,27 @@ const MultiplayerGameContent = () => {
       <StyledSafeAreaView className="flex-1" edges={['top']}>
         {/* Header */}
         <View className="flex-row items-center justify-between px-4 py-2">
-          <Pressable onPress={() => router.back()} className="p-2">
-            <Ionicons name="arrow-back" size={24} color={colors.foreground} />
-          </Pressable>
+          <GlassButton onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={22} color={colors.foreground} />
+          </GlassButton>
 
-          <View className="items-center rounded-full bg-card/50 px-4 py-1">
-            <Text className="font-mono text-sm text-foreground">{roomId}</Text>
+          <View className="flex-row items-center gap-2">
+            {/* Connection indicator */}
+            <View
+              className={`h-2 w-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}
+            />
+            <View className="items-center rounded-full bg-card/50 px-4 py-1">
+              <Text className="font-mono text-sm text-foreground">{roomId}</Text>
+            </View>
           </View>
 
-          <Pressable onPress={audio.toggleVolume} className="p-2">
+          <GlassButton onPress={audio.toggleVolume}>
             <Ionicons
               name={audio.volume === 'on' ? 'volume-high' : 'volume-mute'}
-              size={24}
+              size={22}
               color={colors.foreground}
             />
-          </Pressable>
+          </GlassButton>
         </View>
 
         {/* Users in Room */}
@@ -61,6 +70,15 @@ const MultiplayerGameContent = () => {
                 <Text className="text-xs text-foreground">{user}</Text>
               </View>
             ))}
+          </View>
+        )}
+
+        {/* Connection status message */}
+        {!isConnected && (
+          <View className="mx-4 rounded-lg bg-orange-400/20 p-3">
+            <Text className="text-center text-sm text-orange-400">
+              Connecting to server...
+            </Text>
           </View>
         )}
 
@@ -94,8 +112,11 @@ const MultiplayerGameContent = () => {
 };
 
 export default function MultiplayerGameScreen() {
+  const { roomId } = useLocalSearchParams<{ roomId: string }>();
+  const username = useUserStore((state) => state.username);
+
   return (
-    <GameProvider>
+    <GameProvider roomId={roomId} username={username || 'Guest'}>
       <MultiplayerGameContent />
     </GameProvider>
   );

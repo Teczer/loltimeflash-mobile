@@ -69,71 +69,36 @@ export const useSocket = (options: IUseSocketOptions = {}): IUseSocketReturn => 
     if (!enabled) return;
 
     const socket: TTypedSocket = io(config.socketUrl, {
-      transports: ['websocket', 'polling'],
+      transports: ['polling', 'websocket'],
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
+      timeout: 10000,
+      forceNew: true,
     });
 
     socketRef.current = socket;
 
     // Connection events
     socket.on('connect', () => {
-      console.log('✅ Connected to backend:', socket.id);
       setIsConnected(true);
       setReconnectAttempts(0);
     });
 
-    socket.on('disconnect', (reason) => {
-      console.warn('❌ Disconnected from backend:', reason);
+    socket.on('disconnect', () => {
       setIsConnected(false);
     });
 
     socket.io.on('reconnect_attempt', (attempt) => {
-      console.log(`🔄 Reconnection attempt ${attempt}...`);
       setReconnectAttempts(attempt);
-    });
-
-    socket.io.on('reconnect_failed', () => {
-      console.error('❌ Reconnection failed after max attempts');
     });
 
     // Game events
     socket.on('room:state', (updatedGameState) => {
-      console.log('🔄 Room state updated:', updatedGameState);
       setGameState(updatedGameState);
     });
 
-    socket.on('game:flash', (flashData) => {
-      console.log('⚡ Flash used:', flashData);
-    });
-
-    socket.on('game:flash:cancel', (cancelData) => {
-      console.log('❌ Flash cancelled:', cancelData);
-    });
-
-    socket.on('game:toggle:item', (itemData) => {
-      console.log('🔧 Item toggled:', itemData);
-    });
-
-    socket.on('room:user:joined', (data) => {
-      console.log('👤 User joined:', data.username);
-    });
-
-    socket.on('room:user:left', (data) => {
-      console.log('👋 User left:', data.username);
-    });
-
-    socket.on('game:champion:update', (data) => {
-      console.log('🎮 Champion data updated:', data);
-    });
-
-    socket.on('error', (error) => {
-      console.error('❌ Socket error:', error);
-    });
-
     return () => {
-      console.log('🔌 Cleaning up socket connection');
       socket.disconnect();
     };
   }, [enabled]);
@@ -141,7 +106,6 @@ export const useSocket = (options: IUseSocketOptions = {}): IUseSocketReturn => 
   // Auto-join room when connected
   useEffect(() => {
     if (isConnected && roomId && username && socketRef.current) {
-      console.log(`🚪 Auto-joining room: ${roomId} as ${username}`);
       socketRef.current.emit('room:join', { roomId, username });
     }
   }, [isConnected, roomId, username]);

@@ -26,7 +26,7 @@ export const colors = {
   mutedForeground: '#A3A3A3',
   
   // Accent (gold/bronze)
-  border: '#A38566',
+  border: '#C4A15B',
   
   // Inputs
   input: '#46434D',

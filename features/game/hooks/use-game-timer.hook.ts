@@ -4,6 +4,7 @@ import type { IGameData, IRoleData } from '../types/game.types';
 interface IUseGameTimerOptions {
   gameState: IGameData;
   setGameState: React.Dispatch<React.SetStateAction<IGameData>>;
+  enabled?: boolean;
 }
 
 /**
@@ -14,9 +15,10 @@ interface IUseGameTimerOptions {
  * This prevents time drift and ensures synchronization
  */
 export const useGameTimer = (options: IUseGameTimerOptions): void => {
-  const { setGameState } = options;
+  const { setGameState, enabled = true } = options;
 
   useEffect(() => {
+    if (!enabled) return;
     const interval = setInterval(() => {
       const now = Date.now();
 
@@ -50,5 +52,5 @@ export const useGameTimer = (options: IUseGameTimerOptions): void => {
     }, 100); // Check every 100ms for smoother expiration detection
 
     return () => clearInterval(interval);
-  }, [setGameState]);
+  }, [setGameState, enabled]);
 };

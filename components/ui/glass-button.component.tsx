@@ -2,12 +2,19 @@ import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
 import { forwardRef, ReactNode } from 'react';
 import { Platform, Pressable, PressableProps, View } from 'react-native';
 
-import { colors } from '@/lib/colors';
+import { cn } from '@/lib/utils';
 
 interface IGlassButtonProps extends PressableProps {
   children: ReactNode;
   size?: number;
 }
+
+const baseStyles = 'items-center justify-center border';
+
+const glassStyles = {
+  normal: 'bg-white/15 border-white/10',
+  pressed: 'bg-white/30 border-white/20',
+};
 
 /**
  * A button with native iOS Liquid Glass effect
@@ -39,33 +46,16 @@ export const GlassButton = forwardRef<View, IGlassButtonProps>((props, ref) => {
     );
   }
 
-  // Fallback for Android and older iOS
   return (
     <Pressable ref={ref} onPress={onPress} style={style} {...pressableProps}>
-      <View
-        className="items-center justify-center"
-        style={[
-          buttonSize,
-          {
-            backgroundColor: Platform.OS === 'ios'
-              ? 'rgba(255, 255, 255, 0.15)'
-              : colors.card,
-            // iOS shadow
-            ...(Platform.OS === 'ios' && {
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.25,
-              shadowRadius: 8,
-            }),
-            // Android elevation
-            ...(Platform.OS === 'android' && {
-              elevation: 4,
-            }),
-          },
-        ]}
-      >
-        {children}
-      </View>
+      {({ pressed }) => (
+        <View
+          className={cn(baseStyles, pressed ? glassStyles.pressed : glassStyles.normal)}
+          style={buttonSize}
+        >
+          {children}
+        </View>
+      )}
     </Pressable>
   );
 });

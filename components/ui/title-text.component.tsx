@@ -39,7 +39,7 @@ export const TitleText = (props: ITitleTextProps) => {
     children,
     size = 'lg',
     variant = 'default',
-    strokeColor = 'rgba(0, 0, 0, 1)',
+    strokeColor = 'rgba(0, 0, 0, 0.9)',
     strokeWidth = 2,
     className,
     style,

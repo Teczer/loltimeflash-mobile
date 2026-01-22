@@ -1,7 +1,9 @@
 import { memo, useEffect, useState } from 'react';
-import { Pressable, Text, View, Image, ImageSourcePropType, StyleSheet } from 'react-native';
+import { Image, ImageSourcePropType, Pressable, Text, View } from 'react-native';
 
 import { cn } from '@/lib/utils';
+
+import { TitleText } from '@/components/ui';
 import { formatCooldown, getRemainingTime } from '../hooks/use-flash-cooldown.hook';
 import type { TRole } from '../types/game.types';
 
@@ -34,50 +36,35 @@ const FlashButtonComponent = (props: IFlashButtonProps) => {
     <View className="items-center gap-2">
       <Pressable
         onPress={onPress}
-        className="relative h-24 w-24 items-center justify-center"
+        className="relative size-24 items-center justify-center overflow-hidden rounded-xl"
       >
         {({ pressed }) => (
-          <View className={cn('h-full w-full', pressed && 'opacity-80')}>
+          <View className={cn('size-full', pressed && 'opacity-80')}>
             {/* Timer overlay */}
             {isOnCooldown && (
               <View className="absolute inset-0 z-20 items-center justify-center">
-                <Text style={styles.timerText}>
+                <TitleText size='md'>
                   {formatCooldown(remainingSeconds)}
-                </Text>
+                </TitleText>
               </View>
             )}
 
             {/* Icon */}
             <Image
               source={isUri ? { uri: (iconSource as { uri: string }).uri } : iconSource}
-              className="h-full w-full rounded-xl"
-              resizeMode="cover"
-              style={isOnCooldown ? styles.dimmed : undefined}
+              className={cn('size-full', isOnCooldown && 'opacity-40')}
+              resizeMode="contain"
             />
           </View>
         )}
       </Pressable>
 
-      <Text className="max-w-24 text-center text-sm font-semibold text-foreground" numberOfLines={1}>
+      <Text className="max-w-24 text-center font-sans-bold text-sm text-foreground" numberOfLines={1}>
         {summonerName || role}
       </Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  timerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-    textShadowColor: '#000',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
-  },
-  dimmed: {
-    opacity: 0.4,
-  },
-});
 
 export const FlashButton = memo(FlashButtonComponent, (prev, next) => {
   return prev.cooldown === next.cooldown && prev.iconSource === next.iconSource;

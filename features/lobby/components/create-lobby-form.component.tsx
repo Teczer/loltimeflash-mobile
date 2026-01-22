@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { memo, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Alert, Text, View } from 'react-native';
 
 import { Button, Input } from '@/components/ui';
@@ -22,13 +22,13 @@ const CreateLobbyFormComponent = () => {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
 
-  const { control, setValue, watch } = useForm<TCreateLobbyFormData>({
+  const { control, setValue } = useForm<TCreateLobbyFormData>({
     defaultValues: {
       lobbyCode: '',
     },
   });
 
-  const lobbyCode = watch('lobbyCode');
+  const lobbyCode = useWatch({ control, name: 'lobbyCode' });
 
   const handleCreateLobby = () => {
     const code = generateLobbyCode(10);

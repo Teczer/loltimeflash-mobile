@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import { BackgroundImage } from '@/components/background-image.component';
 import { StyledSafeAreaView } from '@/components/styled';
+import { GlassButton } from '@/components/ui';
 import { RoleCard } from '@/features/game/components';
 import { LEAGUE_ROLES } from '@/features/game/constants/game.constants';
 import { GameProvider, useGameContext } from '@/features/game/contexts';
@@ -35,19 +36,19 @@ const SoloGameContent = () => {
       <StyledSafeAreaView className="flex-1" edges={['top']}>
         {/* Header */}
         <View className="flex-row items-center justify-between px-4 py-2">
-          <Pressable onPress={() => router.back()} className="p-2">
-            <Ionicons name="arrow-back" size={24} color={colors.foreground} />
-          </Pressable>
+          <GlassButton onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={22} color={colors.foreground} />
+          </GlassButton>
 
-          <Text className="text-lg font-semibold text-foreground">Solo Mode</Text>
+          <Text className="font-sans-bold text-lg text-foreground">Solo Mode</Text>
 
-          <Pressable onPress={audio.toggleVolume} className="p-2">
+          <GlassButton onPress={audio.toggleVolume}>
             <Ionicons
               name={audio.volume === 'on' ? 'volume-high' : 'volume-mute'}
-              size={24}
+              size={22}
               color={colors.foreground}
             />
-          </Pressable>
+          </GlassButton>
         </View>
 
         {/* Role Grid */}

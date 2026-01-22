@@ -34,11 +34,11 @@ export default function MultiplayerScreen() {
 
           {/* Divider */}
           <View className="flex-row items-center gap-4">
-            <View className="h-px w-16 bg-border" />
+            <View className="h-px w-16 bg-[#C4A15B]" />
             <View className="rounded-full bg-white/10 px-4 py-2">
-              <Ionicons name="flash" size={20} color={colors.border} />
+              <Ionicons name="cloud" size={20} color={colors.border} />
             </View>
-            <View className="h-px w-16 bg-border" />
+            <View className="h-px w-16 bg-[#C4A15B]" />
           </View>
 
           <JoinLobbyForm />

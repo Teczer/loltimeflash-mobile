@@ -36,10 +36,10 @@ export default function HomeScreen() {
         </GlassButton>
 
         {/* Content */}
-        <View className="flex-1 flex-col items-center justify-center gap-12 px-6">
+        <View className="flex-1 flex-col items-center justify-center gap-y-8 px-6">
           {/* Header with Flash Icon */}
           <View className="flex-row items-center gap-x-4">
-            <TitleText size="lg">Welcome to LolTimeFlash!</TitleText>
+            <TitleText size="md">Welcome to LolTimeFlash!</TitleText>
             <Image
               source={require('@/assets/images/roles/flash-icon.webp')}
               className="size-12 rounded-lg rotate-6"
@@ -48,10 +48,10 @@ export default function HomeScreen() {
           </View>
 
           {/* Start Game Button */}
-          <View className="w-full">
+          <View className="w-1/2">
             <Button
               variant="outline"
-              size="lg"
+              size="default"
               onPress={handleStartGame}
               className="w-full"
             >
