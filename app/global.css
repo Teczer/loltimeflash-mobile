@@ -1,0 +1,53 @@
+@import 'tailwindcss/theme' layer(theme);
+@import 'tailwindcss/preflight' layer(base);
+@import 'tailwindcss/utilities' layer(utilities);
+@import 'uniwind';
+
+@source "../components/**/*.tsx";
+@source "../features/**/*.tsx";
+@source "./**/*.tsx";
+
+/* LolTimeFlash Single Dark Theme */
+@theme {
+  /* LolTimeFlash Dark Theme - Converted from HSL to HEX */
+  /* background: hsl(209, 87%, 6%) */
+  --color-background: #021022;
+  /* foreground: hsl(240, 6%, 94%) */
+  --color-foreground: #EEEFF0;
+  /* card: hsl(260, 4%, 14%) */
+  --color-card: #232225;
+  /* card-foreground: black */
+  --color-card-foreground: #000000;
+  /* primary: hsl(0, 0%, 98%) */
+  --color-primary: #FAFAFA;
+  --color-primary-foreground: #FAFAFA;
+  /* secondary: hsl(107, 4%, 47%) */
+  --color-secondary: #767E73;
+  --color-secondary-foreground: #FFFFFF;
+  /* muted: white */
+  --color-muted: #F5F5F5;
+  /* muted-foreground: gray */
+  --color-muted-foreground: #A3A3A3;
+  /* accent */
+  --color-accent: #FEF3F2;
+  --color-accent-foreground: #171717;
+  /* border: hsl(30, 25%, 52%) - Gold/Bronze */
+  --color-border: #A38566;
+  /* input: hsl(257, 5%, 29%) */
+  --color-input: #46434D;
+  /* ring: hsl(258, 5%, 39%) */
+  --color-ring: #5F5A67;
+  /* destructive: hsl(0, 63%, 31%) */
+  --color-destructive: #812525;
+  /* success */
+  --color-success: #22C55E;
+  /* warning */
+  --color-warning: #F59E0B;
+  /* info */
+  --color-info: #3B82F6;
+  
+  /* Gradient colors for backgrounds (optional) */
+  --color-gradient-1: #E18FFF;
+  --color-gradient-2: #A4A8FF;
+  --color-gradient-3: #232225;
+}
