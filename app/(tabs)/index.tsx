@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Image, Platform, Text, View } from 'react-native';
+import { Image, Linking, Platform, Pressable, Text, View } from 'react-native';
 
 import { BackgroundImage } from '@/components/background-image.component';
 import { StyledSafeAreaView } from '@/components/styled';
-import { Button, GlassButton } from '@/components/ui';
+import { Button, GlassButton, TitleText } from '@/components/ui';
 import { colors } from '@/lib/colors';
 
 export default function HomeScreen() {
@@ -20,7 +20,7 @@ export default function HomeScreen() {
 
   return (
     <BackgroundImage>
-      <StyledSafeAreaView className="flex-1" edges={['top']}>
+      <StyledSafeAreaView className="flex-1 px-4" edges={['top']}>
         {/* Floating Glass Settings Button */}
         <GlassButton
           onPress={handleOpenSettings}
@@ -30,26 +30,19 @@ export default function HomeScreen() {
         </GlassButton>
 
         {/* Content */}
-        <View className="flex-1 items-center justify-center px-6">
+        <View className="flex-1 flex-col items-center justify-center gap-12 px-6">
           {/* Header with Flash Icon */}
-          <View className="flex-row items-center gap-3">
-            <Text className="text-3xl font-bold text-foreground">
-              LolTimeFlash
-            </Text>
+          <View className="flex-row items-center gap-x-4">
+            <TitleText size="lg">Welcome to LolTimeFlash!</TitleText>
             <Image
               source={require('@/assets/images/roles/flash-icon.webp')}
-              className="h-14 w-14 rounded-lg"
+              className="size-12 rounded-lg rotate-6"
               resizeMode="cover"
             />
           </View>
 
-          {/* Subtitle */}
-          <Text className="mt-4 text-center text-lg text-muted-foreground">
-            Track enemy Flash cooldowns in real-time
-          </Text>
-
           {/* Start Game Button */}
-          <View className="mt-12 w-full">
+          <View className="w-full">
             <Button
               variant="outline"
               onPress={handleStartGame}
@@ -57,17 +50,20 @@ export default function HomeScreen() {
             >
               <View className="flex-row items-center gap-2">
                 <Ionicons name="flash" size={20} color={colors.foreground} />
-                <Text className="text-lg font-semibold text-foreground">Start Game</Text>
+                <Text className="font-sans-bold text-lg text-foreground">
+                  Start Game
+                </Text>
               </View>
             </Button>
           </View>
         </View>
 
         {/* Footer */}
-        <View className="pb-24">
-          <Text className="text-center text-xs text-muted-foreground">
-            LolTimeFlash is not endorsed by Riot Games
-          </Text>
+        <View className="flex-row items-center justify-center gap-1 pb-24">
+          <Text className="text-xs text-muted-foreground">Made with ❤️ by</Text>
+          <Pressable onPress={() => Linking.openURL('https://github.com/Teczer')}>
+            <Text className="font-sans-bold text-xs text-foreground">@Teczer_</Text>
+          </Pressable>
         </View>
       </StyledSafeAreaView>
     </BackgroundImage>

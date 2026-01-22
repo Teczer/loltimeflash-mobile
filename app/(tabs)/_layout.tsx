@@ -2,9 +2,15 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Icon, Label, NativeTabs, VectorIcon } from 'expo-router/unstable-native-tabs';
 import { Platform } from 'react-native';
 
+import { colors } from '@/lib/colors';
+
 export default function TabLayout() {
   return (
-    <NativeTabs minimizeBehavior="onScrollDown">
+    <NativeTabs
+      backgroundColor={colors.background}
+      blurEffect="none"
+      iconColor={{ selected: colors.gold, default: colors.mutedForeground }}
+    >
       <NativeTabs.Trigger name="index">
         <Label>Solo</Label>
         {Platform.select({

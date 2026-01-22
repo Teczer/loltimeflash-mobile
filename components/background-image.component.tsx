@@ -25,12 +25,12 @@ const BackgroundImageComponent = (props: IBackgroundImageProps) => {
       {/* Gradient overlay - mimics web's radial-gradient */}
       <LinearGradient
         colors={[
-          'rgba(12, 59, 106, 0.2)',
-          'rgba(3, 16, 30, 0.6)',
+          'rgba(12, 59, 106, 0.3)',
+          'rgba(3, 16, 30, 0.75)',
           'rgba(3, 16, 30, 0.80)',
           'rgba(3, 16, 30, 1)',
         ]}
-        locations={[0, 0.1, 0.2, 0.35]}
+        locations={[0, 0.2, 0.4, 0.7]}
         style={StyleSheet.absoluteFill}
       />
       

@@ -27,7 +27,17 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/BeaufortforLOL-Regular.otf",
+            "./assets/fonts/BeaufortforLOL-Medium.otf",
+            "./assets/fonts/BeaufortforLOL-Bold.otf",
+            "./assets/fonts/BeaufortforLOL-Heavy.otf"
+          ]
+        }
+      ],
       "expo-web-browser",
       [
         "expo-splash-screen",

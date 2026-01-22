@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { View, Text, Pressable, Alert, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 
-import { Button, Input } from '@/components/ui';
 import { BackgroundImage } from '@/components/background-image.component';
 import { StyledSafeAreaView } from '@/components/styled';
+import { Button, Input, TitleText } from '@/components/ui';
 import { BackgroundPicker } from '@/features/settings/components/background-picker.component';
-import { useUserStore, useAudioStore } from '@/stores';
 import { colors } from '@/lib/colors';
+import { useAudioStore, useUserStore } from '@/stores';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -52,15 +52,15 @@ export default function SettingsScreen() {
           <Pressable onPress={() => router.back()} className="p-2">
             <Ionicons name="arrow-back" size={24} color={colors.foreground} />
           </Pressable>
-          <Text className="ml-2 text-xl font-semibold text-foreground">
+          <TitleText size="md" className="ml-2">
             Settings
-          </Text>
+          </TitleText>
         </View>
 
         <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
           {/* Username Section */}
           <View className="mt-4 gap-4">
-            <Text className="text-lg font-semibold text-foreground">Username</Text>
+            <Text className="font-sans-bold text-lg text-foreground">Username</Text>
 
             {isEditing ? (
               <View className="gap-3">
@@ -92,7 +92,7 @@ export default function SettingsScreen() {
                 onPress={() => setIsEditing(true)}
                 className="flex-row items-center justify-between rounded-lg border border-border bg-card/50 p-4"
               >
-                <Text className="text-foreground">
+                <Text className="font-sans text-foreground">
                   {username || 'Not set'}
                 </Text>
                 <View className="flex-row gap-2">
@@ -109,7 +109,7 @@ export default function SettingsScreen() {
 
           {/* Volume Section */}
           <View className="mt-8 gap-4">
-            <Text className="text-lg font-semibold text-foreground">Audio</Text>
+            <Text className="font-sans-bold text-lg text-foreground">Audio</Text>
 
             <Pressable
               onPress={toggleVolume}
@@ -121,7 +121,7 @@ export default function SettingsScreen() {
                   size={24}
                   color={colors.foreground}
                 />
-                <Text className="text-foreground">Flash Sound</Text>
+                <Text className="font-sans text-foreground">Flash Sound</Text>
               </View>
               <View
                 className={`h-6 w-12 rounded-full p-1 ${volume === 'on' ? 'bg-success' : 'bg-input'}`}
@@ -135,16 +135,16 @@ export default function SettingsScreen() {
 
           {/* Background Section */}
           <View className="mt-8 gap-4">
-            <Text className="text-lg font-semibold text-foreground">Background</Text>
+            <Text className="font-sans-bold text-lg text-foreground">Background</Text>
             <BackgroundPicker />
           </View>
 
           {/* App Info */}
           <View className="mt-12 pb-8">
-            <Text className="text-center text-sm text-muted-foreground">
+            <Text className="font-sans text-center text-sm text-muted-foreground">
               LolTimeFlash Mobile v1.0.0
             </Text>
-            <Text className="mt-2 text-center text-xs text-muted-foreground">
+            <Text className="font-sans mt-2 text-center text-xs text-muted-foreground">
               Not endorsed by Riot Games
             </Text>
           </View>

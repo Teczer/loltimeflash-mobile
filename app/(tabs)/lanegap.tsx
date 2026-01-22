@@ -16,7 +16,7 @@ import {
 import { CHAMPIONS, type IChampion } from '@/assets/champions';
 import { BackgroundImage } from '@/components/background-image.component';
 import { StyledSafeAreaView } from '@/components/styled';
-import { GlassButton } from '@/components/ui';
+import { GlassButton, TitleText } from '@/components/ui';
 import { colors } from '@/lib/colors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -36,7 +36,7 @@ const ChampionItem = ({ champion, onPress }: IChampionItemProps) => (
       style={styles.championImage}
       resizeMode="cover"
     />
-    <Text style={styles.championName} numberOfLines={1}>
+    <Text className="font-sans-medium text-center text-foreground" style={styles.championNameSize}>
       {champion.name}
     </Text>
   </Pressable>
@@ -84,11 +84,11 @@ export default function LaneGapScreen() {
 
         {/* Header */}
         <View className="px-4 py-4">
-          <Text className="text-center text-2xl font-bold">
-            <Text style={{ color: colors.foreground }}>LANE</Text>
-            <Text style={{ color: colors.gold }}>GAP</Text>
-          </Text>
-          <Text className="mt-1 text-center text-sm text-muted-foreground">
+          <View className="flex-row items-center justify-center">
+            <TitleText size="md">LANE</TitleText>
+            <TitleText size="md" variant="gold">GAP</TitleText>
+          </View>
+          <Text className="font-sans mt-1 text-center text-sm text-muted-foreground">
             {filteredChampions.length} champions
           </Text>
         </View>
@@ -98,7 +98,7 @@ export default function LaneGapScreen() {
           <View className="flex-row items-center rounded-xl border border-border bg-card/50 px-4 py-3">
             <Ionicons name="search" size={20} color={colors.mutedForeground} />
             <TextInput
-              className="ml-3 flex-1 text-base text-foreground"
+              className="font-sans ml-3 flex-1 text-base text-foreground"
               placeholder="Search enemy champion..."
               placeholderTextColor={colors.mutedForeground}
               value={searchQuery}
@@ -128,7 +128,7 @@ export default function LaneGapScreen() {
           initialNumToRender={20}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
-              <Text className="text-muted-foreground">No champions found</Text>
+              <Text className="font-sans text-muted-foreground">No champions found</Text>
             </View>
           }
         />
@@ -154,11 +154,8 @@ const styles = StyleSheet.create({
     width: ITEM_SIZE,
     height: ITEM_SIZE,
   },
-  championName: {
+  championNameSize: {
     fontSize: 10,
-    fontWeight: '600',
-    color: colors.foreground,
-    textAlign: 'center',
     paddingVertical: 4,
     paddingHorizontal: 2,
   },

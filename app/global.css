@@ -9,6 +9,12 @@
 
 /* LolTimeFlash Single Dark Theme */
 @theme {
+  /* Font families - Beaufort (League of Legends) */
+  --font-sans: 'BeaufortforLOL-Regular';
+  --font-sans-medium: 'BeaufortforLOL-Medium';
+  --font-sans-bold: 'BeaufortforLOL-Bold';
+  --font-sans-heavy: 'BeaufortforLOL-Heavy';
+
   /* LolTimeFlash Dark Theme - Converted from HSL to HEX */
   /* background: hsl(209, 87%, 6%) */
   --color-background: #021022;
