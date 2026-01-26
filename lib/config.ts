@@ -15,12 +15,13 @@ const config = {
   /**
    * PocketBase URL (LaneGap)
    */
-  pocketbaseUrl: process.env.EXPO_PUBLIC_POCKETBASE_URL || 'http://localhost:8090',
+  pocketbaseUrl:
+    process.env.EXPO_PUBLIC_POCKETBASE_URL || 'http://localhost:8090',
 
   /**
    * Current patch version
    */
-  patchVersion: process.env.EXPO_PUBLIC_PATCH_VERSION || '16.1.1',
-};
+  patchVersion: '16.1.1',
+}
 
-export default config;
+export default config

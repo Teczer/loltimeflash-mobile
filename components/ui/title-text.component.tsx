@@ -1,13 +1,13 @@
-import { StyleSheet, Text, TextProps, View } from 'react-native';
+import { StyleSheet, Text, TextProps, View } from 'react-native'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
 interface ITitleTextProps extends TextProps {
-  children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'default' | 'gold';
-  strokeColor?: string;
-  strokeWidth?: number;
+  children: React.ReactNode
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  variant?: 'default' | 'gold'
+  strokeColor?: string
+  strokeWidth?: number
 }
 
 const sizeClasses = {
@@ -15,24 +15,24 @@ const sizeClasses = {
   md: 'text-2xl',
   lg: 'text-3xl',
   xl: 'text-4xl',
-};
+}
 
 const variantClasses = {
   default: 'text-foreground',
-  gold: 'text-border',
-};
+  gold: 'text-gold',
+}
 
 // 8 directions for stroke effect (like web's multiple shadows)
 const getStrokeOffsets = (width: number) => [
-  { x: width, y: 0 },      // right
-  { x: -width, y: 0 },     // left
-  { x: 0, y: width },      // bottom
-  { x: 0, y: -width },     // top
-  { x: width, y: width },   // bottom-right
+  { x: width, y: 0 }, // right
+  { x: -width, y: 0 }, // left
+  { x: 0, y: width }, // bottom
+  { x: 0, y: -width }, // top
+  { x: width, y: width }, // bottom-right
   { x: -width, y: -width }, // top-left
-  { x: width, y: -width },  // top-right
-  { x: -width, y: width },  // bottom-left
-];
+  { x: width, y: -width }, // top-right
+  { x: -width, y: width }, // bottom-left
+]
 
 export const TitleText = (props: ITitleTextProps) => {
   const {
@@ -44,16 +44,16 @@ export const TitleText = (props: ITitleTextProps) => {
     className,
     style,
     ...rest
-  } = props;
+  } = props
 
   const textClassName = cn(
     'font-sans-bold',
     sizeClasses[size],
     variantClasses[variant],
     className
-  );
+  )
 
-  const strokeOffsets = getStrokeOffsets(strokeWidth);
+  const strokeOffsets = getStrokeOffsets(strokeWidth)
 
   return (
     <View style={styles.container}>
@@ -76,18 +76,14 @@ export const TitleText = (props: ITitleTextProps) => {
           {children}
         </Text>
       ))}
-      
+
       {/* Main text on top */}
-      <Text
-        className={textClassName}
-        style={style}
-        {...rest}
-      >
+      <Text className={textClassName} style={style} {...rest}>
         {children}
       </Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -96,4 +92,4 @@ const styles = StyleSheet.create({
   strokeText: {
     position: 'absolute',
   },
-});
+})
