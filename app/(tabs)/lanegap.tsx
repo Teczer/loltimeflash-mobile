@@ -76,7 +76,7 @@ export default function LaneGapScreen() {
   const isSearching = searchQuery.trim().length > 0
 
   return (
-    <BackgroundImage>
+    <BackgroundImage variant="fast">
       <StyledSafeAreaView className="flex-1" edges={['top']}>
         {/* Floating Glass Settings Button */}
         <GlassButton
@@ -129,7 +129,7 @@ export default function LaneGapScreen() {
 
           {/* Enemy Champions Section Title */}
           <View className="mb-2 flex-row items-center gap-2 px-4">
-            <Ionicons name="locate" size={14} color="#ef4444" />
+            <Ionicons name="locate" size={14} color={colors.danger} />
             <Text className="font-sans-bold text-foreground/80 text-sm">
               {isSearching
                 ? `${filteredChampions.length} results`

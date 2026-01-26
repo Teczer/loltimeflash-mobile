@@ -49,10 +49,19 @@
   --color-success: #22c55e;
   /* warning */
   --color-warning: #f59e0b;
+  /* danger */
+  --color-danger: #ef4444;
   /* info */
   --color-info: #3b82f6;
-  /* gold */
+  /* gold (LoL official) */
   --color-gold: #c4a15b;
+  --color-gold-light: #eddc91;
+  /* accent-gold (alias for gold - matches web) */
+  --color-accent-gold: #c4a15b;
+  /* primary-light (matches web) */
+  --color-primary-light: #eddc91;
+  /* primary-muted (gold at 20% - matches web bg-primary-muted) */
+  --color-primary-muted: rgba(196, 161, 91, 0.2);
   /* Gradient colors for backgrounds (optional) */
   --color-gradient-1: #e18fff;
   --color-gradient-2: #a4a8ff;

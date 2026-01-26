@@ -1,38 +1,44 @@
-import { Ionicons } from '@expo/vector-icons';
-import { isLiquidGlassAvailable } from 'expo-glass-effect';
-import { useRouter } from 'expo-router';
-import { Image, Linking, Platform, Pressable, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import { isLiquidGlassAvailable } from 'expo-glass-effect'
+import { useRouter } from 'expo-router'
+import { Image, Linking, Platform, Pressable, Text, View } from 'react-native'
 
-import { BackgroundImage } from '@/components/background-image.component';
-import { StyledSafeAreaView } from '@/components/styled';
-import { Button, GlassButton, TitleText } from '@/components/ui';
-import { colors } from '@/lib/colors';
+import { BackgroundImage } from '@/components/background-image.component'
+import { StyledSafeAreaView } from '@/components/styled'
+import { Button, GlassButton, TitleText } from '@/components/ui'
+import { colors } from '@/lib/colors'
 
-const IS_NATIVE_TABS = isLiquidGlassAvailable();
+const IS_NATIVE_TABS = isLiquidGlassAvailable()
 const FOOTER_PADDING = IS_NATIVE_TABS
-  ? Platform.OS === 'ios' ? 100 : 72  // NativeTabs: larger padding
-  : 24;  // JavaScript Tabs: minimal padding
+  ? Platform.OS === 'ios'
+    ? 100
+    : 72 // NativeTabs: larger padding
+  : 24 // JavaScript Tabs: minimal padding
 
 export default function HomeScreen() {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleStartGame = () => {
-    router.push('/game/solo');
-  };
+    router.push('/game/solo')
+  }
 
   const handleOpenSettings = () => {
-    router.push('/settings');
-  };
+    router.push('/settings')
+  }
 
   return (
-    <BackgroundImage>
+    <BackgroundImage variant="default">
       <StyledSafeAreaView className="flex-1 px-4" edges={['top']}>
         {/* Floating Glass Settings Button */}
         <GlassButton
           onPress={handleOpenSettings}
           className={`absolute right-4 z-50 ${Platform.OS === 'ios' ? 'top-14' : 'top-4'}`}
         >
-          <Ionicons name="settings-outline" size={22} color={colors.foreground} />
+          <Ionicons
+            name="settings-outline"
+            size={22}
+            color={colors.foreground}
+          />
         </GlassButton>
 
         {/* Content */}
@@ -42,7 +48,7 @@ export default function HomeScreen() {
             <TitleText size="md">Welcome to LolTimeFlash!</TitleText>
             <Image
               source={require('@/assets/images/roles/flash-icon.webp')}
-              className="size-12 rounded-lg rotate-6"
+              className="size-12 rotate-6 rounded-lg"
               resizeMode="cover"
             />
           </View>
@@ -65,12 +71,18 @@ export default function HomeScreen() {
           className="flex-row items-center justify-center gap-1"
           style={{ paddingBottom: FOOTER_PADDING }}
         >
-          <Text className="text-xs font-sans-bold text-foreground">Made with ❤️ by</Text>
-          <Pressable onPress={() => Linking.openURL('https://github.com/Teczer')}>
-            <Text className="font-sans-bold text-xs text-foreground">@Teczer_</Text>
+          <Text className="font-sans-bold text-foreground text-xs">
+            Made with ❤️ by
+          </Text>
+          <Pressable
+            onPress={() => Linking.openURL('https://github.com/Teczer')}
+          >
+            <Text className="font-sans-bold text-foreground text-xs">
+              @Teczer_
+            </Text>
           </Pressable>
         </View>
       </StyledSafeAreaView>
     </BackgroundImage>
-  );
+  )
 }

@@ -1,134 +1,200 @@
-import { useMemo } from 'react';
-import { View, Text, ScrollView, Image, Pressable, StyleSheet } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useMemo } from 'react'
+import { ActivityIndicator, Image, ScrollView, Text, View } from 'react-native'
 
-import { BackgroundImage } from '@/components/background-image.component';
-import { StyledSafeAreaView } from '@/components/styled';
-import { getChampion } from '@/assets/champions';
-import { colors } from '@/lib/colors';
+import { getChampion, getChampionIcon } from '@/assets/champions'
+import { StyledSafeAreaView } from '@/components/styled'
+import { GlassButton } from '@/components/ui'
+import {
+  ChampionBackground,
+  CounterPickCard,
+  ItemSpikeItem,
+  LevelSpikeItem,
+  SectionCard,
+  TipItem,
+} from '@/features/lanegap/components'
+import { useEnemyChampion } from '@/features/lanegap/hooks'
+import { useLaneGapStore } from '@/features/lanegap/stores'
+import { colors } from '@/lib/colors'
 
 export default function ChampionDetailScreen() {
-  const router = useRouter();
-  const { championId } = useLocalSearchParams<{ championId: string }>();
-  
+  const router = useRouter()
+  const { championId } = useLocalSearchParams<{ championId: string }>()
+
+  const { data: enemyData, isLoading } = useEnemyChampion(championId || '')
+
+  const { favoriteChampions, toggleFavorite } = useLaneGapStore()
+  const isFavorite = championId ? favoriteChampions.includes(championId) : false
+
   const champion = useMemo(() => {
-    return championId ? getChampion(championId) : undefined;
-  }, [championId]);
+    return championId ? getChampion(championId) : undefined
+  }, [championId])
+
+  const championIcon = useMemo(() => {
+    return championId ? getChampionIcon(championId) : null
+  }, [championId])
 
   if (!champion) {
     return (
-      <BackgroundImage>
+      <View className="bg-background flex-1">
         <StyledSafeAreaView className="flex-1 items-center justify-center">
-          <Text className="text-foreground">Champion not found</Text>
-          <Pressable onPress={() => router.back()} className="mt-4">
-            <Text className="text-primary">Go back</Text>
-          </Pressable>
+          <Text className="text-foreground font-sans">Champion not found</Text>
+          <GlassButton onPress={() => router.back()} className="mt-4">
+            <Text className="text-foreground font-sans">Go back</Text>
+          </GlassButton>
         </StyledSafeAreaView>
-      </BackgroundImage>
-    );
+      </View>
+    )
   }
 
   return (
-    <BackgroundImage>
+    <View className="flex-1 bg-transparent">
+      {/* Champion Splash Background */}
+      <ChampionBackground championId={championId || ''} />
+
       <StyledSafeAreaView className="flex-1" edges={['top']}>
         {/* Header */}
-        <View className="flex-row items-center px-4 py-3">
-          <Pressable onPress={() => router.back()} className="p-2">
-            <Ionicons name="arrow-back" size={24} color={colors.foreground} />
-          </Pressable>
-          <Text className="ml-2 text-xl font-bold text-foreground">
-            {champion.name}
-          </Text>
+        <View className="flex-row items-center justify-between px-4 py-3">
+          <View className="flex-row items-center gap-3">
+            <GlassButton size={32} onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={16} color={colors.foreground} />
+            </GlassButton>
+
+            {championIcon && (
+              <Image
+                source={championIcon}
+                className="size-14 rounded-xl border-2 border-white/20"
+                resizeMode="cover"
+              />
+            )}
+
+            <View>
+              <Text className="font-sans-medium text-danger text-xs uppercase tracking-wider">
+                Facing Enemy
+              </Text>
+              <Text className="font-sans-bold text-foreground text-2xl uppercase">
+                {champion.name}
+              </Text>
+              {enemyData?.dateEdited && (
+                <Text className="text-muted-foreground text-xs">
+                  Updated: {enemyData.dateEdited}
+                </Text>
+              )}
+            </View>
+          </View>
+
+          {/* Favorite Button */}
+          <GlassButton
+            size={32}
+            onPress={() => championId && toggleFavorite(championId)}
+          >
+            <Ionicons
+              name={isFavorite ? 'star' : 'star-outline'}
+              size={16}
+              color={isFavorite ? colors.goldLight : colors.foreground}
+            />
+          </GlassButton>
         </View>
 
-        <ScrollView className="flex-1" contentContainerStyle={styles.scrollContent}>
-          {/* Champion Splash */}
-          <View className="mx-4 overflow-hidden rounded-xl">
-            <Image
-              source={champion.skins[0].source}
-              style={styles.splashImage}
-              resizeMode="cover"
-            />
-          </View>
-
-          {/* Coming Soon Section */}
-          <View className="mx-4 mt-6 rounded-xl border border-border bg-card/50 p-6">
-            <View className="flex-row items-center gap-3">
-              <Ionicons name="construct-outline" size={24} color={colors.primary} />
-              <Text className="text-lg font-semibold text-foreground">
-                Coming Soon
-              </Text>
-            </View>
-            <Text className="mt-3 text-muted-foreground">
-              LaneGap integration is in progress. Soon you'll be able to see:
+        {isLoading ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size="large" color={colors.gold} />
+            <Text className="text-muted-foreground mt-4 font-sans">
+              Loading data...
             </Text>
-            <View className="mt-4 gap-2">
-              <View className="flex-row items-center gap-2">
-                <Ionicons name="checkmark-circle" size={18} color={colors.success} />
-                <Text className="text-foreground">Counter picks</Text>
-              </View>
-              <View className="flex-row items-center gap-2">
-                <Ionicons name="checkmark-circle" size={18} color={colors.success} />
-                <Text className="text-foreground">Matchup tips</Text>
-              </View>
-              <View className="flex-row items-center gap-2">
-                <Ionicons name="checkmark-circle" size={18} color={colors.success} />
-                <Text className="text-foreground">Power spikes (levels & items)</Text>
-              </View>
-              <View className="flex-row items-center gap-2">
-                <Ionicons name="checkmark-circle" size={18} color={colors.success} />
-                <Text className="text-foreground">Personal notes</Text>
-              </View>
-            </View>
           </View>
-
-          {/* All Skins */}
-          <View className="mx-4 mt-6">
-            <Text className="mb-3 text-lg font-semibold text-foreground">
-              All Skins ({champion.skins.length})
-            </Text>
-            <ScrollView 
-              horizontal 
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.skinsContainer}
+        ) : (
+          <ScrollView
+            className="flex-1"
+            contentContainerClassName="px-4 pb-8 gap-4"
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Counter Picks */}
+            <SectionCard
+              title={`Best picks against ${champion.name}`}
+              icon="shield-outline"
+              iconColor={colors.success}
+              isEmpty={!enemyData?.counters?.length}
+              emptyText="Counter picks coming soon..."
             >
-              {champion.skins.map((skin) => (
-                <View key={skin.index} style={styles.skinItem}>
-                  <Image
-                    source={skin.source}
-                    style={styles.skinImage}
-                    resizeMode="cover"
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerClassName="gap-2"
+              >
+                {enemyData?.counters?.map((counter) => (
+                  <CounterPickCard
+                    key={counter.championId}
+                    championId={counter.championId}
+                    championName={counter.championId}
+                    tier={counter.tier}
+                    onPress={() =>
+                      router.push(`/lanegap/${counter.championId}`)
+                    }
                   />
-                </View>
-              ))}
-            </ScrollView>
-          </View>
-        </ScrollView>
-      </StyledSafeAreaView>
-    </BackgroundImage>
-  );
-}
+                ))}
+              </ScrollView>
+            </SectionCard>
 
-const styles = StyleSheet.create({
-  scrollContent: {
-    paddingBottom: 40,
-  },
-  splashImage: {
-    width: '100%',
-    height: 200,
-  },
-  skinsContainer: {
-    gap: 12,
-  },
-  skinItem: {
-    width: 140,
-    height: 80,
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  skinImage: {
-    width: '100%',
-    height: '100%',
-  },
-});
+            {/* Tips */}
+            <SectionCard
+              title={`How to play against ${champion.name}`}
+              icon="locate"
+              iconColor={colors.danger}
+              isEmpty={!enemyData?.tips?.length}
+              emptyText="Tips coming soon..."
+            >
+              <View className="gap-3">
+                {enemyData?.tips?.map((tip, index) => (
+                  <TipItem key={index} tip={tip} index={index} />
+                ))}
+              </View>
+            </SectionCard>
+
+            {/* Level Spikes */}
+            <SectionCard
+              title={`${champion.name} Power Spikes`}
+              icon="trending-up-outline"
+              iconColor={colors.info}
+              isEmpty={!enemyData?.levelSpikes?.length}
+              emptyText="Power spikes coming soon..."
+            >
+              <View className="gap-4">
+                {enemyData?.levelSpikes?.map((spike) => (
+                  <LevelSpikeItem key={spike.level} spike={spike} />
+                ))}
+              </View>
+            </SectionCard>
+
+            {/* Item Spikes */}
+            <SectionCard
+              title={`${champion.name} Item Spikes`}
+              icon="cube-outline"
+              iconColor={colors.goldLight}
+              isEmpty={!enemyData?.itemSpikes?.length}
+              emptyText="Item spikes coming soon..."
+            >
+              <View className="gap-4">
+                {enemyData?.itemSpikes?.map((spike) => (
+                  <ItemSpikeItem key={spike.itemId} spike={spike} />
+                ))}
+              </View>
+            </SectionCard>
+
+            {/* Notes Section - Coming Soon */}
+            <SectionCard
+              title={`My notes vs ${champion.name}`}
+              icon="document-text-outline"
+              iconColor={colors.mutedForeground}
+              isEmpty={true}
+              emptyText="Auth feature incoming soon..."
+            >
+              <View />
+            </SectionCard>
+          </ScrollView>
+        )}
+      </StyledSafeAreaView>
+    </View>
+  )
+}

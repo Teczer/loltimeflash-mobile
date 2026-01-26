@@ -43,8 +43,8 @@ const ChampionItemComponent = ({ champion, onPress }: IChampionItemProps) => {
       </View>
       <Text
         className={cn(
-          'font-sans-medium mt-1.5 text-center text-[10px]',
-          isPressed ? 'text-foreground' : 'text-foreground/60'
+          'mt-1.5 text-center text-[10px] font-medium',
+          isPressed ? 'text-white' : 'text-white/60'
         )}
         numberOfLines={1}
       >

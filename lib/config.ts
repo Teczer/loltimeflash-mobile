@@ -21,7 +21,7 @@ const config = {
   /**
    * Current patch version
    */
-  patchVersion: '16.1.1',
+  patchVersion: process.env.EXPO_PUBLIC_PATCH_VERSION || '15.1.1',
 }
 
 export default config

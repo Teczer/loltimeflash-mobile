@@ -13,10 +13,13 @@ export const colors = {
 
   // Primary (white text for flash UI)
   primary: '#FAFAFA',
+  primaryLight: '#EDDC91',
+  primaryMuted: 'rgba(196, 161, 91, 0.2)',
 
   // LaneGap gold (LoL theme)
   gold: '#C4A15B',
   goldLight: '#EDDC91',
+  accentGold: '#C4A15B',
 
   // Secondary (olive)
   secondary: '#767E73',
@@ -36,6 +39,7 @@ export const colors = {
   success: '#22C55E',
   destructive: '#812525',
   warning: '#F59E0B',
+  danger: '#EF4444',
   info: '#3B82F6',
 } as const
 
