@@ -10,6 +10,7 @@ interface ISectionCardProps {
   children: ReactNode
   emptyText?: string
   isEmpty?: boolean
+  headerRight?: ReactNode
 }
 
 /**
@@ -23,15 +24,19 @@ const SectionCardComponent = ({
   children,
   emptyText = 'Coming soon...',
   isEmpty = false,
+  headerRight,
 }: ISectionCardProps) => (
   <View className="bg-white/3 border-white/6 rounded-xl border p-4">
     {/* CardHeader */}
-    <View className="mb-3 flex-row items-center gap-2">
-      <Ionicons name={icon} size={16} color={iconColor} />
-      {/* CardTitle: text-base font-semibold text-white */}
-      <Text className="font-sans-bold text-base uppercase text-white">
-        {title}
-      </Text>
+    <View className="mb-3 flex-row items-center justify-between">
+      <View className="flex-row items-center gap-2">
+        <Ionicons name={icon} size={16} color={iconColor} />
+        {/* CardTitle: text-base font-semibold text-white */}
+        <Text className="font-sans-bold text-base uppercase text-white">
+          {title}
+        </Text>
+      </View>
+      {headerRight}
     </View>
 
     {/* CardContent */}

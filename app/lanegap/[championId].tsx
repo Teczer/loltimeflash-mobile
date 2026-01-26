@@ -12,6 +12,7 @@ import {
   ItemSpikeItem,
   LevelSpikeItem,
   SectionCard,
+  TierLegend,
   TipItem,
 } from '@/features/lanegap/components'
 import { useEnemyChampion } from '@/features/lanegap/hooks'
@@ -117,6 +118,7 @@ export default function ChampionDetailScreen() {
               iconColor={colors.success}
               isEmpty={!enemyData?.counters?.length}
               emptyText="Counter picks coming soon..."
+              headerRight={<TierLegend />}
             >
               <ScrollView
                 horizontal

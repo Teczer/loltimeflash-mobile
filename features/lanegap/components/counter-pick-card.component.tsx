@@ -30,51 +30,42 @@ const CounterPickCardComponent = ({
 
   return (
     <Pressable onPress={onPress} className="items-center">
-      {({ pressed }) => (
-        <View
-          className={cn(
-            'items-center rounded-xl border border-white/10 bg-[#191a22] p-3'
+      <View className="items-center rounded-xl border border-white/10 bg-[#191a22] px-5 py-3">
+        {/* Champion Icon with Tier Badge */}
+        <View className="relative mb-2">
+          {iconSource && (
+            <Image
+              source={iconSource}
+              className="size-12 rounded-lg"
+              resizeMode="cover"
+            />
           )}
-        >
-          {/* Champion Icon with Tier Badge */}
-          <View className="relative mb-2">
-            {iconSource && (
-              <Image
-                source={iconSource}
-                className="size-12 rounded-lg"
-                resizeMode="cover"
-              />
+
+          {/* Tier Badge */}
+          <View
+            className={cn(
+              'absolute -bottom-1.5 -right-1.5',
+              'size-7 items-center justify-center rounded-lg',
+              'border border-white/20'
             )}
-
-            {/* Tier Badge */}
-            <View
-              className={cn(
-                'absolute -bottom-1.5 -right-1.5',
-                'size-7 items-center justify-center rounded-lg',
-                'border border-white/20'
-              )}
-              style={{ backgroundColor: tierColor }}
-            >
-              <Text
-                className={cn(
-                  'font-sans-bold text-[11px]',
-                  isHighTier ? 'text-slate-800' : 'text-white'
-                )}
-              >
-                {tier}
-              </Text>
-            </View>
-          </View>
-
-          {/* Champion Name */}
-          <Text
-            className="text-center font-sans text-xs text-white/70"
-            numberOfLines={1}
+            style={{ backgroundColor: tierColor }}
           >
-            {championName}
-          </Text>
+            <Text
+              className={cn(
+                'text-[11px] font-bold',
+                isHighTier ? 'text-slate-800' : 'text-white'
+              )}
+            >
+              {tier}
+            </Text>
+          </View>
         </View>
-      )}
+
+        {/* Champion Name */}
+        <Text className="text-center text-xs text-white/70" numberOfLines={1}>
+          {championName}
+        </Text>
+      </View>
     </Pressable>
   )
 }

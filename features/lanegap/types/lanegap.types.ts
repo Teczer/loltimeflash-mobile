@@ -17,6 +17,17 @@ export const TIER_COLORS: Record<TTier, string> = {
   C: '#6B7280',
 }
 
+export const TIER_LABELS: Record<TTier, string> = {
+  'S+': 'Perfect Counter',
+  S: 'Hard Counter',
+  'A+': 'Strong Counter',
+  A: 'Counter',
+  'B+': 'Slight Advantage',
+  B: 'Skill Matchup (50/50)',
+  'B-': 'Slight Disadvantage',
+  C: 'Avoid',
+}
+
 // =============================================================================
 // Champion Data from PocketBase
 // =============================================================================
