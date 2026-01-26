@@ -62,6 +62,8 @@ const UsernameFormComponent = () => {
               autoCapitalize="none"
               autoCorrect={false}
               maxLength={MAX_USERNAME_LENGTH}
+              returnKeyType="done"
+              onSubmitEditing={handleSubmit(onSubmit)}
               className="flex-1 text-center"
             />
           )}

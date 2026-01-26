@@ -1,16 +1,17 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { Text, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
-import { AppInfo } from '@/components/app-info.component';
-import { BackgroundImage } from '@/components/background-image.component';
-import { StyledSafeAreaView } from '@/components/styled';
-import { GlassButton, TitleText } from '@/components/ui';
-import { BackgroundPicker, UsernameForm } from '@/features/settings/components';
-import { colors } from '@/lib/colors';
+import { AppInfo } from '@/components/app-info.component'
+import { BackgroundImage } from '@/components/background-image.component'
+import { StyledSafeAreaView } from '@/components/styled'
+import { GlassButton, TitleText } from '@/components/ui'
+import { BackgroundPicker, UsernameForm } from '@/features/settings/components'
+import { colors } from '@/lib/colors'
 
 export default function SettingsScreen() {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <BackgroundImage>
@@ -23,10 +24,11 @@ export default function SettingsScreen() {
           <TitleText size="md">Settings</TitleText>
         </View>
 
-        <ScrollView
+        <KeyboardAwareScrollView
           className="flex-1"
           contentContainerClassName="px-6 pb-8"
           showsVerticalScrollIndicator={false}
+          bottomOffset={50}
         >
           {/* Username Section */}
           <View className="mt-8">
@@ -35,13 +37,15 @@ export default function SettingsScreen() {
 
           {/* Background Section */}
           <View className="mt-12 gap-4">
-            <Text className="font-sans-bold text-lg text-foreground">Background</Text>
+            <Text className="font-sans-bold text-foreground text-lg">
+              Background
+            </Text>
             <BackgroundPicker />
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
         <AppInfo />
       </StyledSafeAreaView>
     </BackgroundImage>
-  );
+  )
 }

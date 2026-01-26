@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { Platform, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
 import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
@@ -17,7 +18,7 @@ export default function MultiplayerScreen() {
 
   return (
     <BackgroundImage>
-      <StyledSafeAreaView className="flex-1 px-6" edges={['top']}>
+      <StyledSafeAreaView className="flex-1" edges={['top']}>
         {/* Floating Glass Settings Button */}
         <GlassButton
           onPress={handleOpenSettings}
@@ -31,7 +32,12 @@ export default function MultiplayerScreen() {
         </GlassButton>
 
         {/* Content */}
-        <View className="flex-1 items-center justify-center gap-8">
+        <KeyboardAwareScrollView
+          className="flex-1"
+          contentContainerClassName="flex-grow items-center justify-center gap-8 px-6"
+          showsVerticalScrollIndicator={false}
+          bottomOffset={50}
+        >
           <CreateLobbyForm />
 
           {/* Divider */}
@@ -44,7 +50,7 @@ export default function MultiplayerScreen() {
           </View>
 
           <JoinLobbyForm />
-        </View>
+        </KeyboardAwareScrollView>
       </StyledSafeAreaView>
     </BackgroundImage>
   )

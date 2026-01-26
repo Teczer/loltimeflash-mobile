@@ -54,13 +54,7 @@ const SoloGameContent = () => {
         {/* Role Grid */}
         <ScrollView
           className="flex-1"
-          contentContainerStyle={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            paddingHorizontal: 8,
-            paddingBottom: 24,
-          }}
+          contentContainerClassName="flex-row flex-wrap justify-center px-2 pb-6"
         >
           {LEAGUE_ROLES.map((role) => (
             <View key={role.name} className="w-1/2 p-2">

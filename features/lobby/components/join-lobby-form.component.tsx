@@ -47,6 +47,8 @@ const JoinLobbyFormComponent = () => {
                 autoCapitalize="none"
                 autoCorrect={false}
                 maxLength={LOBBY_CODE_LENGTH}
+                returnKeyType="join"
+                onSubmitEditing={handleSubmit(onSubmit)}
                 className="text-center font-mono"
               />
             )}

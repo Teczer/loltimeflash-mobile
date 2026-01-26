@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { FlatList, Modal, Pressable, Text, View } from 'react-native'
+import { FlatList, Keyboard, Modal, Pressable, Text, View } from 'react-native'
 
 import { CHAMPIONS, type IChampion } from '@/assets/champions'
 import { Button, Input } from '@/components/ui'
@@ -84,6 +84,8 @@ const BackgroundPickerModalComponent = ({
             autoCapitalize="none"
             autoCorrect={false}
             clearable
+            returnKeyType="search"
+            onSubmitEditing={Keyboard.dismiss}
             className="flex-1"
           />
         </View>
@@ -98,6 +100,9 @@ const BackgroundPickerModalComponent = ({
           maxToRenderPerBatch={8}
           windowSize={5}
           initialNumToRender={8}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          onScrollBeginDrag={Keyboard.dismiss}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
               <Text className="text-muted-foreground font-sans">
