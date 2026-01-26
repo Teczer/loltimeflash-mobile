@@ -21,7 +21,7 @@ import { colors } from '@/lib/colors'
 export default function LaneGapScreen() {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedLane, setSelectedLane] = useState<TLane>('mid')
+  const [selectedLane, setSelectedLane] = useState<TLane>('all')
 
   const { favoriteChampions, recentChampions, addRecent } = useLaneGapStore()
 

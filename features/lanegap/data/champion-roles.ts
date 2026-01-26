@@ -6,11 +6,12 @@
 
 import { ImageSourcePropType } from 'react-native'
 
-export type TLane = 'top' | 'mid' | 'adc' | 'support'
+export type TLane = 'all' | 'top' | 'mid' | 'adc' | 'support'
 
-export const LANES: TLane[] = ['top', 'mid', 'adc', 'support']
+export const LANES: TLane[] = ['top', 'mid', 'all', 'adc', 'support']
 
 export const LANE_LABELS: Record<TLane, string> = {
+  all: 'All',
   top: 'Top',
   mid: 'Mid',
   adc: 'ADC',
@@ -19,6 +20,7 @@ export const LANE_LABELS: Record<TLane, string> = {
 
 // Using local assets for lane icons
 export const LANE_ICONS: Record<TLane, ImageSourcePropType> = {
+  all: require('@/assets/images/roles/fill-role.png'),
   top: require('@/assets/images/lanes/icon-position-top.png'),
   mid: require('@/assets/images/lanes/icon-position-middle.png'),
   adc: require('@/assets/images/lanes/icon-position-bottom.png'),
@@ -225,9 +227,11 @@ export const CHAMPION_ROLES: Record<string, TLane[]> = {
 
 /**
  * Check if a champion plays a specific lane
+ * Returns true for 'all' lane (no filter)
  * Returns false if champion not in map (won't show in lane filter)
  */
 export function championPlaysLane(championName: string, lane: TLane): boolean {
+  if (lane === 'all') return true
   const roles = CHAMPION_ROLES[championName]
   return roles ? roles.includes(lane) : false
 }
