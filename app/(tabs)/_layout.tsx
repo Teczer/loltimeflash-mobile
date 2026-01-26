@@ -1,13 +1,18 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { isLiquidGlassAvailable } from 'expo-glass-effect';
-import { Tabs } from 'expo-router';
-import { Icon, Label, NativeTabs, VectorIcon } from 'expo-router/unstable-native-tabs';
-import { Platform } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { isLiquidGlassAvailable } from 'expo-glass-effect'
+import { Tabs } from 'expo-router'
+import {
+  Icon,
+  Label,
+  NativeTabs,
+  VectorIcon,
+} from 'expo-router/unstable-native-tabs'
+import { Platform } from 'react-native'
 
-import { colors } from '@/lib/colors';
+import { colors } from '@/lib/colors'
 
-const isGlassEnabled = isLiquidGlassAvailable();
+const isGlassEnabled = isLiquidGlassAvailable()
 
 export default function TabLayout() {
   // Fallback to JavaScript Tabs if liquid glass is not available
@@ -16,11 +21,12 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: colors.gold,
+          tabBarActiveTintColor: 'white',
           tabBarInactiveTintColor: colors.mutedForeground,
           tabBarStyle: {
             backgroundColor: colors.background,
-            borderTopColor: colors.border,
+            borderTopColor: '#666666',
+            borderTopWidth: 0.2,
             paddingTop: 8,
           },
         }}
@@ -29,25 +35,31 @@ export default function TabLayout() {
           name="index"
           options={{
             title: 'Solo',
-            tabBarIcon: ({ color }) => <FontAwesome name="bolt" size={24} color={color} />,
+            tabBarIcon: ({ color }) => (
+              <FontAwesome name="user" size={24} color={color} />
+            ),
           }}
         />
         <Tabs.Screen
           name="multiplayer"
           options={{
             title: 'Multi',
-            tabBarIcon: ({ color }) => <FontAwesome name="users" size={24} color={color} />,
+            tabBarIcon: ({ color }) => (
+              <FontAwesome name="users" size={24} color={color} />
+            ),
           }}
         />
         <Tabs.Screen
           name="lanegap"
           options={{
             title: 'LaneGap',
-            tabBarIcon: ({ color }) => <FontAwesome name="book" size={24} color={color} />,
+            tabBarIcon: ({ color }) => (
+              <FontAwesome name="book" size={24} color={color} />
+            ),
           }}
         />
       </Tabs>
-    );
+    )
   }
 
   // NativeTabs with liquid glass effect
@@ -57,23 +69,38 @@ export default function TabLayout() {
         <Label>Solo</Label>
         {Platform.select({
           ios: <Icon sf={{ default: 'bolt', selected: 'bolt.fill' }} />,
-          android: <Icon src={<VectorIcon family={MaterialIcons} name="flash-on" />} />,
+          android: (
+            <Icon src={<VectorIcon family={MaterialIcons} name="flash-on" />} />
+          ),
         })}
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="multiplayer">
         <Label>Multi</Label>
         {Platform.select({
           ios: <Icon sf={{ default: 'person.2', selected: 'person.2.fill' }} />,
-          android: <Icon src={<VectorIcon family={MaterialIcons} name="people" />} />,
+          android: (
+            <Icon src={<VectorIcon family={MaterialIcons} name="people" />} />
+          ),
         })}
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="lanegap">
         <Label>LaneGap</Label>
         {Platform.select({
-          ios: <Icon sf={{ default: 'books.vertical', selected: 'books.vertical.fill' }} />,
-          android: <Icon src={<VectorIcon family={MaterialIcons} name="library-books" />} />,
+          ios: (
+            <Icon
+              sf={{
+                default: 'books.vertical',
+                selected: 'books.vertical.fill',
+              }}
+            />
+          ),
+          android: (
+            <Icon
+              src={<VectorIcon family={MaterialIcons} name="library-books" />}
+            />
+          ),
         })}
       </NativeTabs.Trigger>
     </NativeTabs>
-  );
+  )
 }

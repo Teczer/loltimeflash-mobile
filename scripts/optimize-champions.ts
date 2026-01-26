@@ -7,12 +7,13 @@
  * Run: bun run scripts/optimize-champions.ts
  */
 
-import { readdir, mkdir, writeFile, copyFile, stat } from 'fs/promises';
+import { readdir, mkdir, writeFile, copyFile, stat, readFile } from 'fs/promises';
 import { existsSync } from 'fs';
-import { join, basename } from 'path';
+import { join } from 'path';
 
 // Paths
 const WEB_SPLASH_DIR = join(__dirname, '../../../apps/web/public/champions/splash');
+const WEB_DATA_JSON = join(__dirname, '../../../apps/web/public/champions/data.json');
 const MOBILE_SPLASH_DIR = join(__dirname, '../assets/champions/splash');
 const INDEX_FILE = join(__dirname, '../assets/champions/index.ts');
 
@@ -26,14 +27,47 @@ try {
   console.log('   Install with: bun add -d sharp');
 }
 
+interface WebSplashArt {
+  skinName: string;
+  skinImageUrl: string;
+}
+
+interface WebChampion {
+  championName: string;
+  splashArts: WebSplashArt[];
+}
+
+interface WebData {
+  version: string;
+  lastUpdated: string;
+  champions: WebChampion[];
+}
+
 interface ChampionSkin {
   championName: string;
   skinIndex: number;
+  skinName: string;
   fileName: string;
 }
 
 async function main() {
   console.log('\n🎮 Champion Splash Art Optimization Script\n');
+
+  // Read web data.json for skin names
+  const dataJsonContent = await readFile(WEB_DATA_JSON, 'utf-8');
+  const webData: WebData = JSON.parse(dataJsonContent);
+  
+  // Build skin name lookup
+  const skinNameMap = new Map<string, string>();
+  for (const champ of webData.champions) {
+    for (const splash of champ.splashArts) {
+      // Extract filename from URL: /champions/splash/Aatrox_0.webp -> Aatrox_0.webp
+      const fileName = splash.skinImageUrl.split('/').pop()!;
+      skinNameMap.set(fileName, splash.skinName);
+    }
+  }
+  
+  console.log(`📖 Loaded ${skinNameMap.size} skin names from data.json\n`);
 
   // Ensure output directory exists
   if (!existsSync(MOBILE_SPLASH_DIR)) {
@@ -53,9 +87,14 @@ async function main() {
     // Parse filename: ChampionName_SkinIndex.webp
     const match = file.match(/^(.+)_(\d+)\.webp$/);
     if (match) {
+      const championName = match[1];
+      const skinIndex = parseInt(match[2], 10);
+      const skinName = skinNameMap.get(file) || (skinIndex === 0 ? championName : `Skin ${skinIndex}`);
+      
       skins.push({
-        championName: match[1],
-        skinIndex: parseInt(match[2], 10),
+        championName,
+        skinIndex,
+        skinName,
         fileName: file,
       });
     }
@@ -132,6 +171,7 @@ import { ImageSourcePropType } from 'react-native';
 
 export interface ISkin {
   index: number;
+  name: string;
   source: ImageSourcePropType;
 }
 
@@ -148,7 +188,9 @@ export interface IChampion {
     
     indexContent += `const ${champName}_SKINS: ISkin[] = [\n`;
     for (const skin of champSkins) {
-      indexContent += `  { index: ${skin.skinIndex}, source: require('./splash/${skin.fileName}') },\n`;
+      // Escape single quotes in skin names
+      const escapedName = skin.skinName.replace(/'/g, "\\'");
+      indexContent += `  { index: ${skin.skinIndex}, name: '${escapedName}', source: require('./splash/${skin.fileName}') },\n`;
     }
     indexContent += `];\n\n`;
   }
@@ -173,9 +215,19 @@ export const getBaseSkin = (name: string): ImageSourcePropType | null => {
   return champion.skins[0].source;
 };
 
-// Default background
-export const DEFAULT_CHAMPION = 'Aurora';
-export const DEFAULT_SPLASH = getBaseSkin('Aurora')!;
+// Default background - Blood Moon Diana
+export const DEFAULT_CHAMPION = 'Diana';
+export const DEFAULT_SKIN_INDEX = 11;
+
+// Get default splash
+const getDefaultSplash = (): ImageSourcePropType => {
+  const champion = getChampion(DEFAULT_CHAMPION);
+  if (!champion) return require('./splash/Diana_11.webp');
+  const skin = champion.skins.find((s) => s.index === DEFAULT_SKIN_INDEX);
+  return skin?.source || champion.skins[0].source;
+};
+
+export const DEFAULT_SPLASH = getDefaultSplash();
 `;
 
   await writeFile(INDEX_FILE, indexContent);

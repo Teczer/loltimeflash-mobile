@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { ImageSourcePropType } from 'react-native';
 
 import { mmkvStorage } from '@/lib/mmkvStorage';
-import { getChampion, DEFAULT_CHAMPION } from '@/assets/champions';
+import { getChampion, DEFAULT_CHAMPION, DEFAULT_SKIN_INDEX } from '@/assets/champions';
 
 interface IBackgroundState {
   championName: string;
@@ -17,7 +17,7 @@ interface IBackgroundActions {
 
 const DEFAULT_STATE: IBackgroundState = {
   championName: DEFAULT_CHAMPION,
-  skinIndex: 0,
+  skinIndex: DEFAULT_SKIN_INDEX,
 };
 
 export const useBackgroundStore = create<IBackgroundState & IBackgroundActions>()(
