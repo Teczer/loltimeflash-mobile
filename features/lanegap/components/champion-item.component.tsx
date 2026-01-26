@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 
 import { ITEM_SIZE } from '../constants'
 
-// Icon size is smaller to allow for padding
 const ICON_SIZE = ITEM_SIZE - 16
 
 interface IChampionItemProps {
@@ -44,7 +43,7 @@ const ChampionItemComponent = ({ champion, onPress }: IChampionItemProps) => {
       </View>
       <Text
         className={cn(
-          'mt-1.5 text-center font-sans-medium text-[10px]',
+          'font-sans-medium mt-1.5 text-center text-[10px]',
           isPressed ? 'text-foreground' : 'text-foreground/60'
         )}
         numberOfLines={1}

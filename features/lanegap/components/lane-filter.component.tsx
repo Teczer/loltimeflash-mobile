@@ -1,12 +1,13 @@
 import { memo } from 'react'
 import { Image, Pressable, View } from 'react-native'
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 
 import { colors } from '@/lib/colors'
 
 import { LANE_ICONS, LANES, type TLane } from '../data'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+const AnimatedImage = Animated.createAnimatedComponent(Image)
 
 interface ILaneFilterProps {
   selectedLane: TLane
@@ -19,36 +20,36 @@ interface ILaneButtonProps {
   onPress: () => void
 }
 
+const TIMING_CONFIG = { duration: 200 }
+
 const LaneButton = memo(({ lane, isSelected, onPress }: ILaneButtonProps) => {
-  const animatedStyle = useAnimatedStyle(() => ({
+  const containerStyle = useAnimatedStyle(() => ({
+    opacity: withTiming(isSelected ? 1 : 0.3, TIMING_CONFIG),
+  }))
+
+  const imageStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: withSpring(isSelected ? 1.2 : 1, {
-          stiffness: 300,
-          damping: 20,
-        }),
+        scale: withTiming(isSelected ? 1.15 : 0.9, TIMING_CONFIG),
       },
     ],
-    opacity: withSpring(isSelected ? 1 : 0.35, {
-      stiffness: 300,
-      damping: 20,
-    }),
   }))
 
   return (
     <AnimatedPressable
       onPress={onPress}
-      className="relative size-14 items-center justify-center"
-      style={animatedStyle}
+      className="relative items-center justify-center"
+      style={containerStyle}
     >
-      <Image
+      <AnimatedImage
         source={LANE_ICONS[lane]}
-        className="size-12"
+        className="size-14"
         resizeMode="contain"
+        style={imageStyle}
       />
       {isSelected && (
         <View
-          className="absolute -bottom-2 h-0.5 w-8 rounded-full"
+          className="absolute -bottom-2 h-0.5 w-2/3 rounded-full"
           style={{ backgroundColor: colors.gold }}
         />
       )}
@@ -62,7 +63,7 @@ const LaneFilterComponent = ({
   selectedLane,
   onSelectLane,
 }: ILaneFilterProps) => (
-  <View className="mb-6 flex-row items-center justify-center gap-4">
+  <View className="mb-2 flex-row items-center justify-center gap-2">
     {LANES.map((lane) => (
       <LaneButton
         key={lane}
