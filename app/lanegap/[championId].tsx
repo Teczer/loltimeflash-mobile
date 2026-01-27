@@ -1,7 +1,13 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { useMemo } from 'react'
-import { ActivityIndicator, Image, ScrollView, Text, View } from 'react-native'
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native'
 
 import { getChampion, getChampionIcon } from '@/assets/champions'
 import { StyledSafeAreaView } from '@/components/styled'
@@ -28,13 +34,8 @@ export default function ChampionDetailScreen() {
   const { favoriteChampions, toggleFavorite } = useLaneGapStore()
   const isFavorite = championId ? favoriteChampions.includes(championId) : false
 
-  const champion = useMemo(() => {
-    return championId ? getChampion(championId) : undefined
-  }, [championId])
-
-  const championIcon = useMemo(() => {
-    return championId ? getChampionIcon(championId) : null
-  }, [championId])
+  const champion = championId ? getChampion(championId) : undefined
+  const championIcon = championId ? getChampionIcon(championId) : null
 
   if (!champion) {
     return (
@@ -58,9 +59,12 @@ export default function ChampionDetailScreen() {
         {/* Header */}
         <View className="flex-row items-center justify-between px-4 py-3">
           <View className="flex-row items-center gap-3">
-            <GlassButton size={32} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={16} color={colors.foreground} />
-            </GlassButton>
+            <Pressable
+              onPress={() => router.back()}
+              className="size-9 items-center justify-center rounded-full transition-all active:scale-95 active:bg-white/15"
+            >
+              <Ionicons name="arrow-back" size={20} color={colors.foreground} />
+            </Pressable>
 
             {championIcon && (
               <Image
@@ -87,7 +91,7 @@ export default function ChampionDetailScreen() {
 
           {/* Favorite Button */}
           <GlassButton
-            size={32}
+            size={36}
             onPress={() => championId && toggleFavorite(championId)}
           >
             <Ionicons

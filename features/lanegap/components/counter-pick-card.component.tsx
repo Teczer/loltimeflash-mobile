@@ -1,4 +1,3 @@
-import { memo, useMemo } from 'react'
 import { Image, Pressable, Text, View } from 'react-native'
 
 import { getChampionIcon } from '@/assets/champions'
@@ -13,17 +12,13 @@ interface ICounterPickCardProps {
   onPress?: () => void
 }
 
-/**
- * Counter pick card matching web style
- * Web: rounded-xl p-3, bg-card border border-white/10
- */
-const CounterPickCardComponent = ({
+export const CounterPickCard = ({
   championId,
   championName,
   tier,
   onPress,
 }: ICounterPickCardProps) => {
-  const iconSource = useMemo(() => getChampionIcon(championId), [championId])
+  const iconSource = getChampionIcon(championId)
   const tierColor = TIER_COLORS[tier]
   const tierBase = tier.replace(/[+-]/, '')
   const isHighTier = tierBase === 'S' || tier === 'S+'
@@ -31,7 +26,6 @@ const CounterPickCardComponent = ({
   return (
     <Pressable onPress={onPress} className="items-center">
       <View className="items-center rounded-xl border border-white/10 bg-[#191a22] px-5 py-3">
-        {/* Champion Icon with Tier Badge */}
         <View className="relative mb-2">
           {iconSource && (
             <Image
@@ -41,7 +35,6 @@ const CounterPickCardComponent = ({
             />
           )}
 
-          {/* Tier Badge */}
           <View
             className={cn(
               'absolute -bottom-1.5 -right-1.5',
@@ -61,7 +54,6 @@ const CounterPickCardComponent = ({
           </View>
         </View>
 
-        {/* Champion Name */}
         <Text className="text-center text-xs text-white/70" numberOfLines={1}>
           {championName}
         </Text>
@@ -69,5 +61,3 @@ const CounterPickCardComponent = ({
     </Pressable>
   )
 }
-
-export const CounterPickCard = memo(CounterPickCardComponent)

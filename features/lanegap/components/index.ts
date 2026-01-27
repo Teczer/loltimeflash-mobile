@@ -1,4 +1,5 @@
 export { ChampionBackground } from './champion-background.component'
+export { ChampionEmptyResult } from './champion-empty-result.component'
 export { ChampionGrid } from './champion-grid.component'
 export { ChampionItem } from './champion-item.component'
 export { ChampionSearch } from './champion-search.component'

@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useState } from 'react'
 import { Image, Pressable, Text, View } from 'react-native'
 
 import { getChampionIcon, type IChampion } from '@/assets/champions'
@@ -15,11 +15,7 @@ interface IChampionItemProps {
 
 const ChampionItemComponent = ({ champion, onPress }: IChampionItemProps) => {
   const [isPressed, setIsPressed] = useState(false)
-
-  const iconSource = useMemo(
-    () => getChampionIcon(champion.name) || champion.skins[0]?.source,
-    [champion.name, champion.skins]
-  )
+  const iconSource = getChampionIcon(champion.name) || champion.skins[0]?.source
 
   return (
     <Pressable

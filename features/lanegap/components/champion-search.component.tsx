@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { Keyboard, View } from 'react-native'
 
 import { Input } from '@/components/ui'
@@ -8,7 +7,7 @@ interface IChampionSearchProps {
   onChangeText: (text: string) => void
 }
 
-const ChampionSearchComponent = ({ value, onChangeText }: IChampionSearchProps) => (
+export const ChampionSearch = ({ value, onChangeText }: IChampionSearchProps) => (
   <View className="mx-4 mb-4">
     <Input
       placeholder="Search enemy champion..."
@@ -22,5 +21,3 @@ const ChampionSearchComponent = ({ value, onChangeText }: IChampionSearchProps) 
     />
   </View>
 )
-
-export const ChampionSearch = memo(ChampionSearchComponent)

@@ -8,6 +8,7 @@ import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
 import { GlassButton } from '@/components/ui'
 import {
+  ChampionEmptyResult,
   ChampionItem,
   ChampionSearch,
   ChampionSection,
@@ -25,14 +26,11 @@ export default function LaneGapScreen() {
 
   const { favoriteChampions, recentChampions, addRecent } = useLaneGapStore()
 
-  // Filter champions by search and lane
   const filteredChampions = useMemo(() => {
     let result = CHAMPIONS
 
-    // Filter by lane
     result = result.filter((c) => championPlaysLane(c.name, selectedLane))
 
-    // Filter by search
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase()
       result = result.filter((c) => c.name.toLowerCase().includes(query))
@@ -41,7 +39,6 @@ export default function LaneGapScreen() {
     return result
   }, [searchQuery, selectedLane])
 
-  // Favorite champions filtered by lane
   const favoriteChampionsList = useMemo(() => {
     return CHAMPIONS.filter(
       (c) =>
@@ -50,7 +47,6 @@ export default function LaneGapScreen() {
     )
   }, [favoriteChampions, selectedLane])
 
-  // Recent champions filtered by lane
   const recentChampionsList = useMemo(() => {
     return recentChampions
       .map((name) => CHAMPIONS.find((c) => c.name === name))
@@ -58,7 +54,7 @@ export default function LaneGapScreen() {
         (c): c is IChampion =>
           c !== undefined && championPlaysLane(c.name, selectedLane)
       )
-      .slice(0, 5)
+      .slice(0, 4)
   }, [recentChampions, selectedLane])
 
   const handleChampionPress = useCallback(
@@ -78,7 +74,6 @@ export default function LaneGapScreen() {
   return (
     <BackgroundImage variant="fast">
       <StyledSafeAreaView className="flex-1" edges={['top']}>
-        {/* Floating Glass Settings Button */}
         <GlassButton
           onPress={handleOpenSettings}
           className={`absolute right-4 z-50 ${Platform.OS === 'ios' ? 'top-14' : 'top-4'}`}
@@ -99,15 +94,12 @@ export default function LaneGapScreen() {
           onScrollBeginDrag={Keyboard.dismiss}
         >
           <LaneGapHeader championCount={filteredChampions.length} />
-
           <ChampionSearch value={searchQuery} onChangeText={setSearchQuery} />
-
           <LaneFilter
             selectedLane={selectedLane}
             onSelectLane={setSelectedLane}
           />
 
-          {/* Favorites Section - hide when searching */}
           {!isSearching && favoriteChampionsList.length > 0 && (
             <ChampionSection
               type="favorites"
@@ -117,7 +109,6 @@ export default function LaneGapScreen() {
             />
           )}
 
-          {/* Recent Section - hide when searching */}
           {!isSearching && recentChampionsList.length > 0 && (
             <ChampionSection
               type="recent"
@@ -139,11 +130,7 @@ export default function LaneGapScreen() {
 
           {/* Champions Grid */}
           {filteredChampions.length === 0 ? (
-            <View className="items-center justify-center py-12">
-              <Text className="text-muted-foreground font-sans">
-                No champions found
-              </Text>
-            </View>
+            <ChampionEmptyResult />
           ) : (
             <View className="flex-row flex-wrap px-3">
               {filteredChampions.map((champion) => (

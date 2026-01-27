@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
-import { memo, useState } from 'react'
+import { useState } from 'react'
 import { Modal, Pressable, Text, View } from 'react-native'
 
 import { colors } from '@/lib/colors'
@@ -8,16 +8,11 @@ import { TIER_COLORS, TIER_LABELS, type TTier } from '../types'
 
 const TIERS_TO_SHOW: TTier[] = ['S+', 'S', 'A+', 'A', 'B+', 'B', 'B-', 'C']
 
-/**
- * Tier Legend component - shows explanation of each tier
- * Appears as a popup when clicking the info button
- */
-const TierLegendComponent = () => {
+export const TierLegend = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      {/* Trigger button */}
       <Pressable
         onPress={() => setIsOpen(true)}
         className="size-7 items-center justify-center rounded-full active:bg-white/10"
@@ -29,7 +24,6 @@ const TierLegendComponent = () => {
         />
       </Pressable>
 
-      {/* Modal popup */}
       <Modal
         visible={isOpen}
         transparent
@@ -44,7 +38,6 @@ const TierLegendComponent = () => {
             className="mx-6 w-[90%] rounded-xl border border-white/10 bg-[#1a1824]"
             onPress={(e) => e.stopPropagation()}
           >
-            {/* Header */}
             <View className="flex-row items-center justify-between border-b border-white/10 px-4 py-3">
               <Text className="text-base font-bold text-white">
                 Tier Legend
@@ -61,14 +54,12 @@ const TierLegendComponent = () => {
               </Pressable>
             </View>
 
-            {/* Tier list */}
             <View className="gap-1 p-3">
               {TIERS_TO_SHOW.map((tier) => (
                 <View
                   key={tier}
                   className="flex-row items-center gap-3 rounded-lg px-2 py-2"
                 >
-                  {/* Tier Badge */}
                   <View
                     className="size-8 items-center justify-center rounded-lg border border-white/20"
                     style={{ backgroundColor: TIER_COLORS[tier] }}
@@ -84,7 +75,6 @@ const TierLegendComponent = () => {
                     </Text>
                   </View>
 
-                  {/* Label */}
                   <Text className="flex-1 text-sm text-white/70">
                     {TIER_LABELS[tier]}
                   </Text>
@@ -97,5 +87,3 @@ const TierLegendComponent = () => {
     </>
   )
 }
-
-export const TierLegend = memo(TierLegendComponent)

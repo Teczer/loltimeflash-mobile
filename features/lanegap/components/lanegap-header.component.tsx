@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { Text, View } from 'react-native'
 
 import { TitleText } from '@/components/ui'
@@ -8,7 +7,7 @@ interface ILaneGapHeaderProps {
   championCount: number
 }
 
-const LaneGapHeaderComponent = ({ championCount }: ILaneGapHeaderProps) => (
+export const LaneGapHeader = ({ championCount }: ILaneGapHeaderProps) => (
   <View className="px-4 py-4">
     <View className="flex-row items-center justify-center">
       <TitleText size="xl">LANE</TitleText>
@@ -22,10 +21,8 @@ const LaneGapHeaderComponent = ({ championCount }: ILaneGapHeaderProps) => (
       </Text>
     </View>
 
-    <Text className="text-muted-foreground mt-1 text-center font-sans text-sm">
+    <Text className="text-muted-foreground mt-1 text-center text-xs">
       {championCount} champions · Patch {config.patchVersion}
     </Text>
   </View>
 )
-
-export const LaneGapHeader = memo(LaneGapHeaderComponent)
