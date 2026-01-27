@@ -4,7 +4,7 @@ import { memo, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Alert, Text, View } from 'react-native';
 
-import { Button, Input } from '@/components/ui';
+import { Button, TextInput } from '@/components/ui';
 import { colors } from '@/lib/colors';
 import { generateLobbyCode } from '@/lib/utils';
 
@@ -71,7 +71,11 @@ const CreateLobbyFormComponent = () => {
                 control={control}
                 name="lobbyCode"
                 render={({ field: { value } }) => (
-                  <Input value={value} editable={false} className="text-center font-mono" />
+                  <TextInput 
+                    value={value} 
+                    editable={false} 
+                    className="font-mono tracking-wider" 
+                  />
                 )}
               />
             </View>

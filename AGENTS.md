@@ -28,6 +28,7 @@
 | **Language** | TypeScript | 5.9 |
 | **UI Framework** | React Native | 0.81 |
 | **Styling** | Uniwind (Tailwind CSS) | 1.2.4 |
+| **Animations** | React Native Reanimated | 3.x |
 | **Navigation** | Expo Router | 6.0 |
 | **State Management** | Zustand | 5.0 |
 | **Server State** | TanStack Query | 5.90 |
@@ -37,35 +38,261 @@
 
 ---
 
-### Git Workflow
+## Coding Guidelines
 
-1. Create feature branch from `main`
-2. Commit with descriptive messages
-3. Test locally before pushing
-4. Submit PR with description of changes
+### 1. Naming Conventions
 
-### Commit Message Convention
+Les composants doivent avoir des noms **explicites et contextuels** :
 
-**Format**: `<gitmoji> <type>(<scope>): <description>`
+```tsx
+// ✅ BON - Nom explicite
+TextInput, ChampionEmptyResult, SettingsCard, ConnectionIndicator
 
-**Rules**:
-
-- ✅ Use gitmoji in **text format** (`:art:` `:recycle:` `:sparkles:` etc.), NOT emoji unicode (🎨 ♻️ ✨)
-- ✅ Max 72 characters for the title
-- ✅ **NO body** (no line breaks, title only)
-- ✅ Use imperative mood ("add", "fix", "refactor", not "added", "fixed")
-- ✅ Lowercase after colon
-
-**Examples**:
-
-```bash
-:recycle: refactor(game): migrate to timestamp-based timers
-:sparkles: feat(socket): add connection status indicator
-:bug: fix(timer): prevent reset on user join
-:art: style(ui): apply kebab-case naming convention
-:memo: docs: update AGENTS.md with Phase 3.5 changes
-:zap: perf(game): optimize components with React.memo
+// ❌ MAUVAIS - Nom générique
+Input, EmptyState, Card, Indicator
 ```
+
+Le nom doit indiquer clairement ce que fait le composant.
+
+### 2. Performance Hooks
+
+**Éviter les `memo`, `useMemo`, `useCallback` inutiles** - les utiliser uniquement quand il y a un réel bénéfice de performance :
+
+```tsx
+// ❌ ÉVITER - memo inutile sur composant simple
+export const SimpleCard = memo(({ title }: IProps) => (
+  <View><Text>{title}</Text></View>
+))
+
+// ✅ BON - Pas de memo, le composant est simple
+export const SimpleCard = ({ title }: IProps) => (
+  <View><Text>{title}</Text></View>
+)
+
+// ✅ BON - memo justifié pour liste avec beaucoup d'items
+export const HeavyListItem = memo(({ data, onPress }: IProps) => {
+  // Composant lourd avec calculs complexes
+})
+```
+
+### 3. Animations (react-native-reanimated)
+
+**Pas d'effets "bouncy"** - utiliser `withTiming` avec `Easing` au lieu de `withSpring` :
+
+```tsx
+// ❌ ÉVITER - Effet rebond
+const animatedStyle = useAnimatedStyle(() => ({
+  transform: [{ scale: withSpring(value ? 1.1 : 1) }]
+}))
+
+// ✅ BON - Transition smooth
+const animatedStyle = useAnimatedStyle(() => ({
+  transform: [{ 
+    scale: withTiming(value ? 1.1 : 1, { 
+      duration: 200, 
+      easing: Easing.out(Easing.ease) 
+    }) 
+  }]
+}))
+```
+
+Pour les indicateurs de connexion : animation pulse avec drop shadow lumineux.
+
+### 4. Styling & Tokens
+
+Utiliser `bg-white/XX` et `border-white/XX` (semi-transparent) pour les overlays :
+
+```tsx
+// ✅ BON - Semi-transparent cohérent
+<View className="bg-white/5 border border-white/10 rounded-xl" />
+
+// ❌ ÉVITER - Tokens solides pour overlays
+<View className="bg-card border-border rounded-xl" />
+```
+
+### 5. Inputs/Forms
+
+- Placeholder **aligné à gauche** (pas centré)
+- Hauteur et padding **cohérents** sur tous les inputs
+- Curseur bien centré verticalement (`textAlignVertical="center"`)
+
+### 6. Platform Handling (iOS/Android)
+
+```tsx
+// Gérer les SafeArea sur Android
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+const insets = useSafeAreaInsets()
+
+// Modal avec presentationStyle conditionnel
+<Modal
+  presentationStyle={Platform.OS === 'ios' ? 'pageSheet' : 'fullScreen'}
+  // Sur Android, ajouter paddingTop: insets.top
+/>
+```
+
+### 7. Architecture Composants
+
+Créer des **composants réutilisables avec variants** :
+
+```tsx
+// Supporter leftElement/rightElement pour contenu personnalisable
+interface ISettingsCardProps {
+  icon?: keyof typeof Ionicons.glyphMap
+  leftElement?: ReactNode  // Alternative au icon
+  title: string
+  subtitle?: string
+  variant?: 'gold' | 'info' | 'success' | 'muted'
+  rightElement?: ReactNode
+  onPress?: () => void
+}
+```
+
+**Splitter** les gros fichiers en composants séparés et réutilisables.
+
+---
+
+## Uniwind - Guide Complet
+
+### Règle d'Or
+
+> **Uniwind transforme les composants React Native natifs pour supporter `className`.**
+> Les composants third-party nécessitent `withUniwind`.
+
+### Composants React Native Natifs
+
+`className` fonctionne directement - **PAS besoin de wrapper** :
+
+```tsx
+import { View, Text, Pressable, ScrollView, Image, TextInput } from 'react-native'
+
+// ✅ Utilisation directe
+<View className="flex-1 items-center justify-center bg-background">
+  <Text className="text-lg font-bold text-foreground">Hello</Text>
+  <Pressable className="px-4 py-2 rounded-lg bg-gold active:bg-gold/80">
+    <Text className="text-white">Press me</Text>
+  </Pressable>
+</View>
+```
+
+### Composants Third-Party
+
+Utiliser `withUniwind` pour les bibliothèques externes :
+
+```tsx
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { withUniwind } from 'uniwind'
+
+// Créer les wrappers (dans components/styled.ts)
+export const StyledSafeAreaView = withUniwind(SafeAreaView)
+export const StyledGestureHandlerRootView = withUniwind(GestureHandlerRootView)
+
+// Usage
+<StyledSafeAreaView className="flex-1 bg-background" edges={['top']}>
+  {children}
+</StyledSafeAreaView>
+```
+
+### Composants Reanimated
+
+`Animated.View` ne supporte **PAS** `className` directement :
+
+```tsx
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+
+// ❌ NE FONCTIONNE PAS
+<Animated.View className="bg-gold" style={animatedStyle} />
+
+// ✅ Option 1: Style inline pour tout
+<Animated.View style={[styles.container, animatedStyle]} />
+
+// ✅ Option 2: Wrapper avec withUniwind (si besoin de className)
+import { withUniwind } from 'uniwind'
+const StyledAnimatedView = withUniwind(Animated.View)
+
+<StyledAnimatedView className="rounded-xl bg-white/10" style={animatedStyle} />
+```
+
+### Gradients Built-in
+
+**PRÉFÉRER** les gradients Uniwind à `expo-linear-gradient` :
+
+```tsx
+// ✅ BON - Gradient Uniwind natif
+<View className="bg-gradient-to-b from-transparent to-background" />
+
+// Avec via pour point intermédiaire
+<View className="bg-gradient-to-b from-transparent via-background/90 to-background" />
+
+// Contrôler la position du via avec pourcentage
+<View className="bg-gradient-to-b from-transparent via-background/90 via-[30%] to-background" />
+
+// Directions disponibles
+<View className="bg-gradient-to-t ..." />  // bottom to top
+<View className="bg-gradient-to-r ..." />  // left to right
+<View className="bg-gradient-to-br ..." /> // top-left to bottom-right
+```
+
+### expo-linear-gradient (si nécessaire)
+
+Si `expo-linear-gradient` est vraiment nécessaire, utiliser `useCSSVariable` :
+
+```tsx
+import { LinearGradient } from 'expo-linear-gradient'
+import { useCSSVariable } from 'uniwind'
+
+// ❌ NE FONCTIONNE PAS - withUniwind ne mappe pas les arrays
+const StyledLinearGradient = withUniwind(LinearGradient)
+
+// ✅ BON - useCSSVariable pour les couleurs
+export const GradientComponent = () => {
+  const startColor = useCSSVariable('--color-transparent')
+  const midColor = useCSSVariable('--color-background')
+  const endColor = useCSSVariable('--color-background')
+
+  return (
+    <LinearGradient
+      colors={[startColor, midColor, endColor]}
+      locations={[0, 0.3, 1]}
+      style={StyleSheet.absoluteFill}
+    />
+  )
+}
+```
+
+### Variables CSS Dynamiques
+
+Pour accéder aux couleurs du thème dynamiquement :
+
+```tsx
+import { useCSSVariable } from 'uniwind'
+
+const MyComponent = () => {
+  const gold = useCSSVariable('--color-gold')
+  const background = useCSSVariable('--color-background')
+  const foreground = useCSSVariable('--color-foreground')
+
+  return (
+    <SomeThirdPartyComponent 
+      color={gold}
+      backgroundColor={background}
+    />
+  )
+}
+```
+
+### Récapitulatif Uniwind
+
+| Composant | Méthode |
+|-----------|---------|
+| `View`, `Text`, `Pressable`, `ScrollView`, `Image` | `className` direct |
+| `SafeAreaView`, `GestureHandlerRootView` | `withUniwind` wrapper |
+| `Animated.View`, `Animated.Text` | `withUniwind` ou `style={}` |
+| `LinearGradient` | `useCSSVariable` pour les couleurs |
+| Gradients simples | Classes built-in `bg-gradient-to-*` |
+
+---
 
 ## Project Structure
 
@@ -99,30 +326,37 @@ loltimeflash-mobile/
 │
 ├── components/
 │   ├── ui/                       # Reusable UI components
+│   │   ├── bottom-sheet.component.tsx
 │   │   ├── button.component.tsx
-│   │   ├── input.component.tsx
 │   │   ├── glass-button.component.tsx
+│   │   ├── text-input.component.tsx
+│   │   ├── title-text.component.tsx
 │   │   └── index.ts
 │   ├── background-image.component.tsx
 │   └── styled.ts                 # withUniwind wrappers
 │
 ├── features/
 │   ├── game/
-│   │   ├── components/           # Game-specific components
+│   │   ├── components/           # RoleCard, FlashButton, TimerControls, etc.
+│   │   ├── contexts/             # GameContext, GameProvider
 │   │   ├── hooks/                # useFlashCooldown, useAudio, etc.
+│   │   ├── constants/
 │   │   └── types/
+│   ├── lanegap/
+│   │   └── components/           # ChampionItem, CounterPickCard, etc.
 │   ├── lobby/
 │   │   └── components/           # CreateLobbyForm, JoinLobbyForm
 │   └── settings/
-│       └── components/           # BackgroundPicker, etc.
+│       └── components/           # BackgroundPicker, UsernameForm, etc.
 │
 ├── hooks/                        # Global hooks
 │   └── use-socket.hook.ts
 │
 ├── lib/
-│   ├── colors.ts                 # Theme colors
+│   ├── colors.ts                 # Theme colors (exported JS object)
 │   ├── config.ts                 # App configuration
-│   └── utils.ts                  # Utility functions
+│   ├── constants.ts              # App constants
+│   └── utils.ts                  # Utility functions (cn, generateLobbyCode)
 │
 ├── providers/
 │   └── query-provider.tsx        # TanStack Query provider
@@ -165,31 +399,7 @@ Stack (Root)
 
 ---
 
-## Styling Guidelines
-
-### Uniwind (Tailwind for React Native)
-
-**Composants React Native natifs** → `className` direct :
-```tsx
-import { View, Text } from 'react-native';
-
-<View className="flex-1 items-center justify-center bg-background">
-  <Text className="text-lg font-bold text-foreground">Hello</Text>
-</View>
-```
-
-**Composants third-party** → `withUniwind` wrapper :
-```tsx
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { withUniwind } from 'uniwind';
-
-export const StyledSafeAreaView = withUniwind(SafeAreaView);
-
-// Usage
-<StyledSafeAreaView className="flex-1" edges={['top']}>
-```
-
-### Theme Colors
+## Theme Colors
 
 Définies dans `lib/colors.ts` et `app/global.css` :
 
@@ -199,8 +409,13 @@ Définies dans `lib/colors.ts` et `app/global.css` :
 | `foreground` | `#EEEFF0` | Primary text |
 | `card` | `#232225` | Card backgrounds |
 | `border` | `#A38566` | Borders (gold/bronze) |
-| `gold` | `#C4A15B` | LaneGap accent |
+| `gold` | `#C4A15B` | Primary accent |
+| `goldLight` | `#D4AF37` | Light gold accent |
 | `mutedForeground` | `#A3A3A3` | Secondary text |
+| `success` | `#22C55E` | Success states |
+| `warning` | `#F59E0B` | Warning states |
+| `info` | `#3B82F6` | Info states |
+| `danger` | `#EF4444` | Error/danger states |
 
 ---
 
@@ -216,8 +431,9 @@ interface IUserState {
   clearUsername: () => void;
 }
 
-// Usage
+// Usage - sélection granulaire pour éviter re-renders
 const username = useUserStore((s) => s.username);
+const setUsername = useUserStore((s) => s.setUsername);
 ```
 
 **Stores disponibles :**
@@ -276,21 +492,10 @@ Tous les splash arts sont **bundlés statiquement** (pas de CDN) pour des perfor
 - `splash/*.webp` - 2000+ images optimisées (114 MB total)
 - `index.ts` - Auto-generated mappings
 
-### Optimization Script
-
-```bash
-bun run optimize:champions
-```
-
-Le script :
-1. Copie les images depuis `apps/web/public/champions/splash`
-2. Compresse avec Sharp (quality 75, max 1280x720)
-3. Génère `assets/champions/index.ts` avec tous les `require()`
-
 ### Usage
 
 ```typescript
-import { CHAMPIONS, getChampion, DEFAULT_SPLASH } from '@/assets/champions';
+import { CHAMPIONS, getChampion, getChampionIcon, DEFAULT_SPLASH } from '@/assets/champions';
 
 // Get all champions
 CHAMPIONS.map(champ => champ.name);
@@ -300,6 +505,9 @@ const aatrox = getChampion('Aatrox');
 
 // Get skin image source
 const source = aatrox?.skins[0].source;
+
+// Get champion icon
+const icon = getChampionIcon('Aatrox');
 ```
 
 ---
@@ -313,26 +521,88 @@ Pour activer l'effet Liquid Glass natif :
 2. **Xcode 26** pour compiler l'app
 3. Plugin `expo-glass-effect` dans `app.json`
 
-### GlassButton Component
+### Components avec Glass Support
 
 ```tsx
+// GlassButton - Bouton avec Liquid Glass
 import { GlassButton } from '@/components/ui';
 
 <GlassButton onPress={handlePress}>
   <Ionicons name="settings-outline" size={22} color={colors.foreground} />
 </GlassButton>
-```
 
-- iOS 26+ avec Xcode 26 → Liquid Glass natif
-- Autres → Fallback semi-transparent stylé
+// TextInput - Input avec variant glass
+import { TextInput } from '@/components/ui';
+
+<TextInput variant="glass" placeholder="Search..." clearable />
+```
 
 ### Check Availability
 
 ```typescript
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 
-const canUseGlass = isLiquidGlassAvailable();
+const canUseGlass = Platform.OS === 'ios' && isLiquidGlassAvailable();
 ```
+
+---
+
+## Git Workflow
+
+1. Create feature branch from `main`
+2. Commit with descriptive messages
+3. Test locally before pushing
+4. Submit PR with description of changes
+
+### Commit Message Convention
+
+**Format**: `<gitmoji> <type>(<scope>): <description>`
+
+**Rules**:
+
+- ✅ Use gitmoji in **text format** (`:art:` `:recycle:` `:sparkles:` etc.), NOT emoji unicode
+- ✅ Max 72 characters for the title
+- ✅ **NO body** (no line breaks, title only)
+- ✅ Use imperative mood ("add", "fix", "refactor", not "added", "fixed")
+- ✅ Lowercase after colon
+
+**Examples**:
+
+```bash
+:recycle: refactor(game): migrate to timestamp-based timers
+:sparkles: feat(socket): add connection status indicator
+:bug: fix(timer): prevent reset on user join
+:art: style(ui): apply kebab-case naming convention
+:memo: docs: update AGENTS.md
+:zap: perf(game): optimize heavy components with memo
+```
+
+**Gitmojis courants :**
+- `:sparkles:` - New feature
+- `:bug:` - Bug fix
+- `:recycle:` - Refactor
+- `:art:` - UI/Style
+- `:memo:` - Documentation
+- `:zap:` - Performance
+
+---
+
+## File Naming Conventions
+
+| Type | Convention | Example |
+|------|------------|---------|
+| Components | `kebab-case.component.tsx` | `glass-button.component.tsx` |
+| Hooks | `use-name.hook.ts` | `use-socket.hook.ts` |
+| Stores | `name.store.ts` | `user.store.ts` |
+| Types | `name.types.ts` | `game.types.ts` |
+| Utils | `name.util.ts` | `format.util.ts` |
+| Constants | `name.constants.ts` | `game.constants.ts` |
+
+### TypeScript Conventions
+
+- **Interfaces** : `I` prefix (`IUserData`, `IGameState`)
+- **Types** : `T` prefix (`TRole`, `TSocketEvent`)
+- **Props** : `IComponentNameProps`
 
 ---
 
@@ -406,45 +676,6 @@ EXPO_PUBLIC_PATCH_VERSION=15.1.1
 
 ---
 
-## File Naming Conventions
-
-| Type | Convention | Example |
-|------|------------|---------|
-| Components | `kebab-case.component.tsx` | `glass-button.component.tsx` |
-| Hooks | `use-name.hook.ts` | `use-socket.hook.ts` |
-| Stores | `name.store.ts` | `user.store.ts` |
-| Types | `name.types.ts` | `game.types.ts` |
-| Utils | `name.util.ts` | `format.util.ts` |
-
-### TypeScript Conventions
-
-- **Interfaces** : `I` prefix (`IUserData`, `IGameState`)
-- **Types** : `T` prefix (`TRole`, `TSocketEvent`)
-- **Props** : `IComponentNameProps`
-
----
-
-## Commit Convention
-
-**Format :** `<gitmoji> <type>(<scope>): <description>`
-
-```bash
-:sparkles: feat(game): add timer calibration
-:bug: fix(socket): handle reconnection
-:recycle: refactor(ui): migrate to GlassButton
-:art: style(tabs): update NativeTabs icons
-```
-
-**Gitmojis courants :**
-- `:sparkles:` - New feature
-- `:bug:` - Bug fix
-- `:recycle:` - Refactor
-- `:art:` - UI/Style
-- `:memo:` - Documentation
-- `:zap:` - Performance
-
----
-
 ## Related Projects
 
 - **LolTimeFlash Web** : https://github.com/Teczer/LolTimeFlash
@@ -458,12 +689,13 @@ EXPO_PUBLIC_PATCH_VERSION=15.1.1
 - [Expo Router](https://docs.expo.dev/router/introduction/)
 - [Native Tabs](https://docs.expo.dev/router/advanced/native-tabs/)
 - [expo-glass-effect](https://docs.expo.dev/versions/latest/sdk/glass-effect/)
-- [Uniwind](https://docs.uniwind.dev/)
+- [Uniwind Documentation](https://docs.uniwind.dev/)
+- [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)
 - [Zustand](https://docs.pmnd.rs/zustand)
 - [TanStack Query](https://tanstack.com/query)
 
 ---
 
-**Last Updated:** January 22, 2026
-**Version:** 1.0.0
+**Last Updated:** January 27, 2026
+**Version:** 1.1.0
 **Status:** ✅ Production Ready

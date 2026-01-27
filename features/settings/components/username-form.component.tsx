@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Text, View } from 'react-native';
 
-import { Button, Input, TitleText } from '@/components/ui';
+import { Button, TextInput, TitleText } from '@/components/ui';
 import { colors } from '@/lib/colors';
 import { MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH } from '@/lib/constants';
 import { useUserStore } from '@/stores';
@@ -54,7 +54,7 @@ const UsernameFormComponent = () => {
           control={control}
           name="username"
           render={({ field: { onChange, onBlur, value } }) => (
-            <Input
+            <TextInput
               placeholder="Enter your username"
               value={value}
               onChangeText={onChange}
@@ -64,7 +64,7 @@ const UsernameFormComponent = () => {
               maxLength={MAX_USERNAME_LENGTH}
               returnKeyType="done"
               onSubmitEditing={handleSubmit(onSubmit)}
-              className="flex-1 text-center"
+              className="flex-1"
             />
           )}
         />

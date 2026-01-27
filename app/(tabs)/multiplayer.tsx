@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
 import { BackgroundImage } from '@/components/background-image.component'
@@ -22,7 +22,7 @@ export default function MultiplayerScreen() {
         {/* Floating Glass Settings Button */}
         <GlassButton
           onPress={handleOpenSettings}
-          className={`absolute right-4 z-50 ${Platform.OS === 'ios' ? 'top-14' : 'top-4'}`}
+          className="absolute right-4 top-14 z-50"
         >
           <Ionicons
             name="settings-outline"

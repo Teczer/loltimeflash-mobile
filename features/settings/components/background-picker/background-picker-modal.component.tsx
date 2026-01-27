@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { FlatList, Keyboard, Modal, Pressable, Text, View } from 'react-native'
+import { FlatList, Keyboard, Modal, Platform, Pressable, Text, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { CHAMPIONS, type IChampion } from '@/assets/champions'
-import { Button, Input } from '@/components/ui'
+import { Button, TextInput } from '@/components/ui'
 import { colors } from '@/lib/colors'
 
 import { ChampionRow } from './champion-row.component'
@@ -18,6 +19,7 @@ const BackgroundPickerModalComponent = ({
   onReset,
 }: IBackgroundPickerModalProps) => {
   const [searchQuery, setSearchQuery] = useState('')
+  const insets = useSafeAreaInsets()
 
   const filteredChampions = useMemo(() => {
     if (!searchQuery) return CHAMPIONS
@@ -56,17 +58,23 @@ const BackgroundPickerModalComponent = ({
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      presentationStyle={Platform.OS === 'ios' ? 'pageSheet' : 'fullScreen'}
       onRequestClose={onClose}
     >
-      <View className="bg-background flex-1">
+      <View 
+        className="flex-1 bg-background"
+        style={{ paddingTop: Platform.OS === 'android' ? insets.top : 0 }}
+      >
         {/* Header */}
-        <View className="border-border flex-row items-center justify-between border-b px-4 py-4">
-          <Pressable onPress={onClose} className="p-2">
+        <View className="flex-row items-center justify-between border-b border-border px-4 py-4">
+          <Pressable 
+            onPress={onClose} 
+            className="size-10 items-center justify-center rounded-full active:bg-white/10"
+          >
             <Ionicons name="close" size={24} color={colors.foreground} />
           </Pressable>
 
-          <Text className="font-sans-bold text-foreground text-lg">
+          <Text className="font-sans-bold text-lg text-foreground">
             Choose Background
           </Text>
 
@@ -76,8 +84,8 @@ const BackgroundPickerModalComponent = ({
         </View>
 
         {/* Search */}
-        <View className="flex-row items-center gap-2 px-4 py-3">
-          <Input
+        <View className="px-4 py-3">
+          <TextInput
             placeholder="Search champions..."
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -86,7 +94,6 @@ const BackgroundPickerModalComponent = ({
             clearable
             returnKeyType="search"
             onSubmitEditing={Keyboard.dismiss}
-            className="flex-1"
           />
         </View>
 
@@ -103,9 +110,10 @@ const BackgroundPickerModalComponent = ({
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           onScrollBeginDrag={Keyboard.dismiss}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
-              <Text className="text-muted-foreground font-sans">
+              <Text className="font-sans text-muted-foreground">
                 No champions found
               </Text>
             </View>

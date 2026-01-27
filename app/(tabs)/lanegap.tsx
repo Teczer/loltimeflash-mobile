@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { useCallback, useMemo, useState } from 'react'
-import { Keyboard, Platform, ScrollView, Text, View } from 'react-native'
+import { Keyboard, ScrollView, Text, View } from 'react-native'
 
 import { CHAMPIONS, type IChampion } from '@/assets/champions'
 import { BackgroundImage } from '@/components/background-image.component'
@@ -76,7 +76,7 @@ export default function LaneGapScreen() {
       <StyledSafeAreaView className="flex-1" edges={['top']}>
         <GlassButton
           onPress={handleOpenSettings}
-          className={`absolute right-4 z-50 ${Platform.OS === 'ios' ? 'top-14' : 'top-4'}`}
+          className="absolute right-4 top-14 z-50"
         >
           <Ionicons
             name="settings-outline"
@@ -87,7 +87,7 @@ export default function LaneGapScreen() {
 
         <ScrollView
           className="flex-1"
-          contentContainerClassName="pb-24"
+          contentContainerClassName="pb-2"
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"

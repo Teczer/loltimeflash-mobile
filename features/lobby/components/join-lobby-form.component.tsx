@@ -5,7 +5,7 @@ import { memo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Text, View } from 'react-native';
 
-import { Button, Input } from '@/components/ui';
+import { Button, TextInput } from '@/components/ui';
 import { LOBBY_CODE_LENGTH } from '@/features/game/constants/game.constants';
 import { colors } from '@/lib/colors';
 
@@ -39,7 +39,7 @@ const JoinLobbyFormComponent = () => {
             control={control}
             name="lobbyCode"
             render={({ field: { onChange, onBlur, value } }) => (
-              <Input
+              <TextInput
                 placeholder="Enter lobby code"
                 value={value}
                 onChangeText={onChange}
@@ -49,7 +49,7 @@ const JoinLobbyFormComponent = () => {
                 maxLength={LOBBY_CODE_LENGTH}
                 returnKeyType="join"
                 onSubmitEditing={handleSubmit(onSubmit)}
-                className="text-center font-mono"
+                className="font-mono tracking-wider"
               />
             )}
           />
