@@ -1,16 +1,16 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { useCallback, useMemo, useState } from 'react'
-import { Keyboard, ScrollView, Text, View } from 'react-native'
+import { useCallback, useMemo } from 'react'
+import { Controller, useForm, useWatch } from 'react-hook-form'
+import { Keyboard, Text, View } from 'react-native'
 
 import { CHAMPIONS, type IChampion } from '@/assets/champions'
 import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
-import { GlassButton } from '@/components/ui'
+import { GlassButton, TextInput } from '@/components/ui'
 import {
   ChampionEmptyResult,
   ChampionItem,
-  ChampionSearch,
   ChampionSection,
   LaneFilter,
   LaneGapHeader,
@@ -18,11 +18,25 @@ import {
 import { championPlaysLane, type TLane } from '@/features/lanegap/data'
 import { useLaneGapStore } from '@/features/lanegap/stores'
 import { colors } from '@/lib/colors'
+import { ScrollView } from 'react-native'
+
+interface ILaneGapFormData {
+  search: string
+  lane: TLane
+}
 
 export default function LaneGapScreen() {
   const router = useRouter()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedLane, setSelectedLane] = useState<TLane>('all')
+
+  const { control, setValue } = useForm<ILaneGapFormData>({
+    defaultValues: {
+      search: '',
+      lane: 'all',
+    },
+  })
+
+  const searchQuery = useWatch({ control, name: 'search' })
+  const selectedLane = useWatch({ control, name: 'lane' })
 
   const { favoriteChampions, recentChampions, addRecent } = useLaneGapStore()
 
@@ -84,20 +98,37 @@ export default function LaneGapScreen() {
             color={colors.foreground}
           />
         </GlassButton>
-
         <ScrollView
           className="flex-1"
-          contentContainerClassName="pb-2"
+          contentContainerClassName="gap-4 px-4 pb-4"
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           onScrollBeginDrag={Keyboard.dismiss}
         >
           <LaneGapHeader championCount={filteredChampions.length} />
-          <ChampionSearch value={searchQuery} onChangeText={setSearchQuery} />
+
+          <Controller
+            control={control}
+            name="search"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Search enemy champion..."
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                autoCapitalize="none"
+                autoCorrect={false}
+                clearable
+                returnKeyType="search"
+                onSubmitEditing={Keyboard.dismiss}
+              />
+            )}
+          />
+
           <LaneFilter
             selectedLane={selectedLane}
-            onSelectLane={setSelectedLane}
+            onSelectLane={(lane) => setValue('lane', lane)}
           />
 
           {!isSearching && favoriteChampionsList.length > 0 && (
@@ -118,30 +149,31 @@ export default function LaneGapScreen() {
             />
           )}
 
-          {/* Enemy Champions Section Title */}
-          <View className="mb-2 flex-row items-center gap-2 px-4">
-            <Ionicons name="locate" size={14} color={colors.danger} />
-            <Text className="font-sans-bold text-foreground/80 text-sm">
-              {isSearching
-                ? `${filteredChampions.length} results`
-                : 'Enemy Champions'}
-            </Text>
-          </View>
-
-          {/* Champions Grid */}
-          {filteredChampions.length === 0 ? (
-            <ChampionEmptyResult />
-          ) : (
-            <View className="flex-row flex-wrap px-3">
-              {filteredChampions.map((champion) => (
-                <ChampionItem
-                  key={champion.name}
-                  champion={champion}
-                  onPress={() => handleChampionPress(champion)}
-                />
-              ))}
+          {/* Enemy Champions Section */}
+          <View className="gap-2">
+            <View className="flex-row items-center gap-2">
+              <Ionicons name="locate" size={14} color={colors.danger} />
+              <Text className="font-sans-bold text-foreground/80 text-sm">
+                {isSearching
+                  ? `${filteredChampions.length} results`
+                  : 'Enemy Champions'}
+              </Text>
             </View>
-          )}
+
+            {filteredChampions.length === 0 ? (
+              <ChampionEmptyResult />
+            ) : (
+              <View className="flex-row flex-wrap justify-start">
+                {filteredChampions.map((champion) => (
+                  <ChampionItem
+                    key={champion.name}
+                    champion={champion}
+                    onPress={() => handleChampionPress(champion)}
+                  />
+                ))}
+              </View>
+            )}
+          </View>
         </ScrollView>
       </StyledSafeAreaView>
     </BackgroundImage>
