@@ -63,7 +63,7 @@ const LaneFilterComponent = ({
   selectedLane,
   onSelectLane,
 }: ILaneFilterProps) => (
-  <View className="mb-2 flex-row items-center justify-center gap-2">
+  <View className="flex-row items-center justify-center gap-2">
     {LANES.map((lane) => (
       <LaneButton
         key={lane}

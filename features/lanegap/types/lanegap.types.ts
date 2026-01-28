@@ -11,9 +11,9 @@ export const TIER_COLORS: Record<TTier, string> = {
   S: '#DC2626',
   'A+': '#EA580C',
   A: '#F97316',
-  'B+': '#CA8A04',
-  B: '#EAB308',
-  'B-': '#A3A31A',
+  'B+': '#1D4ED8',
+  B: '#2563EB',
+  'B-': '#3B82F6',
   C: '#6B7280',
 }
 

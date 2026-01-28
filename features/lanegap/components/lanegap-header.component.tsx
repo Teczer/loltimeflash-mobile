@@ -8,20 +8,17 @@ interface ILaneGapHeaderProps {
 }
 
 export const LaneGapHeader = ({ championCount }: ILaneGapHeaderProps) => (
-  <View className="px-4 py-4">
+  <View className="items-center gap-1">
     <View className="flex-row items-center justify-center">
       <TitleText size="xl">LANE</TitleText>
       <TitleText size="xl" variant="gold">
         GAP
       </TitleText>
     </View>
-    <View className="items-center justify-center">
-      <Text className="text-foreground font-sans-medium text-sm">
-        Select the enemy champion you are facing
-      </Text>
-    </View>
-
-    <Text className="text-muted-foreground mt-1 text-center text-xs">
+    <Text className="font-sans-medium text-sm text-foreground">
+      Select the enemy champion you are facing
+    </Text>
+    <Text className="text-center text-xs text-muted-foreground">
       {championCount} champions · Patch {config.patchVersion}
     </Text>
   </View>

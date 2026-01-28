@@ -4,6 +4,7 @@ import { FlatList, Text, View } from 'react-native'
 
 import type { IChampion } from '@/assets/champions'
 import { colors } from '@/lib/colors'
+import { cn } from '@/lib/utils'
 
 import { ChampionItem } from './champion-item.component'
 
@@ -52,22 +53,24 @@ const ChampionSectionComponent = ({
   if (champions.length === 0) return null
 
   return (
-    <View className="mb-4">
-      <View className="mb-2 flex-row items-center gap-2 px-4">
+    <View className="gap-2">
+      <View className="flex-row items-center gap-2">
         <Ionicons name={config.icon as any} size={14} color={config.color} />
         <Text className="font-sans-bold text-foreground/80 text-sm">
           {config.label}
         </Text>
       </View>
-      <FlatList
-        data={champions}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        horizontal={horizontal}
-        showsHorizontalScrollIndicator={false}
-        contentContainerClassName="px-3"
-        scrollEnabled={horizontal}
-      />
+      <View className={cn(horizontal && '-mx-4')}>
+        <FlatList
+          data={champions}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          horizontal={horizontal}
+          showsHorizontalScrollIndicator={false}
+          scrollEnabled={horizontal}
+          contentContainerClassName={cn(horizontal && 'px-4')}
+        />
+      </View>
     </View>
   )
 }

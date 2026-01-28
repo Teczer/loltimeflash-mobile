@@ -79,7 +79,7 @@ export const TextInput = (props: ITextInputProps) => {
         <View className="border-input bg-background h-12 justify-center rounded-xl border">
           <RNTextInput
             className={cn(
-              'text-foreground px-4 text-base',
+              'text-foreground px-4',
               showClearButton && 'pr-10',
               !editable && 'opacity-70'
             )}
@@ -108,7 +108,7 @@ export const TextInput = (props: ITextInputProps) => {
       )}
     >
       <RNTextInput
-        className="text-foreground px-4 text-base"
+        className="text-foreground px-4"
         placeholderTextColor={colors.mutedForeground}
         cursorColor={colors.gold}
         selectionColor={colors.gold}

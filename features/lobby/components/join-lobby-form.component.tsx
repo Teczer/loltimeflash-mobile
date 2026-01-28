@@ -1,18 +1,18 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { memo } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'expo-router'
+import { memo } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { Text, View } from 'react-native'
 
-import { Button, TextInput } from '@/components/ui';
-import { LOBBY_CODE_LENGTH } from '@/features/game/constants/game.constants';
-import { colors } from '@/lib/colors';
+import { Button, TextInput } from '@/components/ui'
+import { LOBBY_CODE_LENGTH } from '@/features/game/constants/game.constants'
+import { colors } from '@/lib/colors'
 
-import { joinLobbySchema, type TJoinLobbyFormData } from '../schemas';
+import { joinLobbySchema, type TJoinLobbyFormData } from '../schemas'
 
 const JoinLobbyFormComponent = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   const {
     control,
@@ -23,15 +23,17 @@ const JoinLobbyFormComponent = () => {
     defaultValues: {
       lobbyCode: '',
     },
-  });
+  })
 
   const onSubmit = (data: TJoinLobbyFormData) => {
-    router.push(`/game/${data.lobbyCode}`);
-  };
+    router.push(`/game/${data.lobbyCode}`)
+  }
 
   return (
     <View className="w-full items-center gap-6">
-      <Text className="font-sans-bold text-xl text-foreground">Join a Lobby</Text>
+      <Text className="font-sans-bold text-foreground text-xl">
+        Join a Lobby
+      </Text>
 
       <View className="w-full flex-row items-center gap-2">
         <View className="flex-1">
@@ -58,15 +60,23 @@ const JoinLobbyFormComponent = () => {
           variant="outline"
           size="icon"
           onPress={handleSubmit(onSubmit)}
-          icon={<Ionicons name="arrow-forward" size={18} color={colors.foreground} />}
+          icon={
+            <Ionicons
+              name="arrow-forward"
+              size={18}
+              color={colors.foreground}
+            />
+          }
         />
       </View>
 
       {errors.lobbyCode && (
-        <Text className="text-sm text-destructive">{errors.lobbyCode.message}</Text>
+        <Text className="text-destructive text-sm">
+          {errors.lobbyCode.message}
+        </Text>
       )}
     </View>
-  );
-};
+  )
+}
 
-export const JoinLobbyForm = memo(JoinLobbyFormComponent);
+export const JoinLobbyForm = memo(JoinLobbyFormComponent)
