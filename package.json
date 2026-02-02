@@ -16,7 +16,8 @@
     "format:check": "bunx prettier --check .",
     "clean": "rm -rf node_modules ios/build android/build ios/Pods ios/Podfile.lock ~/Library/Developer/Xcode/DerivedData/",
     "lint": "eslint .",
-    "optimize:champions": "bun run scripts/optimize-champions.ts"
+    "optimize:champions": "bun run scripts/optimize-champions.ts",
+    "sync:items": "bun run scripts/sync-items.ts"
   },
   "jest": {
     "preset": "jest-expo"
