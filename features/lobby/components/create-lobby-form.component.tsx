@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { memo, useState } from 'react'
+import { useState } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
 import { Alert, Text, View } from 'react-native'
 
@@ -19,7 +19,7 @@ try {
   console.warn('expo-clipboard not available')
 }
 
-const CreateLobbyFormComponent = () => {
+export const CreateLobbyForm = () => {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
   const username = useUserStore((s) => s.username)
@@ -124,5 +124,3 @@ const CreateLobbyFormComponent = () => {
     </View>
   )
 }
-
-export const CreateLobbyForm = memo(CreateLobbyFormComponent)

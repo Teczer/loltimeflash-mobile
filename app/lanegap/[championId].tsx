@@ -1,19 +1,13 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import {
-  ActivityIndicator,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native'
+import { Image, Pressable, ScrollView, Text, View } from 'react-native'
 
 import { getChampion, getChampionIcon } from '@/assets/champions'
 import { StyledSafeAreaView } from '@/components/styled'
 import { GlassButton } from '@/components/ui'
 import {
   ChampionBackground,
+  ChampionDetailSkeleton,
   CounterPickCard,
   ItemSpikeItem,
   LevelSpikeItem,
@@ -103,12 +97,7 @@ export default function ChampionDetailScreen() {
         </View>
 
         {isLoading ? (
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size="large" color={colors.gold} />
-            <Text className="text-muted-foreground mt-4 font-sans">
-              Loading data...
-            </Text>
-          </View>
+          <ChampionDetailSkeleton />
         ) : (
           <ScrollView
             className="flex-1"

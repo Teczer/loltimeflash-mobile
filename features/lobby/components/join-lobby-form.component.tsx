@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
-import { memo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Text, View } from 'react-native'
 
@@ -12,7 +11,7 @@ import { useUserStore } from '@/stores'
 
 import { joinLobbySchema, type TJoinLobbyFormData } from '../schemas'
 
-const JoinLobbyFormComponent = () => {
+export const JoinLobbyForm = () => {
   const router = useRouter()
   const username = useUserStore((s) => s.username)
 
@@ -89,5 +88,3 @@ const JoinLobbyFormComponent = () => {
     </View>
   )
 }
-
-export const JoinLobbyForm = memo(JoinLobbyFormComponent)

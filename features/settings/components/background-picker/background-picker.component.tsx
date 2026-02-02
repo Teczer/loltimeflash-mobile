@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Text, View } from 'react-native'
 
 import { getChampion } from '@/assets/champions'
@@ -7,7 +7,7 @@ import { useBackgroundStore } from '@/stores/background.store'
 import { BackgroundPickerModal } from './background-picker-modal.component'
 import { BackgroundPreview } from './background-preview.component'
 
-const BackgroundPickerComponent = () => {
+export const BackgroundPicker = () => {
   const { championName, skinIndex, setBackground, reset } = useBackgroundStore()
   const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -38,5 +38,3 @@ const BackgroundPickerComponent = () => {
     </View>
   )
 }
-
-export const BackgroundPicker = memo(BackgroundPickerComponent)
