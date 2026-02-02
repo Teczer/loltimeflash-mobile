@@ -113,6 +113,7 @@ export default function ChampionDetailScreen() {
           <ScrollView
             className="flex-1"
             contentContainerClassName="px-4 pb-8 gap-4"
+            contentInsetAdjustmentBehavior="automatic"
             showsVerticalScrollIndicator={false}
           >
             {/* Counter Picks */}

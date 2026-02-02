@@ -101,6 +101,7 @@ export default function LaneGapScreen() {
         <ScrollView
           className="flex-1"
           contentContainerClassName="gap-4 px-4 pb-4"
+          contentInsetAdjustmentBehavior="automatic"
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"

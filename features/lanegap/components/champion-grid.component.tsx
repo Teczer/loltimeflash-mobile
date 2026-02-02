@@ -11,7 +11,10 @@ interface IChampionGridProps {
   onChampionPress: (champion: IChampion) => void
 }
 
-const ChampionGridComponent = ({ champions, onChampionPress }: IChampionGridProps) => {
+const ChampionGridComponent = ({
+  champions,
+  onChampionPress,
+}: IChampionGridProps) => {
   const renderItem = useCallback(
     ({ item }: { item: IChampion }) => (
       <ChampionItem champion={item} onPress={() => onChampionPress(item)} />
@@ -28,6 +31,7 @@ const ChampionGridComponent = ({ champions, onChampionPress }: IChampionGridProp
       keyExtractor={keyExtractor}
       numColumns={NUM_COLUMNS}
       contentContainerClassName="px-3 pb-24"
+      contentInsetAdjustmentBehavior="automatic"
       showsVerticalScrollIndicator={false}
       removeClippedSubviews
       maxToRenderPerBatch={20}
@@ -38,7 +42,9 @@ const ChampionGridComponent = ({ champions, onChampionPress }: IChampionGridProp
       onScrollBeginDrag={Keyboard.dismiss}
       ListEmptyComponent={
         <View className="flex-1 items-center justify-center py-20">
-          <Text className="font-sans text-muted-foreground">No champions found</Text>
+          <Text className="text-muted-foreground font-sans">
+            No champions found
+          </Text>
         </View>
       }
     />

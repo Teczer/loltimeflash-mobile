@@ -4,9 +4,7 @@ import { Image, Pressable, Text, View } from 'react-native'
 import { getChampionIcon, type IChampion } from '@/assets/champions'
 import { cn } from '@/lib/utils'
 
-import { ITEM_SIZE } from '../constants'
-
-const ICON_SIZE = ITEM_SIZE - 16
+import { useLaneGapLayout } from '../hooks'
 
 interface IChampionItemProps {
   champion: IChampion
@@ -15,6 +13,7 @@ interface IChampionItemProps {
 
 const ChampionItemComponent = ({ champion, onPress }: IChampionItemProps) => {
   const [isPressed, setIsPressed] = useState(false)
+  const { itemSize, iconSize } = useLaneGapLayout()
   const iconSource = getChampionIcon(champion.name) || champion.skins[0]?.source
 
   return (
@@ -28,12 +27,12 @@ const ChampionItemComponent = ({ champion, onPress }: IChampionItemProps) => {
           ? 'border-white/20 bg-white/10'
           : 'border-transparent bg-white/5'
       )}
-      style={{ width: ITEM_SIZE }}
+      style={{ width: itemSize }}
     >
       <View className="overflow-hidden rounded-lg">
         <Image
           source={iconSource}
-          style={{ width: ICON_SIZE, height: ICON_SIZE }}
+          style={{ width: iconSize, height: iconSize }}
           resizeMode="cover"
         />
       </View>

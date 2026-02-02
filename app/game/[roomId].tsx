@@ -103,6 +103,7 @@ const MultiplayerGameContent = () => {
         <ScrollView
           className="flex-1"
           contentContainerClassName="flex-row flex-wrap justify-center px-2 pb-6 pt-2"
+          contentInsetAdjustmentBehavior="automatic"
         >
           {LEAGUE_ROLES.map((role) => (
             <View key={role.name} className="w-1/2 p-2">

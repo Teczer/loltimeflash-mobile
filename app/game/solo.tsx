@@ -1,35 +1,29 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { ScrollView, Text, View } from 'react-native'
 
-import { BackgroundImage } from '@/components/background-image.component';
-import { StyledSafeAreaView } from '@/components/styled';
-import { GlassButton } from '@/components/ui';
-import { RoleCard } from '@/features/game/components';
-import { LEAGUE_ROLES } from '@/features/game/constants/game.constants';
-import { GameProvider, useGameContext } from '@/features/game/contexts';
-import type { TRole } from '@/features/game/types/game.types';
-import { colors } from '@/lib/colors';
+import { BackgroundImage } from '@/components/background-image.component'
+import { StyledSafeAreaView } from '@/components/styled'
+import { GlassButton } from '@/components/ui'
+import { RoleCard } from '@/features/game/components'
+import { LEAGUE_ROLES } from '@/features/game/constants/game.constants'
+import { GameProvider, useGameContext } from '@/features/game/contexts'
+import type { TRole } from '@/features/game/types/game.types'
+import { colors } from '@/lib/colors'
 
 const SoloGameContent = () => {
-  const router = useRouter();
-  const {
-    gameState,
-    useFlash,
-    cancelFlash,
-    toggleItem,
-    adjustTimer,
-    audio,
-  } = useGameContext();
+  const router = useRouter()
+  const { gameState, useFlash, cancelFlash, toggleItem, adjustTimer, audio } =
+    useGameContext()
 
   const handleFlashPress = (role: TRole) => {
-    const roleData = gameState.roles[role];
+    const roleData = gameState.roles[role]
     if (typeof roleData.isFlashed === 'number') {
-      cancelFlash(role);
+      cancelFlash(role)
     } else {
-      useFlash(role);
+      useFlash(role)
     }
-  };
+  }
 
   return (
     <BackgroundImage>
@@ -40,7 +34,9 @@ const SoloGameContent = () => {
             <Ionicons name="arrow-back" size={22} color={colors.foreground} />
           </GlassButton>
 
-          <Text className="font-sans-bold text-lg text-foreground">Solo Mode</Text>
+          <Text className="font-sans-bold text-foreground text-lg">
+            Solo Mode
+          </Text>
 
           <GlassButton onPress={audio.toggleVolume}>
             <Ionicons
@@ -55,6 +51,7 @@ const SoloGameContent = () => {
         <ScrollView
           className="flex-1"
           contentContainerClassName="flex-row flex-wrap justify-center px-2 pb-6"
+          contentInsetAdjustmentBehavior="automatic"
         >
           {LEAGUE_ROLES.map((role) => (
             <View key={role.name} className="w-1/2 p-2">
@@ -71,13 +68,13 @@ const SoloGameContent = () => {
         </ScrollView>
       </StyledSafeAreaView>
     </BackgroundImage>
-  );
-};
+  )
+}
 
 export default function SoloGameScreen() {
   return (
     <GameProvider>
       <SoloGameContent />
     </GameProvider>
-  );
+  )
 }

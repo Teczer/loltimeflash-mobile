@@ -137,7 +137,33 @@ const insets = useSafeAreaInsets()
 />
 ```
 
-### 7. Architecture Composants
+### 7. Expo Best Practices (from expo/skills)
+
+**Utiliser `useWindowDimensions` au lieu de `Dimensions.get`** :
+
+```tsx
+// ❌ ÉVITER - Valeur statique, ne se met pas à jour
+const { width } = Dimensions.get('window')
+
+// ✅ BON - Hook réactif, se met à jour sur rotation/resize
+const { width } = useWindowDimensions()
+```
+
+**Ajouter `contentInsetAdjustmentBehavior="automatic"` aux ScrollViews/FlatLists** :
+
+```tsx
+// ✅ Gestion automatique des safe area insets sur iOS
+<ScrollView contentInsetAdjustmentBehavior="automatic" />
+<FlatList contentInsetAdjustmentBehavior="automatic" />
+```
+
+**Audio** : Utiliser `expo-audio` (pas `expo-av` qui est déprécié)
+
+**Icons** : Utiliser `Ionicons` pour le cross-platform (iOS + Android). Les SF Symbols sont iOS-only.
+
+---
+
+### 8. Architecture Composants
 
 Créer des **composants réutilisables avec variants** :
 
@@ -760,5 +786,5 @@ Les skills sont **automatiquement utilisés** quand tu poses des questions liée
 ---
 
 **Last Updated:** February 2, 2026
-**Version:** 1.2.0
+**Version:** 1.2.1
 **Status:** ✅ Production Ready
