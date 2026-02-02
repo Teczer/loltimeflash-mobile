@@ -10,7 +10,9 @@ interface ITimerControlsProps {
   onAdjust: (seconds: number) => void
 }
 
+// text-red-400
 const MINUS_GLOW_COLOR = 'rgba(248,113,113,1)'
+// text-blue-400
 const PLUS_GLOW_COLOR = 'rgba(96,165,250,1)'
 
 const TimerControlsComponent = (props: ITimerControlsProps) => {
