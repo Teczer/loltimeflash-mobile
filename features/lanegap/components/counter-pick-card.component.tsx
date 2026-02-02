@@ -3,7 +3,7 @@ import { Image, Pressable, Text, View } from 'react-native'
 import { getChampionIcon } from '@/assets/champions'
 import { cn } from '@/lib/utils'
 
-import { TIER_COLORS, type TTier } from '../types'
+import { TIER_COLORS, type TTier } from '@/features/lanegap/types'
 
 interface ICounterPickCardProps {
   championId: string

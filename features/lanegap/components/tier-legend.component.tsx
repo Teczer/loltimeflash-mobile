@@ -4,7 +4,7 @@ import { Modal, Pressable, Text, View } from 'react-native'
 
 import { colors } from '@/lib/colors'
 
-import { TIER_COLORS, TIER_LABELS, type TTier } from '../types'
+import { TIER_COLORS, TIER_LABELS, type TTier } from '@/features/lanegap/types'
 
 const TIERS_TO_SHOW: TTier[] = ['S+', 'S', 'A+', 'A', 'B+', 'B', 'B-', 'C']
 

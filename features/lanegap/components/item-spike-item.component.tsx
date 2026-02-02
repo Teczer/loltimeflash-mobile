@@ -2,7 +2,7 @@ import { Image, Text, View } from 'react-native'
 
 import { getItemIcon } from '@/assets/items'
 
-import type { IItemSpike } from '../types'
+import type { IItemSpike } from '@/features/lanegap/types'
 
 interface IItemSpikeItemProps {
   spike: IItemSpike

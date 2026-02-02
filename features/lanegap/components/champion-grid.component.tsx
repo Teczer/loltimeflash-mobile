@@ -3,8 +3,8 @@ import { FlatList, Keyboard, Text, View } from 'react-native'
 
 import type { IChampion } from '@/assets/champions'
 
-import { NUM_COLUMNS } from '../constants'
-import { ChampionItem } from './champion-item.component'
+import { ChampionItem } from '@/features/lanegap/components/champion-item.component'
+import { NUM_COLUMNS } from '@/features/lanegap/constants'
 
 interface IChampionGridProps {
   champions: IChampion[]

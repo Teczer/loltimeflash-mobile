@@ -9,7 +9,7 @@ import { colors } from '@/lib/colors'
 import { generateLobbyCode } from '@/lib/utils'
 import { useUserStore } from '@/stores'
 
-import { type TCreateLobbyFormData } from '../schemas'
+import { type TCreateLobbyFormData } from '@/features/lobby/schemas'
 
 // Dynamically import expo-clipboard
 let Clipboard: typeof import('expo-clipboard') | null = null

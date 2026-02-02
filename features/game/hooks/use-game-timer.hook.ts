@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import type { IGameData, IRoleData } from '../types/game.types';
+import type { IGameData, IRoleData } from '@/features/game/types/game.types'
+import { useEffect } from 'react'
 
 interface IUseGameTimerOptions {
-  gameState: IGameData;
-  setGameState: React.Dispatch<React.SetStateAction<IGameData>>;
-  enabled?: boolean;
+  gameState: IGameData
+  setGameState: React.Dispatch<React.SetStateAction<IGameData>>
+  enabled?: boolean
 }
 
 /**
@@ -15,42 +15,42 @@ interface IUseGameTimerOptions {
  * This prevents time drift and ensures synchronization
  */
 export const useGameTimer = (options: IUseGameTimerOptions): void => {
-  const { setGameState, enabled = true } = options;
+  const { setGameState, enabled = true } = options
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) return
     const interval = setInterval(() => {
-      const now = Date.now();
+      const now = Date.now()
 
       setGameState((prevState) => {
-        const updatedRoles = { ...prevState.roles } as IRoleData;
-        let hasChanges = false;
+        const updatedRoles = { ...prevState.roles } as IRoleData
+        let hasChanges = false
 
         // Check all active timers and update only expired ones
         for (const key in updatedRoles) {
-          const roleKey = key as keyof IRoleData;
-          const roleData = updatedRoles[roleKey];
+          const roleKey = key as keyof IRoleData
+          const roleData = updatedRoles[roleKey]
 
           // If Flash is on cooldown (isFlashed is a timestamp)
           if (typeof roleData.isFlashed === 'number') {
-            const endsAt = roleData.isFlashed;
-            const remainingMs = endsAt - now;
+            const endsAt = roleData.isFlashed
+            const remainingMs = endsAt - now
 
             // If timer expired, set Flash to available
             if (remainingMs <= 0) {
               updatedRoles[roleKey] = {
                 ...roleData,
                 isFlashed: false,
-              };
-              hasChanges = true;
+              }
+              hasChanges = true
             }
           }
         }
 
-        return hasChanges ? { ...prevState, roles: updatedRoles } : prevState;
-      });
-    }, 100); // Check every 100ms for smoother expiration detection
+        return hasChanges ? { ...prevState, roles: updatedRoles } : prevState
+      })
+    }, 100) // Check every 100ms for smoother expiration detection
 
-    return () => clearInterval(interval);
-  }, [setGameState, enabled]);
-};
+    return () => clearInterval(interval)
+  }, [setGameState, enabled])
+}

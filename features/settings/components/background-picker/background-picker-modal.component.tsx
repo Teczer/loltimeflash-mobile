@@ -1,14 +1,22 @@
 import { Ionicons } from '@expo/vector-icons'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { FlatList, Keyboard, Modal, Platform, Pressable, Text, View } from 'react-native'
+import {
+  FlatList,
+  Keyboard,
+  Modal,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { CHAMPIONS, type IChampion } from '@/assets/champions'
 import { Button, TextInput } from '@/components/ui'
 import { colors } from '@/lib/colors'
 
-import { ChampionRow } from './champion-row.component'
-import type { IBackgroundPickerModalProps } from './types'
+import { ChampionRow } from '@/features/settings/components/background-picker/champion-row.component'
+import type { IBackgroundPickerModalProps } from '@/features/settings/components/background-picker/types'
 
 const BackgroundPickerModalComponent = ({
   visible,
@@ -61,20 +69,20 @@ const BackgroundPickerModalComponent = ({
       presentationStyle={Platform.OS === 'ios' ? 'pageSheet' : 'fullScreen'}
       onRequestClose={onClose}
     >
-      <View 
-        className="flex-1 bg-background"
+      <View
+        className="bg-background flex-1"
         style={{ paddingTop: Platform.OS === 'android' ? insets.top : 0 }}
       >
         {/* Header */}
-        <View className="flex-row items-center justify-between border-b border-border px-4 py-4">
-          <Pressable 
-            onPress={onClose} 
+        <View className="border-border flex-row items-center justify-between border-b px-4 py-4">
+          <Pressable
+            onPress={onClose}
             className="size-10 items-center justify-center rounded-full active:bg-white/10"
           >
             <Ionicons name="close" size={24} color={colors.foreground} />
           </Pressable>
 
-          <Text className="font-sans-bold text-lg text-foreground">
+          <Text className="font-sans-bold text-foreground text-lg">
             Choose Background
           </Text>
 
@@ -113,7 +121,7 @@ const BackgroundPickerModalComponent = ({
           contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
-              <Text className="font-sans text-muted-foreground">
+              <Text className="text-muted-foreground font-sans">
                 No champions found
               </Text>
             </View>

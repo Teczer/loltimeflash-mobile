@@ -4,8 +4,8 @@ import { Text, View } from 'react-native'
 import { getChampion } from '@/assets/champions'
 import { useBackgroundStore } from '@/stores/background.store'
 
-import { BackgroundPickerModal } from './background-picker-modal.component'
-import { BackgroundPreview } from './background-preview.component'
+import { BackgroundPickerModal } from '@/features/settings/components/background-picker/background-picker-modal.component'
+import { BackgroundPreview } from '@/features/settings/components/background-picker/background-preview.component'
 
 export const BackgroundPicker = () => {
   const { championName, skinIndex, setBackground, reset } = useBackgroundStore()

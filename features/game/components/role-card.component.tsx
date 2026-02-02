@@ -3,12 +3,14 @@ import { Image, ImageSourcePropType, Pressable, View } from 'react-native'
 
 import { cn } from '@/lib/utils'
 
-import { ITEM_ICONS } from '../constants/game.constants'
-import { getRemainingTime } from '../hooks/use-flash-cooldown.hook'
-import type { ILeagueRole, ISummonerData } from '../types/game.types'
-
-import { FlashButton } from './flash-button.component'
-import { TimerControls } from './timer-controls.component'
+import { FlashButton } from '@/features/game/components/flash-button.component'
+import { TimerControls } from '@/features/game/components/timer-controls.component'
+import { ITEM_ICONS } from '@/features/game/constants/game.constants'
+import { getRemainingTime } from '@/features/game/hooks/use-flash-cooldown.hook'
+import type {
+  ILeagueRole,
+  ISummonerData,
+} from '@/features/game/types/game.types'
 
 // Role icon mapping
 const ROLE_ICONS: Record<string, ImageSourcePropType> = {

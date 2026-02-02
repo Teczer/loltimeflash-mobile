@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 
 import { colors } from '@/lib/colors'
 
-import type { ILevelSpike } from '../types'
+import type { ILevelSpike } from '@/features/lanegap/types'
 
 interface ILevelSpikeItemProps {
   spike: ILevelSpike

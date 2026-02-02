@@ -1,4 +1,4 @@
-import { pb } from '../lib/pocketbase'
+import { pb } from '@/features/lanegap/lib/pocketbase'
 import type {
   IEnemyChampion,
   IItemSpike,
@@ -7,23 +7,26 @@ import type {
   IPBCounter,
   IPBItemSpike,
   IPBLevelSpike,
-  TIER_ORDER,
   TTier,
-} from '../types'
+} from '@/features/lanegap/types'
 
 // =============================================================================
 // Fetch Enemy Champion Data
 // =============================================================================
 
-export async function fetchEnemyChampion(championId: string): Promise<IEnemyChampion | null> {
+export async function fetchEnemyChampion(
+  championId: string
+): Promise<IEnemyChampion | null> {
   try {
     // Fetch all data in parallel
-    const [allChampions, levelSpikes, itemSpikes, counters] = await Promise.all([
-      pb.collection('champions').getFullList<IPBChampion>(),
-      pb.collection('level_spikes').getFullList<IPBLevelSpike>(),
-      pb.collection('item_spikes').getFullList<IPBItemSpike>(),
-      pb.collection('counters').getFullList<IPBCounter>(),
-    ])
+    const [allChampions, levelSpikes, itemSpikes, counters] = await Promise.all(
+      [
+        pb.collection('champions').getFullList<IPBChampion>(),
+        pb.collection('level_spikes').getFullList<IPBLevelSpike>(),
+        pb.collection('item_spikes').getFullList<IPBItemSpike>(),
+        pb.collection('counters').getFullList<IPBCounter>(),
+      ]
+    )
 
     // Find the champion by champion_id
     const champion = allChampions.find(
@@ -40,7 +43,9 @@ export async function fetchEnemyChampion(championId: string): Promise<IEnemyCham
 
     // Get level spikes for this champion
     const championLevelSpikes: ILevelSpike[] = levelSpikes
-      .filter((spike) => championIdMap.get(spike.champion) === champion.champion_id)
+      .filter(
+        (spike) => championIdMap.get(spike.champion) === champion.champion_id
+      )
       .map((spike) => ({
         level: spike.level,
         text: spike.text_en,
@@ -50,7 +55,9 @@ export async function fetchEnemyChampion(championId: string): Promise<IEnemyCham
 
     // Get item spikes for this champion
     const championItemSpikes: IItemSpike[] = itemSpikes
-      .filter((spike) => championIdMap.get(spike.champion) === champion.champion_id)
+      .filter(
+        (spike) => championIdMap.get(spike.champion) === champion.champion_id
+      )
       .map((spike) => ({
         itemId: spike.item_id,
         text: spike.text_en,
@@ -58,7 +65,10 @@ export async function fetchEnemyChampion(championId: string): Promise<IEnemyCham
 
     // Get counters for this champion (champions that are good AGAINST this enemy)
     const championCounters: { championId: string; tier: TTier }[] = counters
-      .filter((counter) => championIdMap.get(counter.champion) === champion.champion_id)
+      .filter(
+        (counter) =>
+          championIdMap.get(counter.champion) === champion.champion_id
+      )
       .map((counter) => ({
         championId: championIdMap.get(counter.counter_champion) || '',
         tier: counter.tier,
@@ -67,7 +77,9 @@ export async function fetchEnemyChampion(championId: string): Promise<IEnemyCham
 
     // Sort counters by tier
     const tierOrder: TTier[] = ['S+', 'S', 'A+', 'A', 'B+', 'B', 'B-', 'C']
-    championCounters.sort((a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier))
+    championCounters.sort(
+      (a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier)
+    )
 
     return {
       id: champion.champion_id,

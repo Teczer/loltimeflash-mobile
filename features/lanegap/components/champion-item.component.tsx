@@ -4,7 +4,7 @@ import { Image, Pressable, Text, View } from 'react-native'
 import { getChampionIcon, type IChampion } from '@/assets/champions'
 import { cn } from '@/lib/utils'
 
-import { useLaneGapLayout } from '../hooks'
+import { useLaneGapLayout } from '@/features/lanegap/hooks'
 
 interface IChampionItemProps {
   champion: IChampion

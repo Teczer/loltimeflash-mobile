@@ -7,7 +7,7 @@ import Animated, {
 
 import { ZileanRewindIcon, ZileanSpeedUpIcon } from '@/assets/game'
 
-import { TimerControlButton } from './timer-control-button.component'
+import { TimerControlButton } from '@/features/game/components/timer-control-button.component'
 
 interface ITimerControlsProps {
   isOnCooldown: boolean

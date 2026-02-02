@@ -3,8 +3,8 @@ import { FlatList, Text, View } from 'react-native'
 
 import type { ISkin } from '@/assets/champions'
 
-import { SkinItem } from './skin-item.component'
-import type { IChampionRowProps } from './types'
+import { SkinItem } from '@/features/settings/components/background-picker/skin-item.component'
+import type { IChampionRowProps } from '@/features/settings/components/background-picker/types'
 
 const ChampionRowComponent = ({
   champion,

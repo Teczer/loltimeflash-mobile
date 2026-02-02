@@ -5,4 +5,5 @@ export { ItemToggle } from './item-toggle.component';
 export { RoleCard } from './role-card.component';
 export { SettingsCard } from './settings-card.component';
 export { SettingsSection } from './settings-section.component';
+export { SummonerInput } from './summoner-input.component';
 export { TimerControls } from './timer-controls.component';

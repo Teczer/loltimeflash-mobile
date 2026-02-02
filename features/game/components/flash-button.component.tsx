@@ -7,7 +7,7 @@ import { TitleText } from '@/components/ui'
 import {
   formatCooldown,
   getRemainingTime,
-} from '../hooks/use-flash-cooldown.hook'
+} from '@/features/game/hooks/use-flash-cooldown.hook'
 
 interface IFlashButtonProps {
   iconSource: ImageSourcePropType | { uri: string }

@@ -1,7 +1,7 @@
 import {
   FLASH_BASE_COOLDOWN,
   FLASH_COOLDOWN_WITH_BOOTS,
-} from '../constants/game.constants'
+} from '@/features/game/constants/game.constants'
 
 /**
  * Calculate Flash cooldown based on Lucidity Boots

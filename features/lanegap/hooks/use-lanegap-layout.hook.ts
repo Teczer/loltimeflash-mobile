@@ -1,6 +1,6 @@
 import { useWindowDimensions } from 'react-native'
 
-import { NUM_COLUMNS } from '../constants'
+import { NUM_COLUMNS } from '@/features/lanegap/constants'
 
 // px-4 on container = 16px each side = 32px total
 const CONTAINER_PADDING = 32

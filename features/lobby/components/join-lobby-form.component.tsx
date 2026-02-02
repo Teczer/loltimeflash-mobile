@@ -9,7 +9,10 @@ import { LOBBY_CODE_LENGTH } from '@/features/game/constants/game.constants'
 import { colors } from '@/lib/colors'
 import { useUserStore } from '@/stores'
 
-import { joinLobbySchema, type TJoinLobbyFormData } from '../schemas'
+import {
+  joinLobbySchema,
+  type TJoinLobbyFormData,
+} from '@/features/lobby/schemas'
 
 export const JoinLobbyForm = () => {
   const router = useRouter()

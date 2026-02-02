@@ -4,7 +4,7 @@ import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 
 import { colors } from '@/lib/colors'
 
-import { LANE_ICONS, LANES, type TLane } from '../data'
+import { LANE_ICONS, LANES, type TLane } from '@/features/lanegap/data'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const AnimatedImage = Animated.createAnimatedComponent(Image)

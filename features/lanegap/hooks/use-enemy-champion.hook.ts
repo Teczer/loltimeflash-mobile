@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { fetchEnemyChampion } from '../api'
+import { fetchEnemyChampion } from '@/features/lanegap/api'
 
 export const useEnemyChampion = (championId: string) => {
   return useQuery({

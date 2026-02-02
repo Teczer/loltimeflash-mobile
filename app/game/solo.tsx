@@ -1,20 +1,31 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
+import { useState } from 'react'
 import { Text, View } from 'react-native'
 
 import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
-import { GlassButton } from '@/components/ui'
-import { RoleCard } from '@/features/game/components'
+import { BottomSheet, GlassButton } from '@/components/ui'
+import { RoleCard, SummonerInput } from '@/features/game/components'
 import { LEAGUE_ROLES } from '@/features/game/constants/game.constants'
 import { GameProvider, useGameContext } from '@/features/game/contexts'
 import type { TRole } from '@/features/game/types/game.types'
+import type { ILiveGameData } from '@/features/game/types/riot.types'
 import { colors } from '@/lib/colors'
+import { mapEnemyParticipantsToRoles } from '@/lib/riot-role-mapping.util'
 
 const SoloGameContent = () => {
   const router = useRouter()
-  const { gameState, useFlash, cancelFlash, toggleItem, adjustTimer, audio } =
-    useGameContext()
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const {
+    gameState,
+    useFlash,
+    cancelFlash,
+    toggleItem,
+    adjustTimer,
+    updateChampionData,
+    audio,
+  } = useGameContext()
 
   const handleFlashPress = (role: TRole) => {
     const roleData = gameState.roles[role]
@@ -23,6 +34,15 @@ const SoloGameContent = () => {
     } else {
       useFlash(role)
     }
+  }
+
+  const handleGameDataFetched = (data: ILiveGameData) => {
+    const roleMapping = mapEnemyParticipantsToRoles(data.enemies)
+    updateChampionData(roleMapping, {
+      gameId: data.gameId,
+      gameStartTime: data.gameStartTime,
+    })
+    setIsSheetOpen(false)
   }
 
   return (
@@ -34,17 +54,23 @@ const SoloGameContent = () => {
             <Ionicons name="arrow-back" size={22} color={colors.foreground} />
           </GlassButton>
 
-          <Text className="font-sans-bold text-foreground text-lg">
-            Solo Mode
-          </Text>
+          <View className="flex-row items-center gap-2">
+            <GlassButton onPress={() => setIsSheetOpen(true)}>
+              <Ionicons
+                name="game-controller"
+                size={22}
+                color={colors.foreground}
+              />
+            </GlassButton>
 
-          <GlassButton onPress={audio.toggleVolume}>
-            <Ionicons
-              name={audio.volume === 'on' ? 'volume-high' : 'volume-mute'}
-              size={22}
-              color={colors.foreground}
-            />
-          </GlassButton>
+            <GlassButton onPress={audio.toggleVolume}>
+              <Ionicons
+                name={audio.volume === 'on' ? 'volume-high' : 'volume-mute'}
+                size={22}
+                color={colors.foreground}
+              />
+            </GlassButton>
+          </View>
         </View>
 
         {/* Role Grid - 2-1-2 layout */}
@@ -92,6 +118,15 @@ const SoloGameContent = () => {
             ))}
           </View>
         </View>
+
+        {/* Live Game Fetch Sheet */}
+        <BottomSheet
+          isOpen={isSheetOpen}
+          onClose={() => setIsSheetOpen(false)}
+          title="Fetch Live Game"
+        >
+          <SummonerInput onGameDataFetched={handleGameDataFetched} />
+        </BottomSheet>
       </StyledSafeAreaView>
     </BackgroundImage>
   )

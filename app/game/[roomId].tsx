@@ -14,11 +14,14 @@ import {
   RoleCard,
   SettingsCard,
   SettingsSection,
+  SummonerInput,
 } from '@/features/game/components'
 import { LEAGUE_ROLES } from '@/features/game/constants/game.constants'
 import { GameProvider, useGameContext } from '@/features/game/contexts'
 import type { TRole } from '@/features/game/types/game.types'
+import type { ILiveGameData } from '@/features/game/types/riot.types'
 import { colors } from '@/lib/colors'
+import { mapEnemyParticipantsToRoles } from '@/lib/riot-role-mapping.util'
 import { useUserStore } from '@/stores/user.store'
 
 const MultiplayerGameContent = () => {
@@ -33,9 +36,18 @@ const MultiplayerGameContent = () => {
     cancelFlash,
     toggleItem,
     adjustTimer,
+    updateChampionData,
     audio,
     isConnected,
   } = useGameContext()
+
+  const handleGameDataFetched = (data: ILiveGameData) => {
+    const roleMapping = mapEnemyParticipantsToRoles(data.enemies)
+    updateChampionData(roleMapping, {
+      gameId: data.gameId,
+      gameStartTime: data.gameStartTime,
+    })
+  }
 
   const connectionStatus = isConnected ? 'connected' : 'disconnected'
 
@@ -147,6 +159,15 @@ const MultiplayerGameContent = () => {
           onClose={() => setIsSheetOpen(false)}
           title="Room Settings"
         >
+          {/* Live Game Fetch */}
+          <SettingsSection
+            icon="game-controller"
+            iconColor={colors.success}
+            title="Fetch Live Game"
+          >
+            <SummonerInput onGameDataFetched={handleGameDataFetched} />
+          </SettingsSection>
+
           {/* Users Section */}
           <SettingsSection
             icon="people"

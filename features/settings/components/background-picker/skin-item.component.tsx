@@ -4,7 +4,7 @@ import { Image, Pressable, Text, View } from 'react-native'
 
 import { colors } from '@/lib/colors'
 
-import type { ISkinItemProps } from './types'
+import type { ISkinItemProps } from '@/features/settings/components/background-picker/types'
 
 const SkinItemComponent = ({ skin, isSelected, onPress }: ISkinItemProps) => (
   <Pressable onPress={onPress} className="mx-1.5 w-24 items-center">

@@ -14,8 +14,11 @@ import { colors } from '@/lib/colors'
 import { MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH } from '@/lib/constants'
 import { useUserStore } from '@/stores'
 
-import { usernameSchema, type TUsernameFormData } from '../schemas'
-import { ValidationRule } from './validation-rule.component'
+import { ValidationRule } from '@/features/settings/components/validation-rule.component'
+import {
+  usernameSchema,
+  type TUsernameFormData,
+} from '@/features/settings/schemas'
 
 interface IUsernameFormProps {
   withHeightAnimation?: boolean
