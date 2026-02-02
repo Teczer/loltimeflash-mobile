@@ -8,11 +8,13 @@ import { Text, View } from 'react-native'
 import { Button, TextInput } from '@/components/ui'
 import { LOBBY_CODE_LENGTH } from '@/features/game/constants/game.constants'
 import { colors } from '@/lib/colors'
+import { useUserStore } from '@/stores'
 
 import { joinLobbySchema, type TJoinLobbyFormData } from '../schemas'
 
 const JoinLobbyFormComponent = () => {
   const router = useRouter()
+  const username = useUserStore((s) => s.username)
 
   const {
     control,
@@ -26,6 +28,15 @@ const JoinLobbyFormComponent = () => {
   })
 
   const onSubmit = (data: TJoinLobbyFormData) => {
+    // If no username, redirect to gate first
+    if (!username) {
+      router.push({
+        pathname: '/username-gate',
+        params: { redirect: 'join', roomId: data.lobbyCode },
+      })
+      return
+    }
+
     router.push(`/game/${data.lobbyCode}`)
   }
 

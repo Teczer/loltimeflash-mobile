@@ -29,7 +29,7 @@
         "expo-system-ui": "6.0.8",
         "expo-web-browser": "15.0.9",
         "lightningcss": "1.30.2",
-        "pocketbase": "^0.26.6",
+        "pocketbase": "0.26.6",
         "postcss": "8.5.6",
         "react": "19.1.0",
         "react-dom": "19.1.0",

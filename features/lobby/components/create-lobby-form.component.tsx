@@ -1,61 +1,74 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { memo, useState } from 'react';
-import { Controller, useForm, useWatch } from 'react-hook-form';
-import { Alert, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import { memo, useState } from 'react'
+import { Controller, useForm, useWatch } from 'react-hook-form'
+import { Alert, Text, View } from 'react-native'
 
-import { Button, TextInput } from '@/components/ui';
-import { colors } from '@/lib/colors';
-import { generateLobbyCode } from '@/lib/utils';
+import { Button, TextInput } from '@/components/ui'
+import { colors } from '@/lib/colors'
+import { generateLobbyCode } from '@/lib/utils'
+import { useUserStore } from '@/stores'
 
-import { type TCreateLobbyFormData } from '../schemas';
+import { type TCreateLobbyFormData } from '../schemas'
 
 // Dynamically import expo-clipboard
-let Clipboard: typeof import('expo-clipboard') | null = null;
+let Clipboard: typeof import('expo-clipboard') | null = null
 try {
-  Clipboard = require('expo-clipboard');
+  Clipboard = require('expo-clipboard')
 } catch (e) {
-  console.warn('expo-clipboard not available');
+  console.warn('expo-clipboard not available')
 }
 
 const CreateLobbyFormComponent = () => {
-  const router = useRouter();
-  const [copied, setCopied] = useState(false);
+  const router = useRouter()
+  const [copied, setCopied] = useState(false)
+  const username = useUserStore((s) => s.username)
 
   const { control, setValue } = useForm<TCreateLobbyFormData>({
     defaultValues: {
       lobbyCode: '',
     },
-  });
+  })
 
-  const lobbyCode = useWatch({ control, name: 'lobbyCode' });
+  const lobbyCode = useWatch({ control, name: 'lobbyCode' })
 
   const handleCreateLobby = () => {
-    const code = generateLobbyCode(10);
-    setValue('lobbyCode', code);
-  };
+    const code = generateLobbyCode(10)
+    setValue('lobbyCode', code)
+  }
 
   const handleCopyCode = async () => {
     if (lobbyCode) {
       if (Clipboard) {
-        await Clipboard.setStringAsync(lobbyCode);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        await Clipboard.setStringAsync(lobbyCode)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
       } else {
-        Alert.alert('Lobby Code', lobbyCode, [{ text: 'OK' }]);
+        Alert.alert('Lobby Code', lobbyCode, [{ text: 'OK' }])
       }
     }
-  };
+  }
 
   const handleJoinLobby = () => {
-    if (lobbyCode) {
-      router.push(`/game/${lobbyCode}`);
+    if (!lobbyCode) return
+
+    // If no username, redirect to gate first
+    if (!username) {
+      router.push({
+        pathname: '/username-gate',
+        params: { redirect: 'join', roomId: lobbyCode },
+      })
+      return
     }
-  };
+
+    router.push(`/game/${lobbyCode}`)
+  }
 
   return (
     <View className="w-full items-center gap-6">
-      <Text className="font-sans-bold text-xl text-foreground">Create a Lobby</Text>
+      <Text className="font-sans-bold text-foreground text-xl">
+        Create a Lobby
+      </Text>
 
       {!lobbyCode ? (
         <Button variant="outline" onPress={handleCreateLobby}>
@@ -71,10 +84,10 @@ const CreateLobbyFormComponent = () => {
                 control={control}
                 name="lobbyCode"
                 render={({ field: { value } }) => (
-                  <TextInput 
-                    value={value} 
-                    editable={false} 
-                    className="font-mono tracking-wider" 
+                  <TextInput
+                    value={value}
+                    editable={false}
+                    className="font-mono tracking-wider"
                   />
                 )}
               />
@@ -96,14 +109,20 @@ const CreateLobbyFormComponent = () => {
           <Button
             variant="outline"
             onPress={handleJoinLobby}
-            icon={<Ionicons name="arrow-forward" size={18} color={colors.foreground} />}
+            icon={
+              <Ionicons
+                name="arrow-forward"
+                size={18}
+                color={colors.foreground}
+              />
+            }
           >
             Join Lobby
           </Button>
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
-export const CreateLobbyForm = memo(CreateLobbyFormComponent);
+export const CreateLobbyForm = memo(CreateLobbyFormComponent)

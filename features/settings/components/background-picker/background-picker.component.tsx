@@ -1,4 +1,5 @@
 import { memo, useMemo, useState } from 'react'
+import { Text, View } from 'react-native'
 
 import { getChampion } from '@/assets/champions'
 import { useBackgroundStore } from '@/stores/background.store'
@@ -18,7 +19,9 @@ const BackgroundPickerComponent = () => {
   }, [championName, skinIndex])
 
   return (
-    <>
+    <View className="gap-y-4">
+      <Text className="font-sans-bold text-foreground text-lg">Background</Text>
+
       <BackgroundPreview
         image={currentImage}
         onPress={() => setIsModalVisible(true)}
@@ -32,7 +35,7 @@ const BackgroundPickerComponent = () => {
         onSelectSkin={setBackground}
         onReset={reset}
       />
-    </>
+    </View>
   )
 }
 

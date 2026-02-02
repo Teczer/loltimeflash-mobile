@@ -9,13 +9,15 @@ import { StyledSafeAreaView } from '@/components/styled'
 import { GlassButton, TitleText } from '@/components/ui'
 import { BackgroundPicker, UsernameForm } from '@/features/settings/components'
 import { colors } from '@/lib/colors'
+import { useUserStore } from '@/stores'
 
 export default function SettingsScreen() {
   const router = useRouter()
+  const clearUsername = useUserStore((s) => s.clearUsername)
 
   return (
     <BackgroundImage>
-      <StyledSafeAreaView className="flex-1" edges={['top']}>
+      <StyledSafeAreaView className="flex-1 gap-y-6" edges={['top']}>
         {/* Header */}
         <View className="flex-row items-center gap-4 px-4 py-3">
           <GlassButton onPress={() => router.back()}>
@@ -26,21 +28,21 @@ export default function SettingsScreen() {
 
         <KeyboardAwareScrollView
           className="flex-1"
-          contentContainerClassName="px-6 pb-8"
+          contentContainerClassName="px-6 pb-8 gap-y-2"
           showsVerticalScrollIndicator={false}
           bottomOffset={50}
         >
-          {/* Username Section */}
-          <View className="mt-8">
-            <UsernameForm />
-          </View>
+          <UsernameForm />
+          <BackgroundPicker />
 
-          {/* Background Section */}
-          <View className="mt-12 gap-4">
-            <Text className="font-sans-bold text-foreground text-lg">
-              Background
-            </Text>
-            <BackgroundPicker />
+          {/* DEV: Clear username button */}
+          <View className="mt-8 items-center">
+            <GlassButton onPress={clearUsername} className="flex-row gap-2">
+              <Ionicons name="trash-outline" size={16} color={colors.danger} />
+              <Text className="font-sans text-xs text-red-500">
+                Clear username (dev)
+              </Text>
+            </GlassButton>
           </View>
         </KeyboardAwareScrollView>
 
