@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { ScrollView, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 
 import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
@@ -47,25 +47,51 @@ const SoloGameContent = () => {
           </GlassButton>
         </View>
 
-        {/* Role Grid */}
-        <ScrollView
-          className="flex-1"
-          contentContainerClassName="flex-row flex-wrap justify-center px-2 pb-6"
-          contentInsetAdjustmentBehavior="automatic"
-        >
-          {LEAGUE_ROLES.map((role) => (
-            <View key={role.name} className="w-1/2 p-2">
+        {/* Role Grid - 2-1-2 layout */}
+        <View className="flex-1 justify-center gap-y-4 px-2 pb-4">
+          {/* Row 1: TOP, JUNGLE */}
+          <View className="flex-row justify-evenly">
+            {LEAGUE_ROLES.slice(0, 2).map((role) => (
               <RoleCard
+                key={role.name}
                 role={role}
                 data={gameState.roles[role.name]}
                 onFlashPress={() => handleFlashPress(role.name)}
                 onToggleBoots={() => toggleItem(role.name, 'lucidityBoots')}
-                onToggleRune={() => toggleItem(role.name, 'cosmicInsight')}
                 onAdjustTimer={(seconds) => adjustTimer(role.name, seconds)}
               />
-            </View>
-          ))}
-        </ScrollView>
+            ))}
+          </View>
+
+          {/* Row 2: MID (centered) */}
+          <View className="flex-row justify-center">
+            <RoleCard
+              role={LEAGUE_ROLES[2]}
+              data={gameState.roles[LEAGUE_ROLES[2].name]}
+              onFlashPress={() => handleFlashPress(LEAGUE_ROLES[2].name)}
+              onToggleBoots={() =>
+                toggleItem(LEAGUE_ROLES[2].name, 'lucidityBoots')
+              }
+              onAdjustTimer={(seconds) =>
+                adjustTimer(LEAGUE_ROLES[2].name, seconds)
+              }
+            />
+          </View>
+
+          {/* Row 3: ADC, SUPPORT */}
+          <View className="flex-row justify-evenly">
+            {LEAGUE_ROLES.slice(3, 5).map((role) => (
+              <RoleCard
+                key={role.name}
+                role={role}
+                data={gameState.roles[role.name]}
+                onFlashPress={() => handleFlashPress(role.name)}
+                onToggleBoots={() => toggleItem(role.name, 'lucidityBoots')}
+                onAdjustTimer={(seconds) => adjustTimer(role.name, seconds)}
+              />
+            ))}
+          </View>
+        </View>
       </StyledSafeAreaView>
     </BackgroundImage>
   )

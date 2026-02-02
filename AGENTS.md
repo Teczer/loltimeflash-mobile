@@ -12,7 +12,7 @@
 ### Features
 
 - ⏰ Tracking des cooldowns Flash pour les 5 rôles ennemis
-- 🎯 Calcul automatique basé sur les Bottes Lucidité et Cosmic Insight
+- 🎯 Calcul automatique basé sur les Bottes Lucidité
 - 🔄 Synchronisation temps réel via WebSocket (mode multiplayer)
 - 🎨 Backgrounds personnalisables avec splash arts des champions
 - 📱 UI native avec support iOS Liquid Glass (iOS 26+)

@@ -1,7 +1,7 @@
 /**
  * League of Legends role type
  */
-export type TRole = 'TOP' | 'JUNGLE' | 'MID' | 'ADC' | 'SUPPORT';
+export type TRole = 'TOP' | 'JUNGLE' | 'MID' | 'ADC' | 'SUPPORT'
 
 /**
  * Champion data for a role
@@ -10,22 +10,22 @@ export interface IChampionData {
   /**
    * Champion ID (e.g., 266 for Aatrox)
    */
-  championId: number;
+  championId: number
 
   /**
    * Champion name (e.g., "Aatrox")
    */
-  championName: string;
+  championName: string
 
   /**
    * Champion icon URL
    */
-  championIconUrl: string;
+  championIconUrl: string
 
   /**
    * Summoner name of the player
    */
-  summonerName: string;
+  summonerName: string
 }
 
 /**
@@ -39,64 +39,63 @@ export interface ISummonerData {
    *
    * Example: 1700000300000 means Flash will be ready at this Date.now() timestamp
    */
-  isFlashed: false | number;
-  lucidityBoots: boolean;
-  cosmicInsight: boolean;
+  isFlashed: false | number
+  lucidityBoots: boolean
 
   /**
    * Champion data (optional, populated from live game)
    */
-  champion?: IChampionData;
+  champion?: IChampionData
 }
 
 /**
  * Complete role data for all 5 roles
  */
 export interface IRoleData {
-  TOP: ISummonerData;
-  JUNGLE: ISummonerData;
-  MID: ISummonerData;
-  SUPPORT: ISummonerData;
-  ADC: ISummonerData;
+  TOP: ISummonerData
+  JUNGLE: ISummonerData
+  MID: ISummonerData
+  SUPPORT: ISummonerData
+  ADC: ISummonerData
 }
 
 /**
  * Complete game state
  */
 export interface IGameData {
-  users: string[];
-  roles: IRoleData;
+  users: string[]
+  roles: IRoleData
 
   /**
    * Summoner name of the player (for Riot API integration)
    */
-  summonerName?: string;
+  summonerName?: string
 
   /**
    * Region of the player (e.g., 'euw1', 'na1')
    */
-  region?: string;
+  region?: string
 
   /**
    * Riot game ID (from live game)
    */
-  gameId?: number;
+  gameId?: number
 
   /**
    * Game start timestamp in milliseconds (from Riot API)
    */
-  gameStartTime?: number;
+  gameStartTime?: number
 }
 
 /**
  * League role with icon
  */
 export interface ILeagueRole {
-  name: TRole;
-  icon: string;
+  name: TRole
+  icon: string
 }
 
 /**
  * Game mode type
  */
-export type TGameMode = 'solo' | 'multiplayer';
+export type TGameMode = 'solo' | 'multiplayer'

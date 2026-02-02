@@ -1,17 +1,15 @@
-import type { IGameData, ILeagueRole, ISummonerData } from '../types/game.types';
+import type { IGameData, ILeagueRole, ISummonerData } from '../types/game.types'
 
 /**
  * Flash cooldown durations in seconds
  */
-export const FLASH_BASE_COOLDOWN = 300; // 5 minutes
-export const FLASH_COOLDOWN_WITH_BOOTS = 268; // 4:28
-export const FLASH_COOLDOWN_WITH_RUNE = 255; // 4:15
-export const FLASH_COOLDOWN_WITH_BOTH = 231; // 3:51
+export const FLASH_BASE_COOLDOWN = 300 // 5 minutes
+export const FLASH_COOLDOWN_WITH_BOOTS = 268 // 4:28
 
 /**
  * Reaction time compensation (applied when Flash is used)
  */
-export const REACTION_TIME_COMPENSATION = 3; // seconds
+export const REACTION_TIME_COMPENSATION = 3 // seconds
 
 /**
  * League of Legends roles with icons
@@ -38,7 +36,7 @@ export const LEAGUE_ROLES: ILeagueRole[] = [
     name: 'SUPPORT',
     icon: 'supportrole',
   },
-];
+]
 
 /**
  * Default summoner data (Flash available, no items)
@@ -46,8 +44,7 @@ export const LEAGUE_ROLES: ILeagueRole[] = [
 export const DEFAULT_SUMMONER_DATA: ISummonerData = {
   isFlashed: false,
   lucidityBoots: false,
-  cosmicInsight: false,
-};
+}
 
 /**
  * Default game data (empty users, all roles with default data)
@@ -61,22 +58,21 @@ export const DEFAULT_GAME_DATA: IGameData = {
     SUPPORT: { ...DEFAULT_SUMMONER_DATA },
     ADC: { ...DEFAULT_SUMMONER_DATA },
   },
-};
+}
 
 /**
  * Audio volume level (0-1)
  */
-export const AUDIO_VOLUME = 0.15;
+export const AUDIO_VOLUME = 0.15
 
 /**
  * Lobby code length
  */
-export const LOBBY_CODE_LENGTH = 10;
+export const LOBBY_CODE_LENGTH = 10
 
 /**
  * Item icons (local assets)
  */
 export const ITEM_ICONS = {
-  cosmicInsight: require('@/assets/images/roles/rune-cdr.webp'),
   lucidityBoots: require('@/assets/images/roles/lucidity-boots.png'),
-} as const;
+} as const
