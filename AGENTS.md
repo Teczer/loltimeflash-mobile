@@ -22,19 +22,19 @@
 
 ## Tech Stack
 
-| Category | Technology | Version |
-|----------|------------|---------|
-| **Framework** | Expo SDK | 54 |
-| **Language** | TypeScript | 5.9 |
-| **UI Framework** | React Native | 0.81 |
-| **Styling** | Uniwind (Tailwind CSS) | 1.2.4 |
-| **Animations** | React Native Reanimated | 3.x |
-| **Navigation** | Expo Router | 6.0 |
-| **State Management** | Zustand | 5.0 |
-| **Server State** | TanStack Query | 5.90 |
-| **Storage** | MMKV | 4.0 |
-| **Real-time** | Socket.IO Client | 4.8 |
-| **Package Manager** | Bun | Latest |
+| Category             | Technology              | Version |
+| -------------------- | ----------------------- | ------- |
+| **Framework**        | Expo SDK                | 54      |
+| **Language**         | TypeScript              | 5.9     |
+| **UI Framework**     | React Native            | 0.81    |
+| **Styling**          | Uniwind (Tailwind CSS)  | 1.2.4   |
+| **Animations**       | React Native Reanimated | 3.x     |
+| **Navigation**       | Expo Router             | 6.0     |
+| **State Management** | Zustand                 | 5.0     |
+| **Server State**     | TanStack Query          | 5.90    |
+| **Storage**          | MMKV                    | 4.0     |
+| **Real-time**        | Socket.IO Client        | 4.8     |
+| **Package Manager**  | Bun                     | Latest  |
 
 ---
 
@@ -61,12 +61,16 @@ Le nom doit indiquer clairement ce que fait le composant.
 ```tsx
 // ❌ ÉVITER - memo inutile sur composant simple
 export const SimpleCard = memo(({ title }: IProps) => (
-  <View><Text>{title}</Text></View>
+  <View>
+    <Text>{title}</Text>
+  </View>
 ))
 
 // ✅ BON - Pas de memo, le composant est simple
 export const SimpleCard = ({ title }: IProps) => (
-  <View><Text>{title}</Text></View>
+  <View>
+    <Text>{title}</Text>
+  </View>
 )
 
 // ✅ BON - memo justifié pour liste avec beaucoup d'items
@@ -82,17 +86,19 @@ export const HeavyListItem = memo(({ data, onPress }: IProps) => {
 ```tsx
 // ❌ ÉVITER - Effet rebond
 const animatedStyle = useAnimatedStyle(() => ({
-  transform: [{ scale: withSpring(value ? 1.1 : 1) }]
+  transform: [{ scale: withSpring(value ? 1.1 : 1) }],
 }))
 
 // ✅ BON - Transition smooth
 const animatedStyle = useAnimatedStyle(() => ({
-  transform: [{ 
-    scale: withTiming(value ? 1.1 : 1, { 
-      duration: 200, 
-      easing: Easing.out(Easing.ease) 
-    }) 
-  }]
+  transform: [
+    {
+      scale: withTiming(value ? 1.1 : 1, {
+        duration: 200,
+        easing: Easing.out(Easing.ease),
+      }),
+    },
+  ],
 }))
 ```
 
@@ -139,7 +145,7 @@ Créer des **composants réutilisables avec variants** :
 // Supporter leftElement/rightElement pour contenu personnalisable
 interface ISettingsCardProps {
   icon?: keyof typeof Ionicons.glyphMap
-  leftElement?: ReactNode  // Alternative au icon
+  leftElement?: ReactNode // Alternative au icon
   title: string
   subtitle?: string
   variant?: 'gold' | 'info' | 'success' | 'muted'
@@ -164,12 +170,19 @@ interface ISettingsCardProps {
 `className` fonctionne directement - **PAS besoin de wrapper** :
 
 ```tsx
-import { View, Text, Pressable, ScrollView, Image, TextInput } from 'react-native'
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  Image,
+  TextInput,
+} from 'react-native'
 
 // ✅ Utilisation directe
-<View className="flex-1 items-center justify-center bg-background">
-  <Text className="text-lg font-bold text-foreground">Hello</Text>
-  <Pressable className="px-4 py-2 rounded-lg bg-gold active:bg-gold/80">
+;<View className="bg-background flex-1 items-center justify-center">
+  <Text className="text-foreground text-lg font-bold">Hello</Text>
+  <Pressable className="bg-gold active:bg-gold/80 rounded-lg px-4 py-2">
     <Text className="text-white">Press me</Text>
   </Pressable>
 </View>
@@ -273,24 +286,19 @@ const MyComponent = () => {
   const background = useCSSVariable('--color-background')
   const foreground = useCSSVariable('--color-foreground')
 
-  return (
-    <SomeThirdPartyComponent 
-      color={gold}
-      backgroundColor={background}
-    />
-  )
+  return <SomeThirdPartyComponent color={gold} backgroundColor={background} />
 }
 ```
 
 ### Récapitulatif Uniwind
 
-| Composant | Méthode |
-|-----------|---------|
-| `View`, `Text`, `Pressable`, `ScrollView`, `Image` | `className` direct |
-| `SafeAreaView`, `GestureHandlerRootView` | `withUniwind` wrapper |
-| `Animated.View`, `Animated.Text` | `withUniwind` ou `style={}` |
-| `LinearGradient` | `useCSSVariable` pour les couleurs |
-| Gradients simples | Classes built-in `bg-gradient-to-*` |
+| Composant                                          | Méthode                             |
+| -------------------------------------------------- | ----------------------------------- |
+| `View`, `Text`, `Pressable`, `ScrollView`, `Image` | `className` direct                  |
+| `SafeAreaView`, `GestureHandlerRootView`           | `withUniwind` wrapper               |
+| `Animated.View`, `Animated.Text`                   | `withUniwind` ou `style={}`         |
+| `LinearGradient`                                   | `useCSSVariable` pour les couleurs  |
+| Gradients simples                                  | Classes built-in `bg-gradient-to-*` |
 
 ---
 
@@ -393,6 +401,7 @@ Stack (Root)
 ```
 
 **Navigation Notes:**
+
 - `NativeTabs` utilisé sur iOS ET Android pour l'effet natif
 - Settings accessible via `GlassButton` flottant (pas dans les tabs)
 - Liquid Glass disponible sur iOS 26+ (compilé avec Xcode 26)
@@ -403,19 +412,19 @@ Stack (Root)
 
 Définies dans `lib/colors.ts` et `app/global.css` :
 
-| Color | Hex | Usage |
-|-------|-----|-------|
-| `background` | `#021022` | App background |
-| `foreground` | `#EEEFF0` | Primary text |
-| `card` | `#232225` | Card backgrounds |
-| `border` | `#A38566` | Borders (gold/bronze) |
-| `gold` | `#C4A15B` | Primary accent |
-| `goldLight` | `#D4AF37` | Light gold accent |
-| `mutedForeground` | `#A3A3A3` | Secondary text |
-| `success` | `#22C55E` | Success states |
-| `warning` | `#F59E0B` | Warning states |
-| `info` | `#3B82F6` | Info states |
-| `danger` | `#EF4444` | Error/danger states |
+| Color             | Hex       | Usage                 |
+| ----------------- | --------- | --------------------- |
+| `background`      | `#021022` | App background        |
+| `foreground`      | `#EEEFF0` | Primary text          |
+| `card`            | `#232225` | Card backgrounds      |
+| `border`          | `#A38566` | Borders (gold/bronze) |
+| `gold`            | `#C4A15B` | Primary accent        |
+| `goldLight`       | `#D4AF37` | Light gold accent     |
+| `mutedForeground` | `#A3A3A3` | Secondary text        |
+| `success`         | `#22C55E` | Success states        |
+| `warning`         | `#F59E0B` | Warning states        |
+| `info`            | `#3B82F6` | Info states           |
+| `danger`          | `#EF4444` | Error/danger states   |
 
 ---
 
@@ -426,17 +435,18 @@ Définies dans `lib/colors.ts` et `app/global.css` :
 ```typescript
 // stores/user.store.ts
 interface IUserState {
-  username: string | null;
-  setUsername: (name: string) => void;
-  clearUsername: () => void;
+  username: string | null
+  setUsername: (name: string) => void
+  clearUsername: () => void
 }
 
 // Usage - sélection granulaire pour éviter re-renders
-const username = useUserStore((s) => s.username);
-const setUsername = useUserStore((s) => s.setUsername);
+const username = useUserStore((s) => s.username)
+const setUsername = useUserStore((s) => s.setUsername)
 ```
 
 **Stores disponibles :**
+
 - `useUserStore` - Username management
 - `useAudioStore` - Volume on/off
 - `useBackgroundStore` - Selected background (championName + skinIndex)
@@ -444,6 +454,7 @@ const setUsername = useUserStore((s) => s.setUsername);
 ### MMKV Persistence
 
 Zustand stores persistent via MMKV :
+
 ```typescript
 import { zustandStorage } from '@/lib/mmkv';
 
@@ -461,24 +472,24 @@ persist(
 
 ```typescript
 // hooks/use-socket.hook.ts
-import { io } from 'socket.io-client';
-import { config } from '@/lib/config';
+import { io } from 'socket.io-client'
+import { config } from '@/lib/config'
 
 const socket = io(config.socketUrl, {
   autoConnect: false,
   reconnection: true,
   reconnectionAttempts: 5,
-});
+})
 ```
 
 ### Socket Events
 
-| Event | Direction | Description |
-|-------|-----------|-------------|
-| `join-room` | Client → Server | Join multiplayer room |
-| `flash-action` | Client → Server | Flash button pressed |
-| `room-state` | Server → Client | Full game state sync |
-| `flash-notification` | Server → Client | Someone flashed |
+| Event                | Direction       | Description           |
+| -------------------- | --------------- | --------------------- |
+| `join-room`          | Client → Server | Join multiplayer room |
+| `flash-action`       | Client → Server | Flash button pressed  |
+| `room-state`         | Server → Client | Full game state sync  |
+| `flash-notification` | Server → Client | Someone flashed       |
 
 ---
 
@@ -489,25 +500,31 @@ const socket = io(config.socketUrl, {
 Tous les splash arts sont **bundlés statiquement** (pas de CDN) pour des performances optimales.
 
 **Location :** `assets/champions/`
+
 - `splash/*.webp` - 2000+ images optimisées (114 MB total)
 - `index.ts` - Auto-generated mappings
 
 ### Usage
 
 ```typescript
-import { CHAMPIONS, getChampion, getChampionIcon, DEFAULT_SPLASH } from '@/assets/champions';
+import {
+  CHAMPIONS,
+  getChampion,
+  getChampionIcon,
+  DEFAULT_SPLASH,
+} from '@/assets/champions'
 
 // Get all champions
-CHAMPIONS.map(champ => champ.name);
+CHAMPIONS.map((champ) => champ.name)
 
 // Get specific champion
-const aatrox = getChampion('Aatrox');
+const aatrox = getChampion('Aatrox')
 
 // Get skin image source
-const source = aatrox?.skins[0].source;
+const source = aatrox?.skins[0].source
 
 // Get champion icon
-const icon = getChampionIcon('Aatrox');
+const icon = getChampionIcon('Aatrox')
 ```
 
 ---
@@ -517,6 +534,7 @@ const icon = getChampionIcon('Aatrox');
 ### Requirements
 
 Pour activer l'effet Liquid Glass natif :
+
 1. **iOS 26+** sur le device
 2. **Xcode 26** pour compiler l'app
 3. Plugin `expo-glass-effect` dans `app.json`
@@ -525,24 +543,22 @@ Pour activer l'effet Liquid Glass natif :
 
 ```tsx
 // GlassButton - Bouton avec Liquid Glass
-import { GlassButton } from '@/components/ui';
-
-<GlassButton onPress={handlePress}>
+import { GlassButton } from '@/components/ui'
+;<GlassButton onPress={handlePress}>
   <Ionicons name="settings-outline" size={22} color={colors.foreground} />
 </GlassButton>
 
 // TextInput - Input avec variant glass
-import { TextInput } from '@/components/ui';
-
-<TextInput variant="glass" placeholder="Search..." clearable />
+import { TextInput } from '@/components/ui'
+;<TextInput variant="glass" placeholder="Search..." clearable />
 ```
 
 ### Check Availability
 
 ```typescript
-import { isLiquidGlassAvailable } from 'expo-glass-effect';
+import { isLiquidGlassAvailable } from 'expo-glass-effect'
 
-const canUseGlass = Platform.OS === 'ios' && isLiquidGlassAvailable();
+const canUseGlass = Platform.OS === 'ios' && isLiquidGlassAvailable()
 ```
 
 ---
@@ -578,6 +594,7 @@ const canUseGlass = Platform.OS === 'ios' && isLiquidGlassAvailable();
 ```
 
 **Gitmojis courants :**
+
 - `:sparkles:` - New feature
 - `:bug:` - Bug fix
 - `:recycle:` - Refactor
@@ -589,14 +606,14 @@ const canUseGlass = Platform.OS === 'ios' && isLiquidGlassAvailable();
 
 ## File Naming Conventions
 
-| Type | Convention | Example |
-|------|------------|---------|
+| Type       | Convention                 | Example                      |
+| ---------- | -------------------------- | ---------------------------- |
 | Components | `kebab-case.component.tsx` | `glass-button.component.tsx` |
-| Hooks | `use-name.hook.ts` | `use-socket.hook.ts` |
-| Stores | `name.store.ts` | `user.store.ts` |
-| Types | `name.types.ts` | `game.types.ts` |
-| Utils | `name.util.ts` | `format.util.ts` |
-| Constants | `name.constants.ts` | `game.constants.ts` |
+| Hooks      | `use-name.hook.ts`         | `use-socket.hook.ts`         |
+| Stores     | `name.store.ts`            | `user.store.ts`              |
+| Types      | `name.types.ts`            | `game.types.ts`              |
+| Utils      | `name.util.ts`             | `format.util.ts`             |
+| Constants  | `name.constants.ts`        | `game.constants.ts`          |
 
 ### TypeScript Conventions
 
@@ -627,18 +644,18 @@ bun run start
 
 ### Scripts
 
-| Command | Description |
-|---------|-------------|
-| `bun run start` | Start Metro bundler |
-| `bun run dev` | Start with dev-client |
-| `bun run ios` | Run on iOS simulator |
-| `bun run android` | Run on Android emulator |
-| `bun run prebuild` | Generate native projects |
-| `bun run prebuild:clean` | Clean + regenerate native |
-| `bun run optimize:champions` | Optimize champion images |
-| `bun run format` | Format with Prettier |
-| `bun run lint` | Lint with ESLint |
-| `bun run clean` | Clean all caches |
+| Command                      | Description               |
+| ---------------------------- | ------------------------- |
+| `bun run start`              | Start Metro bundler       |
+| `bun run dev`                | Start with dev-client     |
+| `bun run ios`                | Run on iOS simulator      |
+| `bun run android`            | Run on Android emulator   |
+| `bun run prebuild`           | Generate native projects  |
+| `bun run prebuild:clean`     | Clean + regenerate native |
+| `bun run optimize:champions` | Optimize champion images  |
+| `bun run format`             | Format with Prettier      |
+| `bun run lint`               | Lint with ESLint          |
+| `bun run clean`              | Clean all caches          |
 
 ### Running on Device
 
@@ -696,6 +713,52 @@ EXPO_PUBLIC_PATCH_VERSION=15.1.1
 
 ---
 
-**Last Updated:** January 27, 2026
-**Version:** 1.1.0
+## AI Agent Skills (Expo)
+
+Le projet utilise les **skills officiels Expo** pour améliorer l'assistance IA lors du développement.
+
+### Installation
+
+```bash
+# Installer les skills Expo (à faire une fois par développeur)
+bunx skills add expo/skills -y
+```
+
+### Skills Disponibles
+
+Les skills sont installés dans `.agents/skills/` et auto-découverts par Cursor :
+
+| Skill                  | Description                                     |
+| ---------------------- | ----------------------------------------------- |
+| `building-native-ui`   | UI native (animations, tabs, gradients, icons)  |
+| `native-data-fetching` | Fetching de données                             |
+| `expo-tailwind-setup`  | Configuration Tailwind/Uniwind                  |
+| `expo-api-routes`      | Routes API Expo                                 |
+| `expo-dev-client`      | Custom dev client                               |
+| `use-dom`              | Composants DOM dans React Native                |
+| `expo-cicd-workflows`  | Workflows CI/CD                                 |
+| `expo-deployment`      | Déploiement (App Store, Play Store, TestFlight) |
+| `upgrading-expo`       | Migration et upgrade SDK                        |
+
+### Usage
+
+Les skills sont **automatiquement utilisés** quand tu poses des questions liées à Expo :
+
+- "Comment configurer les tabs natifs ?"
+- "Comment déployer sur l'App Store ?"
+- "Comment upgrader vers Expo SDK 55 ?"
+
+> **Note** : Le dossier `.agents/` est versionné dans le repo. Pour mettre à jour les skills : `bunx skills add expo/skills -y`
+
+---
+
+## Related Projects
+
+- **LolTimeFlash Web** : https://github.com/Teczer/LolTimeFlash
+- **LaneGap** : https://github.com/Teczer/LaneGap (Backend PocketBase)
+
+---
+
+**Last Updated:** February 2, 2026
+**Version:** 1.2.0
 **Status:** ✅ Production Ready
