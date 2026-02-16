@@ -4,6 +4,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { Alert, Pressable, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
 const APP_VERSION = '1.0.0'
@@ -14,28 +15,33 @@ const handleOpenPrivacyPolicy = async () => {
   await WebBrowser.openBrowserAsync(PRIVACY_POLICY_URL)
 }
 
-const handleContactSupport = async () => {
-  const mailtoUrl = `mailto:${SUPPORT_EMAIL}`
-
-  try {
-    const canOpen = await Linking.canOpenURL(mailtoUrl)
-
-    if (canOpen) {
-      await Linking.openURL(mailtoUrl)
-    } else {
-      Alert.alert('Contact Support', `Send us an email at:\n${SUPPORT_EMAIL}`, [
-        { text: 'OK' },
-      ])
-    }
-  } catch {
-    Alert.alert('Contact Support', `Send us an email at:\n${SUPPORT_EMAIL}`, [
-      { text: 'OK' },
-    ])
-  }
-}
-
 export const AppInfo = () => {
   const insets = useSafeAreaInsets()
+  const { t } = useTranslation()
+
+  const handleContactSupport = async () => {
+    const mailtoUrl = `mailto:${SUPPORT_EMAIL}`
+
+    try {
+      const canOpen = await Linking.canOpenURL(mailtoUrl)
+
+      if (canOpen) {
+        await Linking.openURL(mailtoUrl)
+      } else {
+        Alert.alert(
+          t.appInfo.contactSupport,
+          t.appInfo.sendEmail.replace('{email}', SUPPORT_EMAIL),
+          [{ text: t.common.ok }]
+        )
+      }
+    } catch {
+      Alert.alert(
+        t.appInfo.contactSupport,
+        t.appInfo.sendEmail.replace('{email}', SUPPORT_EMAIL),
+        [{ text: t.common.ok }]
+      )
+    }
+  }
 
   return (
     <View
@@ -53,7 +59,7 @@ export const AppInfo = () => {
             color={colors.mutedForeground}
           />
           <Text className="text-muted-foreground font-sans text-xs">
-            Privacy Policy
+            {t.appInfo.privacyPolicy}
           </Text>
         </Pressable>
 
@@ -69,7 +75,7 @@ export const AppInfo = () => {
             color={colors.mutedForeground}
           />
           <Text className="text-muted-foreground font-sans text-xs">
-            Contact
+            {t.appInfo.contact}
           </Text>
         </Pressable>
       </View>
@@ -79,13 +85,7 @@ export const AppInfo = () => {
           LolTimeFlash v{APP_VERSION}
         </Text>
         <Text className="text-center font-sans text-[10px] leading-relaxed text-white/40">
-          LolTimeFlash is not endorsed by Riot Games and does not reflect the
-          views
-          {'\n'}or opinions of Riot Games or anyone officially involved in
-          producing
-          {'\n'}or managing League of Legends. League of Legends and Riot Games
-          are
-          {'\n'}trademarks or registered trademarks of Riot Games, Inc.
+          {t.appInfo.disclaimer}
         </Text>
       </View>
     </View>

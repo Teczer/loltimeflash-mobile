@@ -11,11 +11,13 @@ import { LEAGUE_ROLES } from '@/features/game/constants/game.constants'
 import { GameProvider, useGameContext } from '@/features/game/contexts'
 import type { TRole } from '@/features/game/types/game.types'
 import type { ILiveGameData } from '@/features/game/types/riot.types'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { mapEnemyParticipantsToRoles } from '@/lib/riot-role-mapping.util'
 
 const SoloGameContent = () => {
   const router = useRouter()
+  const { t } = useTranslation()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const {
     gameState,
@@ -123,7 +125,7 @@ const SoloGameContent = () => {
         <BottomSheet
           isOpen={isSheetOpen}
           onClose={() => setIsSheetOpen(false)}
-          title="Fetch Live Game"
+          title={t.game.fetchLiveGame}
         >
           <SummonerInput onGameDataFetched={handleGameDataFetched} />
         </BottomSheet>

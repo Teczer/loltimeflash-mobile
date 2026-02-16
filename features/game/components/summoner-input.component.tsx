@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native'
 
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { cn } from '@/lib/utils'
 
@@ -24,6 +25,7 @@ interface ISummonerInputProps {
 
 export const SummonerInput = (props: ISummonerInputProps) => {
   const { onGameDataFetched } = props
+  const { t } = useTranslation()
   const [summonerName, setSummonerName] = useState('')
   const [region, setRegion] = useState<TRiotRegion>('euw1')
   const [showRegionPicker, setShowRegionPicker] = useState(false)
@@ -45,7 +47,7 @@ export const SummonerInput = (props: ISummonerInputProps) => {
       <View className="flex-row items-center gap-2">
         <TextInput
           className="text-foreground border-border bg-background/50 font-sans-bold flex-1 rounded-lg border px-4 py-3"
-          placeholder="Summoner Name"
+          placeholder={t.game.summonerName}
           placeholderTextColor={colors.mutedForeground}
           value={summonerName}
           onChangeText={setSummonerName}
@@ -108,7 +110,7 @@ export const SummonerInput = (props: ISummonerInputProps) => {
         {isPending ? (
           <>
             <ActivityIndicator size="small" color={colors.foreground} />
-            <Text className="text-foreground font-sans-bold">Fetching...</Text>
+            <Text className="text-foreground font-sans-bold">{t.game.fetching}</Text>
           </>
         ) : (
           <>
@@ -125,7 +127,7 @@ export const SummonerInput = (props: ISummonerInputProps) => {
                 summonerName.trim() ? 'text-background' : 'text-foreground'
               )}
             >
-              Fetch Live Game
+              {t.game.fetchLiveGame}
             </Text>
           </>
         )}

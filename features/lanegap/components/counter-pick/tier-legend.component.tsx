@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Modal, Pressable, Text, View } from 'react-native'
 
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
 import { ICON_COLORS, ICON_SIZES, TIER_COLORS, TIER_LABELS } from '@/features/lanegap/constants'
@@ -11,6 +12,7 @@ const TIERS_TO_SHOW: TTier[] = ['S+', 'S', 'A+', 'A', 'B+', 'B', 'B-', 'C']
 
 export const TierLegend = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const { t, language } = useTranslation()
 
   return (
     <>
@@ -41,7 +43,7 @@ export const TierLegend = () => {
           >
             <View className="flex-row items-center justify-between border-b border-white/10 px-4 py-3">
               <Text className="text-base font-bold text-white">
-                Tier Legend
+                {t.laneGap.tierLegend}
               </Text>
               <Pressable
                 onPress={() => setIsOpen(false)}
@@ -77,7 +79,7 @@ export const TierLegend = () => {
                   </View>
 
                   <Text className="flex-1 text-sm text-white/70">
-                    {TIER_LABELS[tier]}
+                    {TIER_LABELS[tier][language]}
                   </Text>
                 </View>
               ))}

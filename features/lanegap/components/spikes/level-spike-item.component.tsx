@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import { Text, View } from 'react-native'
 
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
 import { ICON_SIZES } from '@/features/lanegap/constants'
@@ -11,6 +12,9 @@ interface ILevelSpikeItemProps {
 }
 
 export const LevelSpikeItem = ({ spike }: ILevelSpikeItemProps) => {
+  const { language } = useTranslation()
+  const text = spike.text[language] || spike.text.en
+
   if (spike.important) {
     return (
       <View className="border-warning/30 bg-linear-to-br from-warning/15 to-accent-gold/10 flex-row items-start gap-3 rounded-lg border p-3">
@@ -20,7 +24,7 @@ export const LevelSpikeItem = ({ spike }: ILevelSpikeItemProps) => {
 
         <View className="min-w-0 flex-1">
           <Text className="text-sm font-medium leading-relaxed text-white">
-            {spike.text}
+            {text}
           </Text>
         </View>
 
@@ -39,7 +43,7 @@ export const LevelSpikeItem = ({ spike }: ILevelSpikeItemProps) => {
 
       <View className="min-w-0 flex-1">
         <Text className="text-sm leading-relaxed text-white/70">
-          {spike.text}
+          {text}
         </Text>
       </View>
     </View>

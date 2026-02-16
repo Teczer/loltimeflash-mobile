@@ -20,12 +20,14 @@ import { LEAGUE_ROLES } from '@/features/game/constants/game.constants'
 import { GameProvider, useGameContext } from '@/features/game/contexts'
 import type { TRole } from '@/features/game/types/game.types'
 import type { ILiveGameData } from '@/features/game/types/riot.types'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { mapEnemyParticipantsToRoles } from '@/lib/riot-role-mapping.util'
 import { useUserStore } from '@/stores/user.store'
 
 const MultiplayerGameContent = () => {
   const router = useRouter()
+  const { t } = useTranslation()
   const { roomId } = useLocalSearchParams<{ roomId: string }>()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -107,7 +109,7 @@ const MultiplayerGameContent = () => {
           <View className="bg-warning/20 mx-4 mt-2 flex-row items-center justify-center gap-2 rounded-lg p-3">
             <ConnectionIndicator status="reconnecting" size="sm" />
             <Text className="text-warning text-center text-sm">
-              Connecting to server...
+              {t.game.connectingToServer}
             </Text>
           </View>
         )}
@@ -157,13 +159,13 @@ const MultiplayerGameContent = () => {
         <BottomSheet
           isOpen={isSheetOpen}
           onClose={() => setIsSheetOpen(false)}
-          title="Room Settings"
+          title={t.game.roomSettings}
         >
           {/* Live Game Fetch */}
           <SettingsSection
             icon="game-controller"
             iconColor={colors.success}
-            title="Fetch Live Game"
+            title={t.game.fetchLiveGame}
           >
             <SummonerInput onGameDataFetched={handleGameDataFetched} />
           </SettingsSection>
@@ -172,7 +174,7 @@ const MultiplayerGameContent = () => {
           <SettingsSection
             icon="people"
             iconColor={colors.gold}
-            title={`Connected Users (${gameState.users.length})`}
+            title={t.game.connectedUsers.replace('{count}', String(gameState.users.length))}
           >
             {gameState.users.length > 0 ? (
               <View className="flex-row flex-wrap gap-2">
@@ -192,7 +194,7 @@ const MultiplayerGameContent = () => {
               </View>
             ) : (
               <Text className="text-sm text-white/50">
-                No users connected yet
+                {t.game.noUsersConnected}
               </Text>
             )}
           </SettingsSection>
@@ -201,14 +203,14 @@ const MultiplayerGameContent = () => {
           <SettingsSection
             icon="key"
             iconColor={colors.goldLight}
-            title="Room Code"
+            title={t.game.roomCode}
           >
             <SettingsCard
               leftElement={
                 <ConnectionIndicator status={connectionStatus} size="lg" />
               }
               title={roomId || ''}
-              subtitle={isConnected ? 'Connected' : 'Disconnected'}
+              subtitle={isConnected ? t.common.connected : t.common.disconnected}
               onPress={handleCopyCode}
               rightElement={
                 <View className="flex-row items-center gap-2 rounded-lg bg-white/10 px-3 py-1.5">
@@ -220,7 +222,7 @@ const MultiplayerGameContent = () => {
                   <Text
                     className={`text-sm ${copied ? 'text-success' : 'text-white'}`}
                   >
-                    {copied ? 'Copied!' : 'Copy'}
+                    {copied ? t.common.copied : t.common.copy}
                   </Text>
                 </View>
               }
@@ -231,13 +233,13 @@ const MultiplayerGameContent = () => {
           <SettingsSection
             icon="musical-notes"
             iconColor={colors.info}
-            title="Sound"
+            title={t.game.sound}
             className=""
           >
             <SettingsCard
               icon={audio.volume === 'on' ? 'volume-high' : 'volume-mute'}
-              title={audio.volume === 'on' ? 'Sound On' : 'Sound Off'}
-              subtitle="Flash notification sound"
+              title={audio.volume === 'on' ? t.game.soundOn : t.game.soundOff}
+              subtitle={t.game.flashNotificationSound}
               variant={audio.volume === 'on' ? 'gold' : 'muted'}
               rightElement={
                 <CustomToggle

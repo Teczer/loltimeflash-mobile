@@ -17,11 +17,13 @@ import {
 } from '@/features/lanegap/components'
 import { useEnemyChampion } from '@/features/lanegap/hooks'
 import { useLaneGapStore } from '@/features/lanegap/stores'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
 export default function ChampionDetailScreen() {
   const router = useRouter()
   const { championId } = useLocalSearchParams<{ championId: string }>()
+  const { t, language } = useTranslation()
 
   const { data: enemyData, isLoading } = useEnemyChampion(championId || '')
 
@@ -31,13 +33,16 @@ export default function ChampionDetailScreen() {
   const champion = championId ? getChampion(championId) : undefined
   const championIcon = championId ? getChampionIcon(championId) : null
 
+  const displayName = enemyData?.name?.[language] || enemyData?.name?.en || champion?.name || ''
+  const tips = enemyData?.tips?.[language] || enemyData?.tips?.en || []
+
   if (!champion) {
     return (
       <View className="bg-background flex-1">
         <StyledSafeAreaView className="flex-1 items-center justify-center">
-          <Text className="text-foreground font-sans">Champion not found</Text>
+          <Text className="text-foreground font-sans">{t.laneGap.championNotFound}</Text>
           <GlassButton onPress={() => router.back()} className="mt-4">
-            <Text className="text-foreground font-sans">Go back</Text>
+            <Text className="text-foreground font-sans">{t.laneGap.goBack}</Text>
           </GlassButton>
         </StyledSafeAreaView>
       </View>
@@ -68,14 +73,14 @@ export default function ChampionDetailScreen() {
 
             <View>
               <Text className="font-sans-medium text-danger text-xs uppercase tracking-wider">
-                Facing Enemy
+                {t.laneGap.facingEnemy}
               </Text>
               <Text className="font-sans-bold text-foreground text-2xl uppercase">
-                {champion.name}
+                {displayName}
               </Text>
               {enemyData?.dateEdited && (
                 <Text className="text-muted-foreground text-xs">
-                  Updated: {enemyData.dateEdited}
+                  {t.laneGap.updated.replace('{date}', enemyData.dateEdited)}
                 </Text>
               )}
             </View>
@@ -103,7 +108,7 @@ export default function ChampionDetailScreen() {
             showsVerticalScrollIndicator={false}
           >
             <SectionCard
-              title={`Best picks against ${champion.name}`}
+              title={t.laneGap.bestPicks.replace('{name}', displayName)}
               icon="shield-outline"
               iconColor={colors.success}
               isEmpty={!enemyData?.counters?.length}
@@ -131,20 +136,20 @@ export default function ChampionDetailScreen() {
             </SectionCard>
 
             <SectionCard
-              title={`How to play against ${champion.name}`}
+              title={t.laneGap.howToPlay.replace('{name}', displayName)}
               icon="locate"
               iconColor={colors.danger}
-              isEmpty={!enemyData?.tips?.length}
+              isEmpty={!tips?.length}
             >
               <View className="gap-3">
-                {enemyData?.tips?.map((tip, index) => (
+                {tips?.map((tip, index) => (
                   <TipItem key={index} tip={tip} index={index} />
                 ))}
               </View>
             </SectionCard>
 
             <SectionCard
-              title={`${champion.name} Power Spikes`}
+              title={t.laneGap.powerSpikes.replace('{name}', displayName)}
               icon="trending-up-outline"
               iconColor={colors.info}
               isEmpty={!enemyData?.levelSpikes?.length}
@@ -157,7 +162,7 @@ export default function ChampionDetailScreen() {
             </SectionCard>
 
             <SectionCard
-              title={`${champion.name} Item Spikes`}
+              title={t.laneGap.itemSpikes.replace('{name}', displayName)}
               icon="cube-outline"
               iconColor={colors.goldLight}
               isEmpty={!enemyData?.itemSpikes?.length}

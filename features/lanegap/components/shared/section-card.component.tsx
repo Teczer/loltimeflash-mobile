@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons'
 import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
 
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { cn } from '@/lib/utils'
 
@@ -23,11 +24,15 @@ export const SectionCard = ({
   icon,
   iconColor,
   children,
-  emptyText = 'No data available',
+  emptyText,
   isEmpty = false,
   headerRight,
   className,
-}: ISectionCardProps) => (
+}: ISectionCardProps) => {
+  const { t } = useTranslation()
+  const displayEmptyText = emptyText || t.laneGap.noDataAvailable
+
+  return (
   <View
     className={cn('bg-white/3 border-white/6 rounded-xl border p-4', className)}
   >
@@ -44,10 +49,11 @@ export const SectionCard = ({
     {isEmpty ? (
       <View className="items-center justify-center rounded-lg bg-white/5 py-8">
         <Ionicons name="sparkles-outline" size={ICON_SIZES.xl} color={colors.goldLight} />
-        <Text className="mt-2 text-sm text-white/50">{emptyText}</Text>
+        <Text className="mt-2 text-sm text-white/50">{displayEmptyText}</Text>
       </View>
     ) : (
       children
     )}
   </View>
-)
+  )
+}

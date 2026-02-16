@@ -6,6 +6,7 @@ import { Image, Linking, Platform, Pressable, Text, View } from 'react-native'
 import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
 import { Button, GlassButton, TitleText } from '@/components/ui'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
 const IS_NATIVE_TABS = isLiquidGlassAvailable()
@@ -17,6 +18,7 @@ const FOOTER_PADDING = IS_NATIVE_TABS
 
 export default function HomeScreen() {
   const router = useRouter()
+  const { t } = useTranslation()
 
   const handleStartGame = () => {
     router.push('/game/solo')
@@ -45,7 +47,7 @@ export default function HomeScreen() {
         <View className="flex-1 flex-col items-center justify-center gap-y-8 px-6">
           {/* Header with Flash Icon */}
           <View className="flex-row items-center gap-x-4">
-            <TitleText size="md">Welcome to LolTimeFlash!</TitleText>
+            <TitleText size="md">{t.home.welcome}</TitleText>
             <Image
               source={require('@/assets/images/roles/flash-icon.webp')}
               className="size-12 rotate-6 rounded-lg"
@@ -61,7 +63,7 @@ export default function HomeScreen() {
               onPress={handleStartGame}
               className="w-full"
             >
-              Solo Lobby
+              {t.home.soloLobby}
             </Button>
           </View>
         </View>
@@ -72,7 +74,7 @@ export default function HomeScreen() {
           style={{ paddingBottom: FOOTER_PADDING }}
         >
           <Text className="font-sans-bold text-foreground text-xs">
-            Made with ❤️ by
+            {t.home.madeWith}
           </Text>
           <Pressable
             onPress={() => Linking.openURL('https://github.com/Teczer')}

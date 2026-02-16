@@ -1,3 +1,5 @@
+import type { ILocalizedText } from '@/lib/i18n'
+
 import type { TTier } from '../types/lanegap.types'
 
 export const TIER_ORDER: readonly TTier[] = [
@@ -22,13 +24,13 @@ export const TIER_COLORS: Record<TTier, string> = {
   C: '#6B7280',
 }
 
-export const TIER_LABELS: Record<TTier, string> = {
-  'S+': 'Perfect Counter',
-  S: 'Hard Counter',
-  'A+': 'Strong Counter',
-  A: 'Counter',
-  'B+': 'Slight Advantage',
-  B: 'Skill Matchup (50/50)',
-  'B-': 'Slight Disadvantage',
-  C: 'Avoid',
+export const TIER_LABELS: Record<TTier, ILocalizedText> = {
+  'S+': { en: 'Perfect Counter', fr: 'Counter parfait' },
+  S: { en: 'Hard Counter', fr: 'Hard counter' },
+  'A+': { en: 'Strong Counter', fr: 'Counter fort' },
+  A: { en: 'Counter', fr: 'Counter' },
+  'B+': { en: 'Slight Advantage', fr: 'Léger avantage' },
+  B: { en: 'Skill Matchup (50/50)', fr: 'Skill matchup (50/50)' },
+  'B-': { en: 'Slight Disadvantage', fr: 'Léger désavantage' },
+  C: { en: 'Avoid', fr: 'À éviter' },
 }

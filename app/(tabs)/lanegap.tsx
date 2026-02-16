@@ -17,6 +17,7 @@ import {
 } from '@/features/lanegap/components'
 import { championPlaysLane, type TLane } from '@/features/lanegap/data'
 import { useLaneGapStore } from '@/features/lanegap/stores'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { ScrollView } from 'react-native'
 
@@ -27,6 +28,7 @@ interface ILaneGapFormData {
 
 export default function LaneGapScreen() {
   const router = useRouter()
+  const { t } = useTranslation()
 
   const { control, setValue } = useForm<ILaneGapFormData>({
     defaultValues: {
@@ -114,7 +116,7 @@ export default function LaneGapScreen() {
             name="search"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                placeholder="Search enemy champion..."
+                placeholder={t.laneGap.searchPlaceholder}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}
@@ -156,8 +158,8 @@ export default function LaneGapScreen() {
               <Ionicons name="locate" size={14} color={colors.danger} />
               <Text className="font-sans-bold text-foreground/80 text-sm">
                 {isSearching
-                  ? `${filteredChampions.length} results`
-                  : 'Enemy Champions'}
+                  ? t.laneGap.results.replace('{count}', String(filteredChampions.length))
+                  : t.laneGap.enemyChampions}
               </Text>
             </View>
 

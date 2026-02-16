@@ -3,6 +3,7 @@ import { memo, useCallback } from 'react'
 import { FlatList, Text, View } from 'react-native'
 
 import type { IChampion } from '@/assets/champions'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { cn } from '@/lib/utils'
 
@@ -11,24 +12,17 @@ import { ChampionItem } from '@/features/lanegap/components/champion/champion-it
 
 type TSectionType = 'favorites' | 'recent' | 'enemies'
 
-const SECTION_CONFIG: Record<
-  TSectionType,
-  { icon: string; color: string; label: string }
-> = {
-  favorites: { icon: 'star', color: colors.gold, label: 'Favorites' },
-  recent: {
-    icon: 'time-outline',
-    color: colors.mutedForeground,
-    label: 'Recent',
-  },
-  enemies: { icon: 'skull', color: '#ef4444', label: 'Enemy Champions' },
-}
-
 interface IChampionSectionProps {
   type: TSectionType
   champions: IChampion[]
   onChampionPress: (champion: IChampion) => void
   horizontal?: boolean
+}
+
+const SECTION_ICONS: Record<TSectionType, { icon: string; color: string }> = {
+  favorites: { icon: 'star', color: colors.gold },
+  recent: { icon: 'time-outline', color: colors.mutedForeground },
+  enemies: { icon: 'skull', color: '#ef4444' },
 }
 
 const ChampionSectionComponent = ({
@@ -37,7 +31,15 @@ const ChampionSectionComponent = ({
   onChampionPress,
   horizontal = false,
 }: IChampionSectionProps) => {
-  const config = SECTION_CONFIG[type]
+  const { t } = useTranslation()
+
+  const sectionLabels: Record<TSectionType, string> = {
+    favorites: t.laneGap.favorites,
+    recent: t.laneGap.recent,
+    enemies: t.laneGap.enemyChampions,
+  }
+
+  const config = { ...SECTION_ICONS[type], label: sectionLabels[type] }
 
   const renderItem = useCallback(
     ({ item }: { item: IChampion }) => (

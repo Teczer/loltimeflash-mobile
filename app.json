@@ -12,7 +12,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.loltimeflash.app",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["mailto"]
+        "LSApplicationQueriesSchemes": [
+          "mailto"
+        ]
       }
     },
     "android": {
@@ -53,7 +55,8 @@
             "image": "./assets/images/splash.png"
           }
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,

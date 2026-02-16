@@ -7,11 +7,17 @@ import { AppInfo } from '@/components/app-info.component'
 import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
 import { GlassButton, TitleText } from '@/components/ui'
-import { BackgroundPicker, UsernameForm } from '@/features/settings/components'
+import {
+  BackgroundPicker,
+  LanguagePicker,
+  UsernameForm,
+} from '@/features/settings/components'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
 export default function SettingsScreen() {
   const router = useRouter()
+  const { t } = useTranslation()
 
   return (
     <BackgroundImage>
@@ -21,7 +27,7 @@ export default function SettingsScreen() {
           <GlassButton onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={22} color={colors.foreground} />
           </GlassButton>
-          <TitleText size="md">Settings</TitleText>
+          <TitleText size="md">{t.settings.title}</TitleText>
         </View>
 
         <KeyboardAwareScrollView
@@ -31,6 +37,7 @@ export default function SettingsScreen() {
           bottomOffset={50}
         >
           <UsernameForm />
+          <LanguagePicker />
           <BackgroundPicker />
         </KeyboardAwareScrollView>
 

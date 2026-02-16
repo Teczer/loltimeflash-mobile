@@ -5,6 +5,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form'
 import { Alert, Text, View } from 'react-native'
 
 import { Button, TextInput } from '@/components/ui'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { generateLobbyCode } from '@/lib/utils'
 import { useUserStore } from '@/stores'
@@ -21,6 +22,7 @@ try {
 
 export const CreateLobbyForm = () => {
   const router = useRouter()
+  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const username = useUserStore((s) => s.username)
 
@@ -44,7 +46,7 @@ export const CreateLobbyForm = () => {
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
       } else {
-        Alert.alert('Lobby Code', lobbyCode, [{ text: 'OK' }])
+        Alert.alert(t.lobby.lobbyCode, lobbyCode, [{ text: t.common.ok }])
       }
     }
   }
@@ -67,16 +69,16 @@ export const CreateLobbyForm = () => {
   return (
     <View className="w-full items-center gap-6">
       <Text className="font-sans-bold text-foreground text-xl">
-        Create a Lobby
+        {t.lobby.createTitle}
       </Text>
 
       {!lobbyCode ? (
         <Button variant="outline" onPress={handleCreateLobby}>
-          Create Lobby
+          {t.lobby.createButton}
         </Button>
       ) : (
         <View className="w-full items-center gap-4">
-          <Text className="text-muted-foreground">Your lobby code is:</Text>
+          <Text className="text-muted-foreground">{t.lobby.lobbyCodeIs}</Text>
 
           <View className="w-full flex-row items-center gap-2">
             <View className="flex-1">
@@ -117,7 +119,7 @@ export const CreateLobbyForm = () => {
               />
             }
           >
-            Join Lobby
+            {t.lobby.joinButton}
           </Button>
         </View>
       )}

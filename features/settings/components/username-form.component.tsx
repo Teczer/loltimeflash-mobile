@@ -10,6 +10,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { Button, TextInput, TitleText } from '@/components/ui'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH } from '@/lib/constants'
 import { useUserStore } from '@/stores'
@@ -27,6 +28,7 @@ interface IUsernameFormProps {
 const UsernameFormComponent = (props: IUsernameFormProps) => {
   const { withHeightAnimation = true } = props
   const { username, setUsername } = useUserStore()
+  const { t } = useTranslation()
   const contentHeight = useSharedValue(0)
   const hasMeasured = useRef(false)
 
@@ -69,8 +71,8 @@ const UsernameFormComponent = (props: IUsernameFormProps) => {
     [contentHeight]
   )
 
-  const minLengthMessage = `Must be at least ${MIN_USERNAME_LENGTH} characters`
-  const maxLengthMessage = `Must not exceed ${MAX_USERNAME_LENGTH} characters`
+  const minLengthMessage = t.settings.minLength.replace('{min}', String(MIN_USERNAME_LENGTH))
+  const maxLengthMessage = t.settings.maxLength.replace('{max}', String(MAX_USERNAME_LENGTH))
 
   const validationRulesContent = (
     <View className="gap-1">
@@ -87,11 +89,11 @@ const UsernameFormComponent = (props: IUsernameFormProps) => {
 
   return (
     <View className="items-center gap-y-4">
-      <TitleText size="sm">Change or set your username</TitleText>
+      <TitleText size="sm">{t.settings.changeUsername}</TitleText>
 
       {username && (
         <Text className="font-sans-medium text-foreground text-sm">
-          Your username is :{' '}
+          {t.settings.yourUsername}{' '}
           <Text className="font-sans-bold text-lg text-[#C89B3C]">
             {username}
           </Text>
@@ -104,7 +106,7 @@ const UsernameFormComponent = (props: IUsernameFormProps) => {
           name="username"
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              placeholder="Enter your username"
+              placeholder={t.settings.enterUsername}
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}

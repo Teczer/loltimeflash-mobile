@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { CHAMPIONS, type IChampion } from '@/assets/champions'
 import { Button, TextInput } from '@/components/ui'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
 import { ChampionRow } from '@/features/settings/components/background-picker/champion-row.component'
@@ -28,6 +29,7 @@ const BackgroundPickerModalComponent = ({
 }: IBackgroundPickerModalProps) => {
   const [searchQuery, setSearchQuery] = useState('')
   const insets = useSafeAreaInsets()
+  const { t } = useTranslation()
 
   const filteredChampions = useMemo(() => {
     if (!searchQuery) return CHAMPIONS
@@ -83,18 +85,18 @@ const BackgroundPickerModalComponent = ({
           </Pressable>
 
           <Text className="font-sans-bold text-foreground text-lg">
-            Choose Background
+            {t.settings.chooseBackground}
           </Text>
 
           <Button variant="outline" size="sm" onPress={handleReset}>
-            Reset
+            {t.common.reset}
           </Button>
         </View>
 
         {/* Search */}
         <View className="px-4 py-3">
           <TextInput
-            placeholder="Search champions..."
+            placeholder={t.settings.searchChampions}
             value={searchQuery}
             onChangeText={setSearchQuery}
             autoCapitalize="none"
@@ -122,7 +124,7 @@ const BackgroundPickerModalComponent = ({
           ListEmptyComponent={
             <View className="flex-1 items-center justify-center py-20">
               <Text className="text-muted-foreground font-sans">
-                No champions found
+                {t.settings.noChampionsFound}
               </Text>
             </View>
           }

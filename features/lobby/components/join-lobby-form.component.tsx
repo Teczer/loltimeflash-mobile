@@ -6,6 +6,7 @@ import { Text, View } from 'react-native'
 
 import { Button, TextInput } from '@/components/ui'
 import { LOBBY_CODE_LENGTH } from '@/features/game/constants/game.constants'
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { useUserStore } from '@/stores'
 
@@ -16,6 +17,7 @@ import {
 
 export const JoinLobbyForm = () => {
   const router = useRouter()
+  const { t } = useTranslation()
   const username = useUserStore((s) => s.username)
 
   const {
@@ -45,7 +47,7 @@ export const JoinLobbyForm = () => {
   return (
     <View className="w-full items-center gap-6">
       <Text className="font-sans-bold text-foreground text-xl">
-        Join a Lobby
+        {t.lobby.joinTitle}
       </Text>
 
       <View className="w-full flex-row items-center gap-2">
@@ -55,7 +57,7 @@ export const JoinLobbyForm = () => {
             name="lobbyCode"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                placeholder="Enter lobby code"
+                placeholder={t.lobby.enterCode}
                 value={value}
                 onChangeText={onChange}
                 onBlur={onBlur}

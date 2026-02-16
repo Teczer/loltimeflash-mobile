@@ -1,6 +1,7 @@
 import { Image, Text, View } from 'react-native'
 
 import { getItemIcon } from '@/assets/items'
+import { useTranslation } from '@/hooks/use-translation.hook'
 
 import type { IItemSpike } from '@/features/lanegap/types'
 
@@ -9,7 +10,9 @@ interface IItemSpikeItemProps {
 }
 
 export const ItemSpikeItem = ({ spike }: IItemSpikeItemProps) => {
+  const { language } = useTranslation()
   const itemIcon = getItemIcon(spike.itemId)
+  const text = spike.text[language] || spike.text.en
 
   return (
     <View className="flex-row items-center gap-3 rounded-lg bg-white/5 p-3">
@@ -20,7 +23,7 @@ export const ItemSpikeItem = ({ spike }: IItemSpikeItemProps) => {
       </View>
 
       <Text className="flex-1 text-sm leading-relaxed text-white/70">
-        {spike.text}
+        {text}
       </Text>
     </View>
   )

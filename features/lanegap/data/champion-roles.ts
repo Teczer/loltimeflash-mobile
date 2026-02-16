@@ -10,12 +10,14 @@ export type TLane = 'all' | 'top' | 'mid' | 'adc' | 'support'
 
 export const LANES: TLane[] = ['top', 'mid', 'all', 'adc', 'support']
 
-export const LANE_LABELS: Record<TLane, string> = {
-  all: 'All',
-  top: 'Top',
-  mid: 'Mid',
-  adc: 'ADC',
-  support: 'Support',
+import type { ILocalizedText } from '@/lib/i18n'
+
+export const LANE_LABELS: Record<TLane, ILocalizedText> = {
+  all: { en: 'All', fr: 'Tous' },
+  top: { en: 'Top', fr: 'Top' },
+  mid: { en: 'Mid', fr: 'Mid' },
+  adc: { en: 'ADC', fr: 'ADC' },
+  support: { en: 'Support', fr: 'Support' },
 }
 
 // Using local assets for lane icons

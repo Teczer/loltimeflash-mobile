@@ -10,11 +10,14 @@ import {
 } from 'expo-router/unstable-native-tabs'
 import { Platform } from 'react-native'
 
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
 const isGlassEnabled = isLiquidGlassAvailable()
 
 export default function TabLayout() {
+  const { t } = useTranslation()
+
   // Fallback to JavaScript Tabs if liquid glass is not available
   if (!isGlassEnabled) {
     return (
@@ -34,7 +37,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Solo',
+            title: t.tabs.solo,
             tabBarIcon: ({ color }) => (
               <FontAwesome name="user" size={24} color={color} />
             ),
@@ -43,7 +46,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="multiplayer"
           options={{
-            title: 'Multi',
+            title: t.tabs.multi,
             tabBarIcon: ({ color }) => (
               <FontAwesome name="users" size={24} color={color} />
             ),
@@ -52,7 +55,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="lanegap"
           options={{
-            title: 'LaneGap',
+            title: t.tabs.laneGap,
             tabBarIcon: ({ color }) => (
               <FontAwesome name="book" size={24} color={color} />
             ),
@@ -66,7 +69,7 @@ export default function TabLayout() {
   return (
     <NativeTabs tintColor={colors.gold}>
       <NativeTabs.Trigger name="index">
-        <Label>Solo</Label>
+        <Label>{t.tabs.solo}</Label>
         {Platform.select({
           ios: <Icon sf={{ default: 'bolt', selected: 'bolt.fill' }} />,
           android: (
@@ -75,7 +78,7 @@ export default function TabLayout() {
         })}
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="multiplayer">
-        <Label>Multi</Label>
+        <Label>{t.tabs.multi}</Label>
         {Platform.select({
           ios: <Icon sf={{ default: 'person.2', selected: 'person.2.fill' }} />,
           android: (
@@ -84,7 +87,7 @@ export default function TabLayout() {
         })}
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="lanegap">
-        <Label>LaneGap</Label>
+        <Label>{t.tabs.laneGap}</Label>
         {Platform.select({
           ios: (
             <Icon

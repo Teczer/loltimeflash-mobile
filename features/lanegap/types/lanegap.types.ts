@@ -1,23 +1,25 @@
+import type { ILocalizedText } from '@/lib/i18n'
+
 export type TTier = 'S+' | 'S' | 'A+' | 'A' | 'B+' | 'B' | 'B-' | 'C'
 
 export type TTierBase = 'S+' | 'S' | 'A+' | 'A' | 'B' | 'C'
 
 export interface ILevelSpike {
   level: number
-  text: string
+  text: ILocalizedText
   important?: boolean
 }
 
 export interface IItemSpike {
   itemId: string
-  text: string
+  text: ILocalizedText
 }
 
 export interface IEnemyChampion {
   id: string
-  name: string
+  name: ILocalizedText
   dateEdited: string
-  tips: string[]
+  tips: { en: string[]; fr: string[] }
   levelSpikes: ILevelSpike[]
   itemSpikes: IItemSpike[]
   counters: { championId: string; tier: TTier }[]

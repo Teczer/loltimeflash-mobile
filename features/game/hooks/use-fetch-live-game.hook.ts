@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { Alert } from 'react-native'
 
+import { useTranslation } from '@/hooks/use-translation.hook'
 import { fetchLiveGameData } from '@/lib/riot-api.service'
 
 import type {
@@ -26,6 +27,8 @@ interface IUseFetchLiveGameReturn {
 export const useFetchLiveGame = (
   options?: IUseFetchLiveGameOptions
 ): IUseFetchLiveGameReturn => {
+  const { t } = useTranslation()
+
   const { mutate, mutateAsync, isPending } = useMutation({
     mutationFn: async ({ summonerName, region }: IFetchLiveGameParams) => {
       const response = await fetchLiveGameData(summonerName, region)
@@ -36,11 +39,14 @@ export const useFetchLiveGame = (
     },
     onSuccess: (data) => {
       const enemyCount = data.enemies?.length || 0
-      Alert.alert('Success', `Found ${enemyCount} enemy champions in live game`)
+      Alert.alert(
+        t.game.success,
+        t.game.foundEnemies.replace('{count}', String(enemyCount))
+      )
       options?.onSuccess?.(data)
     },
     onError: (error: Error) => {
-      Alert.alert('Error', error.message || 'Network error - please try again')
+      Alert.alert(t.game.error, error.message || t.game.networkError)
     },
   })
 

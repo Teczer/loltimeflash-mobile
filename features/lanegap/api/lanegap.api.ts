@@ -48,7 +48,7 @@ export async function fetchEnemyChampion(
       )
       .map((spike) => ({
         level: spike.level,
-        text: spike.text_en,
+        text: { en: spike.text_en, fr: spike.text_fr },
         important: spike.important,
       }))
       .sort((a, b) => a.level - b.level)
@@ -60,7 +60,7 @@ export async function fetchEnemyChampion(
       )
       .map((spike) => ({
         itemId: spike.item_id,
-        text: spike.text_en,
+        text: { en: spike.text_en, fr: spike.text_fr },
       }))
 
     // Get counters for this champion (champions that are good AGAINST this enemy)
@@ -83,9 +83,9 @@ export async function fetchEnemyChampion(
 
     return {
       id: champion.champion_id,
-      name: champion.name_en,
+      name: { en: champion.name_en, fr: champion.name_fr },
       dateEdited: champion.date_edited,
-      tips: champion.tips_en || [],
+      tips: { en: champion.tips_en || [], fr: champion.tips_fr || [] },
       levelSpikes: championLevelSpikes,
       itemSpikes: championItemSpikes,
       counters: championCounters,
