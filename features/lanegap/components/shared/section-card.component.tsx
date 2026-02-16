@@ -23,7 +23,7 @@ export const SectionCard = ({
   icon,
   iconColor,
   children,
-  emptyText = 'Coming soon...',
+  emptyText = 'No data available',
   isEmpty = false,
   headerRight,
   className,

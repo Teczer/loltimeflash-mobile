@@ -46,11 +46,9 @@ export default function ChampionDetailScreen() {
 
   return (
     <View className="flex-1 bg-transparent">
-      {/* Champion Splash Background */}
       <ChampionBackground championId={championId || ''} />
 
       <StyledSafeAreaView className="flex-1" edges={['top']}>
-        {/* Header */}
         <View className="flex-row items-center justify-between px-4 py-3">
           <View className="flex-row items-center gap-3">
             <Pressable
@@ -83,7 +81,6 @@ export default function ChampionDetailScreen() {
             </View>
           </View>
 
-          {/* Favorite Button */}
           <GlassButton
             size={36}
             onPress={() => championId && toggleFavorite(championId)}
@@ -105,13 +102,11 @@ export default function ChampionDetailScreen() {
             contentInsetAdjustmentBehavior="automatic"
             showsVerticalScrollIndicator={false}
           >
-            {/* Counter Picks */}
             <SectionCard
               title={`Best picks against ${champion.name}`}
               icon="shield-outline"
               iconColor={colors.success}
               isEmpty={!enemyData?.counters?.length}
-              emptyText="Counter picks coming soon..."
               headerRight={<TierLegend />}
               className="overflow-hidden"
             >
@@ -135,13 +130,11 @@ export default function ChampionDetailScreen() {
               </ScrollView>
             </SectionCard>
 
-            {/* Tips */}
             <SectionCard
               title={`How to play against ${champion.name}`}
               icon="locate"
               iconColor={colors.danger}
               isEmpty={!enemyData?.tips?.length}
-              emptyText="Tips coming soon..."
             >
               <View className="gap-3">
                 {enemyData?.tips?.map((tip, index) => (
@@ -150,13 +143,11 @@ export default function ChampionDetailScreen() {
               </View>
             </SectionCard>
 
-            {/* Level Spikes */}
             <SectionCard
               title={`${champion.name} Power Spikes`}
               icon="trending-up-outline"
               iconColor={colors.info}
               isEmpty={!enemyData?.levelSpikes?.length}
-              emptyText="Power spikes coming soon..."
             >
               <View className="gap-4">
                 {enemyData?.levelSpikes?.map((spike) => (
@@ -165,30 +156,17 @@ export default function ChampionDetailScreen() {
               </View>
             </SectionCard>
 
-            {/* Item Spikes */}
             <SectionCard
               title={`${champion.name} Item Spikes`}
               icon="cube-outline"
               iconColor={colors.goldLight}
               isEmpty={!enemyData?.itemSpikes?.length}
-              emptyText="Item spikes coming soon..."
             >
               <View className="gap-4">
                 {enemyData?.itemSpikes?.map((spike) => (
                   <ItemSpikeItem key={spike.itemId} spike={spike} />
                 ))}
               </View>
-            </SectionCard>
-
-            {/* Notes Section - Coming Soon */}
-            <SectionCard
-              title={`My notes vs ${champion.name}`}
-              icon="document-text-outline"
-              iconColor={colors.mutedForeground}
-              isEmpty={true}
-              emptyText="Auth feature incoming soon..."
-            >
-              <View />
             </SectionCard>
           </ScrollView>
         )}

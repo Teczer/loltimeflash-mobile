@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.loltimeflash.app"
+      "bundleIdentifier": "com.loltimeflash.app",
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": ["mailto"]
+      }
     },
     "android": {
       "edgeToEdgeEnabled": true,
