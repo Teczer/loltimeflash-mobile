@@ -5,16 +5,23 @@ import { GlowingBorderCard } from './glowing-border-card.component'
 /**
  * S Tier Red Beam Effect
  *
- * A premium red beam effect for S tier counters.
+ * A red beam that rotates around the border with a trail effect.
+ * Matches the web version: transparent -> red trail -> transparent
  */
 
-// Red colors for S tier - 4 colors with high contrast
-const S_COLORS = [
-  '#FF4444', // Bright red
-  '#8B0000', // Dark red
-  '#FF6666', // Light red
-  '#660000', // Very dark red
+// Beam colors: transparent -> dark red -> red -> bright red -> pink -> transparent
+const S_BEAM_COLORS = [
+  'transparent',
+  'transparent',
+  '#7f1d1d', // Dark red
+  '#dc2626', // Red
+  '#ef4444', // Bright red
+  '#fca5a5', // Light pink
+  'transparent',
 ]
+
+// Positions to create the beam trail effect
+const S_BEAM_POSITIONS = [0, 0.5, 0.65, 0.8, 0.9, 0.95, 1]
 
 interface ISTierBeamProps {
   children: ReactNode
@@ -23,14 +30,15 @@ interface ISTierBeamProps {
 
 export const STierBeam = ({ children, borderRadius = 12 }: ISTierBeamProps) => (
   <GlowingBorderCard
-    colors={S_COLORS}
-    duration={3000}
+    colors={S_BEAM_COLORS}
+    positions={S_BEAM_POSITIONS}
+    duration={2000}
     borderRadius={borderRadius}
-    borderWidth={1}
+    borderWidth={2}
     showGlow={true}
-    glowIntensity={0.7}
-    glowBlurRadius={15}
-    glowSpread={0.5}
+    glowIntensity={0.5}
+    glowBlurRadius={8}
+    glowSpread={0.6}
   >
     {children}
   </GlowingBorderCard>

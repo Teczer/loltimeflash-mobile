@@ -22,6 +22,8 @@ const SCALE_FACTOR = 2
 type GlowingBorderCardProps = {
   children: ReactNode
   colors: string[]
+  /** Custom positions for gradient colors (0-1 range) */
+  positions?: number[]
   duration?: number
   /** Whether to show the glow effect */
   showGlow?: boolean
@@ -37,13 +39,12 @@ type GlowingBorderCardProps = {
   borderRadius?: number
   /** Whether to auto-start the animation */
   autoStart?: boolean
-  /** Show glowing orbs at color transitions */
-  showOrbs?: boolean
 }
 
 export const GlowingBorderCard = ({
   children,
   colors,
+  positions,
   duration = 2000,
   borderWidth = 3,
   showGlow = true,
@@ -52,7 +53,6 @@ export const GlowingBorderCard = ({
   glowBlurRadius = 30,
   borderRadius = 12,
   autoStart = true,
-  showOrbs = true,
 }: GlowingBorderCardProps) => {
   const rotateX = useSharedValue(0)
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
@@ -96,6 +96,7 @@ export const GlowingBorderCard = ({
               width={glowWidth}
               height={glowHeight}
               colors={colors}
+              positions={positions}
               blurRadius={glowBlurRadius}
               opacity={glowIntensity}
             />
@@ -115,7 +116,7 @@ export const GlowingBorderCard = ({
               width={wheelSize}
               height={wheelSize}
               colors={colors}
-              showOrbs={showOrbs}
+              positions={positions}
             />
           </Animated.View>
         </View>

@@ -53,10 +53,8 @@ type BaseColorWheelProps = {
 type SkiaColorWheelProps = BaseColorWheelProps & {
   /** Background color for the center (donut hole) */
   centerColor?: string
-  /** Show glowing orbs at color transitions */
-  showOrbs?: boolean
-  /** Size of the orbs relative to radius (0-1) */
-  orbSize?: number
+  /** Custom positions for gradient colors (0-1 range) */
+  positions?: number[]
 }
 
 /**
@@ -74,8 +72,7 @@ export const SkiaColorWheel = ({
   rotation = -90,
   innerRadius = 0,
   centerColor = 'transparent',
-  showOrbs = false,
-  orbSize = 0.08,
+  positions,
 }: SkiaColorWheelProps) => {
   // Support both width/height and legacy size prop
   const actualWidth = width ?? size
@@ -85,35 +82,22 @@ export const SkiaColorWheel = ({
   const centerY = actualHeight / 2
   const radius = Math.max(actualWidth, actualHeight) / 2
 
-  // Add the first color at the end to create a seamless loop
-  const gradientColors = useMemo(() => [...colors, colors[0]], [colors])
-
   // Create rotation transform
   const transform = useMemo(
     () => [{ rotate: (rotation * Math.PI) / 180 }],
     [rotation]
   )
 
-  // Calculate orb positions at color transitions
-  // Orbs positioned at 0.5 radius to be visible in the clipped border area
-  const orbPositions = useMemo(() => {
-    if (!showOrbs) return []
-    const anglePerColor = (2 * Math.PI) / colors.length
-    const orbDistance = radius * 0.5 // Position at the visible clipped edge
-    return colors.map((color, index) => {
-      const angle = index * anglePerColor - Math.PI / 2 // Start from top
-      const x = centerX + orbDistance * Math.cos(angle)
-      const y = centerY + orbDistance * Math.sin(angle)
-      return { x, y, color }
-    })
-  }, [colors, centerX, centerY, radius, showOrbs])
-
   return (
     <View style={styles.container}>
       <Canvas style={{ width: actualWidth, height: actualHeight }}>
         <Group transform={transform} origin={vec(centerX, centerY)}>
           <SkiaCircle cx={centerX} cy={centerY} r={radius}>
-            <SweepGradient c={vec(centerX, centerY)} colors={gradientColors} />
+            <SweepGradient
+              c={vec(centerX, centerY)}
+              colors={colors}
+              positions={positions}
+            />
           </SkiaCircle>
 
           {/* Inner circle for donut hole */}
@@ -140,6 +124,8 @@ type SkiaColorWheelBlurredProps = BaseColorWheelProps & {
   blurRadius?: number
   /** Opacity of the blurred wheel (0-1) */
   opacity?: number
+  /** Custom positions for gradient colors (0-1 range) */
+  positions?: number[]
 }
 
 /**
@@ -159,6 +145,7 @@ export const SkiaColorWheelBlurred = ({
   innerRadius = 0,
   blurRadius = 20,
   opacity = 0.6,
+  positions,
 }: SkiaColorWheelBlurredProps) => {
   // Support both width/height and legacy size prop
   const actualWidth = width ?? size
@@ -172,9 +159,6 @@ export const SkiaColorWheelBlurred = ({
   const centerX = canvasWidth / 2
   const centerY = canvasHeight / 2
   const radius = Math.max(actualWidth, actualHeight) / 2
-
-  // Add the first color at the end to create a seamless loop
-  const gradientColors = useMemo(() => [...colors, colors[0]], [colors])
 
   // Create rotation transform
   const transform = useMemo(
@@ -202,7 +186,11 @@ export const SkiaColorWheelBlurred = ({
       <Group layer={blurPaint}>
         <Group transform={transform} origin={vec(centerX, centerY)}>
           <SkiaCircle cx={centerX} cy={centerY} r={radius}>
-            <SweepGradient c={vec(centerX, centerY)} colors={gradientColors} />
+            <SweepGradient
+              c={vec(centerX, centerY)}
+              colors={colors}
+              positions={positions}
+            />
           </SkiaCircle>
           {/* Inner circle for donut hole */}
           {innerRadius > 0 && (
