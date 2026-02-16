@@ -3,6 +3,7 @@ import { Text, View } from 'react-native'
 
 import { colors } from '@/lib/colors'
 
+import { ICON_SIZES } from '@/features/lanegap/constants'
 import type { ILevelSpike } from '@/features/lanegap/types'
 
 interface ILevelSpikeItemProps {
@@ -23,7 +24,7 @@ export const LevelSpikeItem = ({ spike }: ILevelSpikeItemProps) => {
           </Text>
         </View>
 
-        <Ionicons name="star" size={16} color={colors.warning} />
+        <Ionicons name="star" size={ICON_SIZES.sm} color={colors.warning} />
       </View>
     )
   }

@@ -10,13 +10,13 @@ import {
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { CARD_BACKGROUND_COLOR, DEFAULT_WHEEL_COLORS } from './constants'
+import { CARD_BACKGROUND_COLOR } from './constants'
 
 type BaseColorWheelProps = {
   width?: number
   height?: number
   size?: number
-  colors?: readonly string[]
+  colors: readonly string[]
   rotation?: number
   innerRadius?: number
 }
@@ -30,7 +30,7 @@ export const SkiaColorWheel = ({
   width,
   height,
   size = 300,
-  colors = DEFAULT_WHEEL_COLORS,
+  colors,
   rotation = -90,
   innerRadius = 0,
   centerColor = 'transparent',
@@ -82,7 +82,7 @@ export const SkiaColorWheelBlurred = ({
   width,
   height,
   size = 300,
-  colors = DEFAULT_WHEEL_COLORS,
+  colors,
   rotation = -90,
   innerRadius = 0,
   blurRadius = 20,

@@ -1,3 +1,4 @@
+export { APlusTierGlow } from './a-plus-tier-glow.component'
 export { ATierGlow } from './a-tier-glow.component'
 export { SkiaColorWheel, SkiaColorWheelBlurred } from './color-wheels.component'
 export { GlowingBorderCard } from './glowing-border-card.component'
@@ -7,7 +8,6 @@ export {
   CARD_BACKGROUND_COLOR,
   DEFAULT_BORDER_RADIUS,
   DEFAULT_BORDER_WIDTH,
-  DEFAULT_WHEEL_COLORS,
   SCALE_FACTOR,
   TIER_CONFIGS,
 } from './constants'

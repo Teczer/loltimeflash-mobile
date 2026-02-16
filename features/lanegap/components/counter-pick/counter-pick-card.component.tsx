@@ -5,27 +5,17 @@ import { Image, Pressable, Text, View } from 'react-native'
 import { getChampionIcon } from '@/assets/champions'
 import { cn } from '@/lib/utils'
 
+import { TIER_COLORS } from '@/features/lanegap/constants'
 import {
+  APlusTierGlow,
   ATierGlow,
   SPlusTierBeam,
   STierBeam,
 } from '@/features/lanegap/components/effects'
-import {
-  TIER_COLORS,
-  type TTier,
-  type TTierBase,
-} from '@/features/lanegap/types'
-
-// =============================================================================
-// Constants
-// =============================================================================
+import type { TTier, TTierBase } from '@/features/lanegap/types'
 
 const BORDER_RADIUS = 12
 const BORDER_WIDTH = 1
-
-// =============================================================================
-// Types
-// =============================================================================
 
 interface ICounterPickCardProps {
   championId: string
@@ -34,21 +24,10 @@ interface ICounterPickCardProps {
   onPress?: () => void
 }
 
-// =============================================================================
-// Helper Functions
-// =============================================================================
-
-/**
- * Get the base tier (without +/-) for effect selection
- */
 const getTierBase = (tier: TTier): TTierBase => {
-  if (tier === 'S+') return 'S+'
+  if (tier === 'S+' || tier === 'A+') return tier
   return tier.replace(/[+-]/, '') as TTierBase
 }
-
-// =============================================================================
-// Inner Components
-// =============================================================================
 
 interface ITierWrapperProps {
   tierBase: TTierBase
@@ -63,6 +42,12 @@ const TierWrapper = ({ tierBase, children }: ITierWrapperProps) => {
       )
     case 'S':
       return <STierBeam borderRadius={BORDER_RADIUS}>{children}</STierBeam>
+    case 'A+':
+      return (
+        <APlusTierGlow borderRadius={BORDER_RADIUS} borderWidth={BORDER_WIDTH}>
+          {children}
+        </APlusTierGlow>
+      )
     case 'A':
       return (
         <ATierGlow borderRadius={BORDER_RADIUS} borderWidth={BORDER_WIDTH}>
@@ -74,10 +59,6 @@ const TierWrapper = ({ tierBase, children }: ITierWrapperProps) => {
   }
 }
 
-// =============================================================================
-// Component
-// =============================================================================
-
 const CounterPickCardComponent = ({
   championId,
   championName,
@@ -88,7 +69,7 @@ const CounterPickCardComponent = ({
   const tierColor = TIER_COLORS[tier]
   const tierBase = getTierBase(tier)
   const isHighTier = tierBase === 'S' || tier === 'S+'
-  const hasEffect = tierBase === 'S+' || tierBase === 'S' || tierBase === 'A'
+  const hasEffect = tierBase === 'S+' || tierBase === 'S' || tierBase === 'A+' || tierBase === 'A'
 
   const cardContent = (
     <View
@@ -114,7 +95,6 @@ const CounterPickCardComponent = ({
           />
         )}
 
-        {/* Tier Badge */}
         <View
           className={cn(
             'absolute -bottom-1.5 -right-1.5',

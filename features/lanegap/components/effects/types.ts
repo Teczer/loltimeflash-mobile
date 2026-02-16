@@ -17,5 +17,6 @@ export type TierPulseConfig = {
 export type TierConfigs = {
   S_PLUS: TierBeamConfig
   S: TierBeamConfig
+  A_PLUS: TierPulseConfig
   A: TierPulseConfig
 }
