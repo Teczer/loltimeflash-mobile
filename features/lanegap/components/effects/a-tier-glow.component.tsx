@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useEffect } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import Animated, {
   Easing,
   interpolate,
@@ -10,8 +10,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 
-const A_TIER_COLOR = '#F97316'
-const BORDER_WIDTH = 1
+import { styles } from './a-tier-glow.styles'
+import { DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_WIDTH, TIER_CONFIGS } from './constants'
 
 interface IATierGlowProps {
   children: ReactNode
@@ -21,22 +21,23 @@ interface IATierGlowProps {
 
 export const ATierGlow = ({
   children,
-  borderRadius = 12,
-  borderWidth = BORDER_WIDTH,
+  borderRadius = DEFAULT_BORDER_RADIUS,
+  borderWidth = DEFAULT_BORDER_WIDTH,
 }: IATierGlowProps) => {
   const progress = useSharedValue(0)
+  const config = TIER_CONFIGS.A
 
   useEffect(() => {
     progress.value = withRepeat(
-      withTiming(1, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
+      withTiming(1, { duration: config.duration, easing: Easing.inOut(Easing.ease) }),
       -1,
       true
     )
-  }, [progress])
+  }, [progress, config.duration])
 
   const glowStyle = useAnimatedStyle(() => {
-    const spread = interpolate(progress.value, [0, 1], [0, 3])
-    const blur = interpolate(progress.value, [0, 1], [2, 8])
+    const spread = interpolate(progress.value, [0, 1], config.pulseSpread)
+    const blur = interpolate(progress.value, [0, 1], config.pulseBlur)
 
     return {
       boxShadow: [
@@ -45,7 +46,7 @@ export const ATierGlow = ({
           offsetY: 0,
           blurRadius: blur,
           spreadRadius: spread,
-          color: `${A_TIER_COLOR}90`,
+          color: `${config.color}90`,
         },
       ],
     }
@@ -53,18 +54,13 @@ export const ATierGlow = ({
 
   return (
     <View style={styles.wrapper}>
-      {/* Pulsing shadow glow */}
       <Animated.View
         style={[
           styles.glow,
-          {
-            borderRadius,
-            backgroundColor: `${A_TIER_COLOR}00`, // Very subtle orange tint
-          },
+          { borderRadius, backgroundColor: `${config.color}00` },
           glowStyle,
         ]}
       />
-      {/* Content */}
       <View
         style={[
           styles.content,
@@ -79,16 +75,3 @@ export const ATierGlow = ({
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    position: 'relative',
-  },
-  glow: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  content: {
-    backgroundColor: '#191a22',
-    overflow: 'hidden',
-  },
-})

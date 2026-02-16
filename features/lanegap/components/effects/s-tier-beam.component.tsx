@@ -1,44 +1,31 @@
 import type { ReactNode } from 'react'
 
+import {
+  DEFAULT_BORDER_RADIUS,
+  DEFAULT_BORDER_WIDTH,
+  TIER_CONFIGS,
+} from './constants'
 import { GlowingBorderCard } from './glowing-border-card.component'
-
-/**
- * S Tier Red Beam Effect
- *
- * A red beam that rotates around the border with a trail effect.
- * Matches the web version: transparent -> red trail -> transparent
- */
-
-// Beam colors: transparent -> dark red -> red -> bright red -> pink -> transparent
-const S_BEAM_COLORS = [
-  'transparent',
-  'transparent',
-  '#7f1d1d', // Dark red
-  '#dc2626', // Red
-  '#ef4444', // Bright red
-  '#fca5a5', // Light pink
-  'transparent',
-]
-
-// Positions to create the beam trail effect
-const S_BEAM_POSITIONS = [0, 0.5, 0.65, 0.8, 0.9, 0.95, 1]
 
 interface ISTierBeamProps {
   children: ReactNode
   borderRadius?: number
 }
 
-export const STierBeam = ({ children, borderRadius = 12 }: ISTierBeamProps) => (
+export const STierBeam = ({
+  children,
+  borderRadius = DEFAULT_BORDER_RADIUS,
+}: ISTierBeamProps) => (
   <GlowingBorderCard
-    colors={S_BEAM_COLORS}
-    positions={S_BEAM_POSITIONS}
-    duration={2000}
+    colors={TIER_CONFIGS.S.colors}
+    positions={TIER_CONFIGS.S.positions}
+    duration={TIER_CONFIGS.S.duration}
     borderRadius={borderRadius}
-    borderWidth={2}
+    borderWidth={DEFAULT_BORDER_WIDTH}
     showGlow={true}
-    glowIntensity={0.5}
-    glowBlurRadius={8}
-    glowSpread={0.6}
+    glowIntensity={TIER_CONFIGS.S.glowIntensity}
+    glowBlurRadius={TIER_CONFIGS.S.glowBlurRadius}
+    glowSpread={TIER_CONFIGS.S.glowSpread}
   >
     {children}
   </GlowingBorderCard>
