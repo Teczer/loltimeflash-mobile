@@ -6,7 +6,9 @@ interface IChampionBackgroundProps {
   championId: string
 }
 
-export const ChampionBackground = ({ championId }: IChampionBackgroundProps) => {
+export const ChampionBackground = ({
+  championId,
+}: IChampionBackgroundProps) => {
   const champion = getChampion(championId)
   const splashSource = champion?.skins[0]?.source
 
@@ -17,8 +19,8 @@ export const ChampionBackground = ({ championId }: IChampionBackgroundProps) => 
       <Image
         source={splashSource}
         resizeMode="cover"
-        blurRadius={4}
-        className="h-full w-full opacity-60"
+        blurRadius={5}
+        className="h-full w-full opacity-40"
       />
 
       <View className="via-background/90 to-background bg-linear-to-b absolute bottom-0 left-0 right-0 h-[65%] from-transparent via-30%" />

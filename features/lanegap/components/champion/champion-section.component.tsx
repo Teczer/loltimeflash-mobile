@@ -6,7 +6,7 @@ import type { IChampion } from '@/assets/champions'
 import { colors } from '@/lib/colors'
 import { cn } from '@/lib/utils'
 
-import { ChampionItem } from '@/features/lanegap/components/champion-item.component'
+import { ChampionItem } from '@/features/lanegap/components/champion/champion-item.component'
 
 type TSectionType = 'favorites' | 'recent' | 'enemies'
 

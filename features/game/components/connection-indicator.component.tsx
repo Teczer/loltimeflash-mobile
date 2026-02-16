@@ -90,11 +90,15 @@ export const ConnectionIndicator = ({
               height: sizeConfig.glow,
               borderRadius: sizeConfig.glow / 2,
               backgroundColor: statusColor,
-              shadowColor: statusColor,
-              shadowOffset: { width: 0, height: 0 },
-              shadowOpacity: 1,
-              shadowRadius: 8,
-              elevation: 8,
+              boxShadow: [
+                {
+                  offsetX: 0,
+                  offsetY: 0,
+                  blurRadius: 8,
+                  spreadDistance: 0,
+                  color: statusColor,
+                },
+              ],
             },
           ]}
         />

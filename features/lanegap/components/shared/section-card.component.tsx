@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { Text, View } from 'react-native'
 
 import { colors } from '@/lib/colors'
+import { cn } from '@/lib/utils'
 
 interface ISectionCardProps {
   title: string
@@ -12,6 +13,7 @@ interface ISectionCardProps {
   emptyText?: string
   isEmpty?: boolean
   headerRight?: ReactNode
+  className?: string
 }
 
 export const SectionCard = ({
@@ -22,8 +24,11 @@ export const SectionCard = ({
   emptyText = 'Coming soon...',
   isEmpty = false,
   headerRight,
+  className,
 }: ISectionCardProps) => (
-  <View className="bg-white/3 border-white/6 rounded-xl border p-4">
+  <View
+    className={cn('bg-white/3 border-white/6 rounded-xl border p-4', className)}
+  >
     <View className="mb-3 flex-row items-center justify-between">
       <View className="flex-row items-center gap-2">
         <Ionicons name={icon} size={16} color={iconColor} />

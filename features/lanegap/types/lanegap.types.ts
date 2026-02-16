@@ -4,6 +4,11 @@
 
 export type TTier = 'S+' | 'S' | 'A+' | 'A' | 'B+' | 'B' | 'B-' | 'C'
 
+/**
+ * Base tier without +/- modifiers (used for effect selection)
+ */
+export type TTierBase = 'S+' | 'S' | 'A' | 'B' | 'C'
+
 export const TIER_ORDER: readonly TTier[] = ['S+', 'S', 'A+', 'A', 'B+', 'B', 'B-', 'C'] as const
 
 export const TIER_COLORS: Record<TTier, string> = {

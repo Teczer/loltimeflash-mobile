@@ -1,14 +1,31 @@
-export { ChampionBackground } from './champion-background.component'
-export { ChampionDetailSkeleton } from './champion-detail-skeleton.component'
-export { ChampionEmptyResult } from './champion-empty-result.component'
-export { ChampionGrid } from './champion-grid.component'
-export { ChampionItem } from './champion-item.component'
-export { ChampionSection } from './champion-section.component'
-export { CounterPickCard } from './counter-pick-card.component'
-export { ItemSpikeItem } from './item-spike-item.component'
-export { LaneFilter } from './lane-filter.component'
-export { LaneGapHeader } from './lanegap-header.component'
-export { LevelSpikeItem } from './level-spike-item.component'
-export { SectionCard } from './section-card.component'
-export { TierLegend } from './tier-legend.component'
-export { TipItem } from './tip-item.component'
+// Champion components
+export {
+  ChampionBackground,
+  ChampionDetailSkeleton,
+  ChampionEmptyResult,
+  ChampionGrid,
+  ChampionItem,
+  ChampionSection,
+} from './champion'
+
+// Counter pick components
+export { CounterPickCard, TierLegend } from './counter-pick'
+
+// Tier effects
+export {
+  ATierGlow,
+  GlowingBorderCard,
+  SkiaColorWheel,
+  SkiaColorWheelBlurred,
+  SPlusTierBeam,
+  STierBeam,
+} from './effects'
+
+// Lane components
+export { LaneFilter, LaneGapHeader } from './lane'
+
+// Shared components
+export { SectionCard, TipItem } from './shared'
+
+// Spike components
+export { ItemSpikeItem, LevelSpikeItem } from './spikes'
