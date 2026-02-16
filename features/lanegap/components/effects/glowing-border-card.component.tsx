@@ -10,6 +10,7 @@ import { type LayoutChangeEvent, StyleSheet, View } from 'react-native'
 import Animated, {
   Easing,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withRepeat,
   withTiming,
@@ -18,6 +19,16 @@ import Animated, {
 import { SkiaColorWheel, SkiaColorWheelBlurred } from './color-wheels.component'
 
 const SCALE_FACTOR = 2
+
+// Compensate for corner speed-up on rectangular shapes
+// Slows down at corners (45°, 135°, 225°, 315°) and speeds up on flat edges
+const compensateCorners = (angle: number, strength: number = 0.15): number => {
+  'worklet'
+  const rad = (angle * Math.PI) / 180
+  // Sin wave with 4 peaks at the corners
+  const correction = Math.sin(4 * rad) * strength * 15
+  return angle - correction
+}
 
 type GlowingBorderCardProps = {
   children: ReactNode
@@ -54,23 +65,28 @@ export const GlowingBorderCard = ({
   borderRadius = 12,
   autoStart = true,
 }: GlowingBorderCardProps) => {
-  const rotateX = useSharedValue(0)
+  const progress = useSharedValue(0)
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
   const outerBorderRadius = borderRadius
 
   useEffect(() => {
     if (autoStart) {
-      rotateX.value = withRepeat(
+      progress.value = withRepeat(
         withTiming(360, { duration, easing: Easing.linear }),
         -1,
         false
       )
     }
-  }, [autoStart, duration, rotateX])
+  }, [autoStart, duration, progress])
+
+  // Apply corner compensation for smoother rotation on rectangles
+  const compensatedRotation = useDerivedValue(() => {
+    return compensateCorners(progress.value)
+  })
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotateX.value}deg` }],
+    transform: [{ rotate: `${compensatedRotation.value}deg` }],
   }))
 
   const handleLayout = (event: LayoutChangeEvent) => {

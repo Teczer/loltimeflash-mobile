@@ -4,6 +4,7 @@ import { type LayoutChangeEvent, StyleSheet, View } from 'react-native'
 import Animated, {
   Easing,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withRepeat,
   withTiming,
@@ -44,37 +45,51 @@ interface ISPlusTierBeamProps {
   borderRadius?: number
 }
 
+// Compensate for corner speed-up on rectangular shapes
+// Slows down at corners (45°, 135°, 225°, 315°) and speeds up on flat edges
+const compensateCorners = (angle: number, strength: number = 0.15): number => {
+  'worklet'
+  const rad = (angle * Math.PI) / 180
+  // Sin wave with 4 peaks at the corners (45°, 135°, 225°, 315°)
+  const correction = Math.sin(4 * rad) * strength * 15
+  return angle - correction
+}
+
 export const SPlusTierBeam = ({
   children,
   borderRadius = 12,
 }: ISPlusTierBeamProps) => {
-  const rotateClockwise = useSharedValue(0)
-  const rotateCounterClockwise = useSharedValue(0)
+  // Linear progress for both beams
+  const progress = useSharedValue(0)
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
   const borderWidth = 2
 
   useEffect(() => {
-    // Clockwise beam
-    rotateClockwise.value = withRepeat(
-      withTiming(360, { duration: 2500, easing: Easing.linear }),
+    // Single linear animation driving both beams
+    progress.value = withRepeat(
+      withTiming(360, { duration: 3000, easing: Easing.linear }),
       -1,
       false
     )
-    // Counter-clockwise beam
-    rotateCounterClockwise.value = withRepeat(
-      withTiming(-360, { duration: 2500, easing: Easing.linear }),
-      -1,
-      false
-    )
-  }, [rotateClockwise, rotateCounterClockwise])
+  }, [progress])
 
-  const clockwiseStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotateClockwise.value}deg` }],
+  // Beam 1: compensated rotation
+  const beam1Rotation = useDerivedValue(() => {
+    return compensateCorners(progress.value)
+  })
+
+  // Beam 2: 180° offset, same compensation
+  const beam2Rotation = useDerivedValue(() => {
+    return compensateCorners(progress.value + 180)
+  })
+
+  const beam1Style = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${beam1Rotation.value}deg` }],
   }))
 
-  const counterClockwiseStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotateCounterClockwise.value}deg` }],
+  const beam2Style = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${beam2Rotation.value}deg` }],
   }))
 
   const handleLayout = (event: LayoutChangeEvent) => {
@@ -90,17 +105,32 @@ export const SPlusTierBeam = ({
 
   return (
     <View style={styles.wrapper}>
-      {/* Glow layer */}
+      {/* Glow layers - both beams chasing */}
       {width > 0 && height > 0 && (
         <View style={styles.glowWrapper} pointerEvents="none">
-          <Animated.View style={clockwiseStyle}>
+          <Animated.View style={beam1Style}>
             <SkiaColorWheelBlurred
               width={glowSize}
               height={glowSize}
               colors={S_PLUS_BEAM_COLORS}
               positions={S_PLUS_BEAM_POSITIONS}
-              blurRadius={10}
-              opacity={0.6}
+              blurRadius={8}
+              opacity={0.5}
+            />
+          </Animated.View>
+        </View>
+      )}
+
+      {width > 0 && height > 0 && (
+        <View style={styles.glowWrapper} pointerEvents="none">
+          <Animated.View style={beam2Style}>
+            <SkiaColorWheelBlurred
+              width={glowSize}
+              height={glowSize}
+              colors={S_PLUS_BEAM_COLORS}
+              positions={S_PLUS_BEAM_POSITIONS}
+              blurRadius={8}
+              opacity={0.5}
             />
           </Animated.View>
         </View>
@@ -111,9 +141,9 @@ export const SPlusTierBeam = ({
         style={[styles.effectContainer, { borderRadius }]}
         onLayout={handleLayout}
       >
-        {/* Clockwise beam */}
+        {/* Beam 1 */}
         <View style={[styles.borderLayer, { borderRadius }]}>
-          <Animated.View style={[styles.rotatingWheel, clockwiseStyle]}>
+          <Animated.View style={[styles.rotatingWheel, beam1Style]}>
             <SkiaColorWheel
               width={wheelSize}
               height={wheelSize}
@@ -123,9 +153,9 @@ export const SPlusTierBeam = ({
           </Animated.View>
         </View>
 
-        {/* Counter-clockwise beam */}
+        {/* Beam 2 - chasing beam 1 */}
         <View style={[styles.borderLayer, { borderRadius }]}>
-          <Animated.View style={[styles.rotatingWheel, counterClockwiseStyle]}>
+          <Animated.View style={[styles.rotatingWheel, beam2Style]}>
             <SkiaColorWheel
               width={wheelSize}
               height={wheelSize}
