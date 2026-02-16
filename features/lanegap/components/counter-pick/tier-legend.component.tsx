@@ -4,7 +4,8 @@ import { Modal, Pressable, Text, View } from 'react-native'
 
 import { colors } from '@/lib/colors'
 
-import { TIER_COLORS, TIER_LABELS, type TTier } from '@/features/lanegap/types'
+import { ICON_COLORS, ICON_SIZES, TIER_COLORS, TIER_LABELS } from '@/features/lanegap/constants'
+import type { TTier } from '@/features/lanegap/types'
 
 const TIERS_TO_SHOW: TTier[] = ['S+', 'S', 'A+', 'A', 'B+', 'B', 'B-', 'C']
 
@@ -19,8 +20,8 @@ export const TierLegend = () => {
       >
         <Ionicons
           name="information-circle-outline"
-          size={20}
-          color="rgba(255,255,255,0.4)"
+          size={ICON_SIZES.lg}
+          color={ICON_COLORS.muted}
         />
       </Pressable>
 
@@ -48,8 +49,8 @@ export const TierLegend = () => {
               >
                 <Ionicons
                   name="close"
-                  size={18}
-                  color="rgba(255,255,255,0.6)"
+                  size={ICON_SIZES.md}
+                  color={ICON_COLORS.subtle}
                 />
               </Pressable>
             </View>

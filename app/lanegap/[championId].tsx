@@ -113,11 +113,13 @@ export default function ChampionDetailScreen() {
               isEmpty={!enemyData?.counters?.length}
               emptyText="Counter picks coming soon..."
               headerRight={<TierLegend />}
+              className="overflow-hidden"
             >
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerClassName="gap-2"
+                style={{ overflow: 'visible' }}
               >
                 {enemyData?.counters?.map((counter) => (
                   <CounterPickCard

@@ -6,7 +6,8 @@ import type { IChampion } from '@/assets/champions'
 import { colors } from '@/lib/colors'
 import { cn } from '@/lib/utils'
 
-import { ChampionItem } from '@/features/lanegap/components/champion-item.component'
+import { ICON_SIZES } from '@/features/lanegap/constants'
+import { ChampionItem } from '@/features/lanegap/components/champion/champion-item.component'
 
 type TSectionType = 'favorites' | 'recent' | 'enemies'
 
@@ -55,7 +56,7 @@ const ChampionSectionComponent = ({
   return (
     <View className="gap-2">
       <View className="flex-row items-center gap-2">
-        <Ionicons name={config.icon as any} size={14} color={config.color} />
+        <Ionicons name={config.icon as any} size={ICON_SIZES.xs} color={config.color} />
         <Text className="font-sans-bold text-foreground/80 text-sm">
           {config.label}
         </Text>
