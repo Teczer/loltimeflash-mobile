@@ -53,6 +53,10 @@ type BaseColorWheelProps = {
 type SkiaColorWheelProps = BaseColorWheelProps & {
   /** Background color for the center (donut hole) */
   centerColor?: string
+  /** Show glowing orbs at color transitions */
+  showOrbs?: boolean
+  /** Size of the orbs relative to radius (0-1) */
+  orbSize?: number
 }
 
 /**
@@ -70,6 +74,8 @@ export const SkiaColorWheel = ({
   rotation = -90,
   innerRadius = 0,
   centerColor = 'transparent',
+  showOrbs = false,
+  orbSize = 0.08,
 }: SkiaColorWheelProps) => {
   // Support both width/height and legacy size prop
   const actualWidth = width ?? size
@@ -88,6 +94,20 @@ export const SkiaColorWheel = ({
     [rotation]
   )
 
+  // Calculate orb positions at color transitions
+  // Orbs positioned at 0.5 radius to be visible in the clipped border area
+  const orbPositions = useMemo(() => {
+    if (!showOrbs) return []
+    const anglePerColor = (2 * Math.PI) / colors.length
+    const orbDistance = radius * 0.5 // Position at the visible clipped edge
+    return colors.map((color, index) => {
+      const angle = index * anglePerColor - Math.PI / 2 // Start from top
+      const x = centerX + orbDistance * Math.cos(angle)
+      const y = centerY + orbDistance * Math.sin(angle)
+      return { x, y, color }
+    })
+  }, [colors, centerX, centerY, radius, showOrbs])
+
   return (
     <View style={styles.container}>
       <Canvas style={{ width: actualWidth, height: actualHeight }}>
@@ -95,6 +115,7 @@ export const SkiaColorWheel = ({
           <SkiaCircle cx={centerX} cy={centerY} r={radius}>
             <SweepGradient c={vec(centerX, centerY)} colors={gradientColors} />
           </SkiaCircle>
+
           {/* Inner circle for donut hole */}
           {innerRadius > 0 && (
             <SkiaCircle
@@ -174,8 +195,8 @@ export const SkiaColorWheelBlurred = ({
         width: canvasWidth,
         height: canvasHeight,
         opacity,
-        marginLeft: -blurPadding,
-        marginTop: -blurPadding,
+        marginLeft: -blurPadding / 2,
+        marginTop: -blurPadding / 2,
       }}
     >
       <Group layer={blurPaint}>

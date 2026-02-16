@@ -8,16 +8,12 @@ import { GlowingBorderCard } from './glowing-border-card.component'
  * A premium red beam effect for S tier counters.
  */
 
-// Red colors for S tier
+// Red colors for S tier - 4 colors with high contrast
 const S_COLORS = [
-  '#DC2626', // Red-600
-  '#991B1B', // Red-800
-  '#EF4444', // Red-500
-  '#B91C1C', // Red-700
-  '#DC2626', // Red-600
-  '#7F1D1D', // Red-900
-  '#F87171', // Red-400
-  '#DC2626', // Red-600
+  '#FF4444', // Bright red
+  '#8B0000', // Dark red
+  '#FF6666', // Light red
+  '#660000', // Very dark red
 ]
 
 interface ISTierBeamProps {
@@ -28,12 +24,12 @@ interface ISTierBeamProps {
 export const STierBeam = ({ children, borderRadius = 12 }: ISTierBeamProps) => (
   <GlowingBorderCard
     colors={S_COLORS}
-    duration={2000}
+    duration={3000}
     borderRadius={borderRadius}
-    borderWidth={3}
+    borderWidth={1}
     showGlow={true}
-    glowIntensity={0.8}
-    glowBlurRadius={8}
+    glowIntensity={0.7}
+    glowBlurRadius={15}
     glowSpread={0.5}
   >
     {children}

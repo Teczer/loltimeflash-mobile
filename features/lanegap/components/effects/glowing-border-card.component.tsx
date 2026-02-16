@@ -37,6 +37,8 @@ type GlowingBorderCardProps = {
   borderRadius?: number
   /** Whether to auto-start the animation */
   autoStart?: boolean
+  /** Show glowing orbs at color transitions */
+  showOrbs?: boolean
 }
 
 export const GlowingBorderCard = ({
@@ -50,6 +52,7 @@ export const GlowingBorderCard = ({
   glowBlurRadius = 30,
   borderRadius = 12,
   autoStart = true,
+  showOrbs = true,
 }: GlowingBorderCardProps) => {
   const rotateX = useSharedValue(0)
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
@@ -112,6 +115,7 @@ export const GlowingBorderCard = ({
               width={wheelSize}
               height={wheelSize}
               colors={colors}
+              showOrbs={showOrbs}
             />
           </Animated.View>
         </View>

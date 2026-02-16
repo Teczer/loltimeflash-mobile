@@ -113,7 +113,7 @@ export default function ChampionDetailScreen() {
               isEmpty={!enemyData?.counters?.length}
               emptyText="Counter picks coming soon..."
               headerRight={<TierLegend />}
-              className="overflow-visible"
+              className="overflow-hidden"
             >
               <ScrollView
                 horizontal

@@ -21,6 +21,7 @@ import {
 // =============================================================================
 
 const BORDER_RADIUS = 12
+const BORDER_WIDTH = 1
 
 // =============================================================================
 // Types
@@ -63,7 +64,11 @@ const TierWrapper = ({ tierBase, children }: ITierWrapperProps) => {
     case 'S':
       return <STierBeam borderRadius={BORDER_RADIUS}>{children}</STierBeam>
     case 'A':
-      return <ATierGlow borderRadius={BORDER_RADIUS}>{children}</ATierGlow>
+      return (
+        <ATierGlow borderRadius={BORDER_RADIUS} borderWidth={BORDER_WIDTH}>
+          {children}
+        </ATierGlow>
+      )
     default:
       return <>{children}</>
   }
@@ -87,10 +92,18 @@ const CounterPickCardComponent = ({
 
   const cardContent = (
     <View
-      className={cn(
-        'items-center px-5 py-3',
-        !hasEffect && 'rounded-xl border border-white/10 bg-[#191a22]'
-      )}
+      className="items-center px-5 py-3"
+      style={
+        !hasEffect
+          ? {
+              borderRadius: BORDER_RADIUS - BORDER_WIDTH,
+              margin: BORDER_WIDTH,
+              backgroundColor: '#191a22',
+              borderWidth: BORDER_WIDTH,
+              borderColor: 'rgba(255,255,255,0.1)',
+            }
+          : undefined
+      }
     >
       <View className="relative mb-2">
         {iconSource && (
