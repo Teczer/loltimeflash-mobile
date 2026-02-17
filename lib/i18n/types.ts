@@ -21,6 +21,7 @@ export interface ITranslations {
     solo: string
     multi: string
     laneGap: string
+    profile: string
   }
   home: {
     welcome: string
@@ -116,6 +117,55 @@ export interface ITranslations {
     contactSupport: string
     sendEmail: string
     disclaimer: string
+  }
+  auth: {
+    profile: string
+    signIn: string
+    signUp: string
+    logout: string
+    logoutConfirm: string
+    cancel: string
+    email: string
+    password: string
+    confirmPassword: string
+    name: string
+    enterEmail: string
+    enterPassword: string
+    confirmYourPassword: string
+    enterName: string
+    noAccount: string
+    alreadyAccount: string
+    orContinueWith: string
+    google: string
+    discord: string
+    loginSuccess: string
+    registerSuccess: string
+    loginError: string
+    registerError: string
+    passwordMismatch: string
+    invalidEmail: string
+    passwordTooShort: string
+    nameTooShort: string
+    welcomeBack: string
+    member: string
+    editProfile: string
+    deleteAccount: string
+    deleteAccountConfirm: string
+    deleteAccountWarning: string
+    signInToAccess: string
+    signInDescription: string
+    account: string
+  }
+  notes: {
+    myNotes: string
+    addNote: string
+    editNote: string
+    deleteNote: string
+    deleteNoteConfirm: string
+    notePlaceholder: string
+    noNotes: string
+    signInForNotes: string
+    saved: string
   }
   notFound: {
     oops: string

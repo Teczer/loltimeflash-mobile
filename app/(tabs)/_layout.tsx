@@ -61,6 +61,15 @@ export default function TabLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: t.tabs.profile,
+            tabBarIcon: ({ color }) => (
+              <FontAwesome name="user-circle" size={24} color={color} />
+            ),
+          }}
+        />
       </Tabs>
     )
   }
@@ -100,6 +109,24 @@ export default function TabLayout() {
           android: (
             <Icon
               src={<VectorIcon family={MaterialIcons} name="library-books" />}
+            />
+          ),
+        })}
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="profile">
+        <Label>{t.tabs.profile}</Label>
+        {Platform.select({
+          ios: (
+            <Icon
+              sf={{
+                default: 'person.crop.circle',
+                selected: 'person.crop.circle.fill',
+              }}
+            />
+          ),
+          android: (
+            <Icon
+              src={<VectorIcon family={MaterialIcons} name="account-circle" />}
             />
           ),
         })}
