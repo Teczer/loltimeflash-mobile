@@ -67,11 +67,11 @@ export default function TabLayout() {
 
   // NativeTabs with liquid glass effect
   return (
-    <NativeTabs tintColor={colors.gold}>
+    <NativeTabs tintColor="white">
       <NativeTabs.Trigger name="index">
         <Label>{t.tabs.solo}</Label>
         {Platform.select({
-          ios: <Icon sf={{ default: 'bolt', selected: 'bolt.fill' }} />,
+          ios: <Icon sf={{ default: 'person', selected: 'person.fill' }} />,
           android: (
             <Icon src={<VectorIcon family={MaterialIcons} name="flash-on" />} />
           ),
@@ -80,7 +80,7 @@ export default function TabLayout() {
       <NativeTabs.Trigger name="multiplayer">
         <Label>{t.tabs.multi}</Label>
         {Platform.select({
-          ios: <Icon sf={{ default: 'person.2', selected: 'person.2.fill' }} />,
+          ios: <Icon sf={{ default: 'person.3', selected: 'person.3.fill' }} />,
           android: (
             <Icon src={<VectorIcon family={MaterialIcons} name="people" />} />
           ),
@@ -92,8 +92,8 @@ export default function TabLayout() {
           ios: (
             <Icon
               sf={{
-                default: 'books.vertical',
-                selected: 'books.vertical.fill',
+                default: 'book.pages',
+                selected: 'book.pages.fill',
               }}
             />
           ),
