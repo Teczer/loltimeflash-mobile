@@ -12,9 +12,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.loltimeflash.app",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": [
-          "mailto"
-        ]
+        "LSApplicationQueriesSchemes": ["mailto"],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -61,6 +60,13 @@
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9ed80648-4129-40bf-a651-b4280da556d0"
+      }
+    },
+    "owner": "teczer"
   }
 }
