@@ -13,7 +13,15 @@
       "bundleIdentifier": "com.loltimeflash.app",
       "infoPlist": {
         "LSApplicationQueriesSchemes": ["mailto"],
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "loltimeflash",
+              "com.googleusercontent.apps.463246350287-6rir517otoc45evgs1f8qihciegcccc3"
+            ]
+          }
+        ]
       }
     },
     "android": {
@@ -48,11 +56,7 @@
         {
           "backgroundColor": "#021022",
           "image": "./assets/images/splash.png",
-          "enableFullScreenImage_legacy": true,
-          "dark": {
-            "backgroundColor": "#021022",
-            "image": "./assets/images/splash.png"
-          }
+          "enableFullScreenImage_legacy": true
         }
       ],
       "expo-localization"

@@ -12,6 +12,7 @@ export interface IUser {
   name: string
   avatar?: string
   created: string
+  verified: boolean
 }
 
 interface IAuthState {
@@ -74,6 +75,7 @@ function mapUser(record: RecordModel): IUser {
     name,
     avatar: record['avatar'] as string | undefined,
     created: record.created,
+    verified: (record['verified'] as boolean) ?? false,
   }
 }
 
@@ -90,6 +92,12 @@ export const useAuthStore = create<IAuthState & IAuthActions>()(
             .authWithPassword(email, password)
           const user = mapUser(authData.record)
 
+          if (!user.verified) {
+            pb.authStore.clear()
+            set({ isLoading: false })
+            throw new Error('email_not_verified')
+          }
+
           set({
             user,
             token: authData.token,
@@ -97,8 +105,11 @@ export const useAuthStore = create<IAuthState & IAuthActions>()(
             isLoading: false,
           })
           syncUsername(user.name)
-        } catch {
+        } catch (error) {
           set({ isLoading: false })
+          if (error instanceof Error && error.message === 'email_not_verified') {
+            throw error
+          }
           throw new Error('login_failed')
         }
       },
@@ -112,21 +123,17 @@ export const useAuthStore = create<IAuthState & IAuthActions>()(
             passwordConfirm: password,
             name,
           })
-
-          const authData = await pb
-            .collection('users')
-            .authWithPassword(email, password)
-          const user = mapUser(authData.record)
-
-          set({
-            user,
-            token: authData.token,
-            isAuthenticated: true,
-            isLoading: false,
-          })
-          syncUsername(user.name)
-        } catch {
           set({ isLoading: false })
+        } catch (error) {
+          set({ isLoading: false })
+          const errorStr = String(error)
+          if (
+            errorStr.includes('unique') ||
+            errorStr.includes('already') ||
+            errorStr.includes('validation_not_unique')
+          ) {
+            throw new Error('email_already_used')
+          }
           throw new Error('register_failed')
         }
       },

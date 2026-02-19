@@ -9,20 +9,23 @@ import {
   registerSchema,
   type TRegisterForm,
 } from '@/features/auth/schemas/auth.schema'
+import { useSendOTP } from '@/features/auth/hooks/use-otp.hook'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { useAuthStore } from '@/stores/auth.store'
 
 interface IRegisterFormProps {
   onSwitchToLogin: () => void
+  onNeedOTP: (email: string, password: string) => void
 }
 
 const RegisterFormComponent = (props: IRegisterFormProps) => {
-  const { onSwitchToLogin } = props
+  const { onSwitchToLogin, onNeedOTP } = props
   const { t } = useTranslation()
   const register = useAuthStore((s) => s.register)
   const isLoading = useAuthStore((s) => s.isLoading)
   const [showPassword, setShowPassword] = useState(false)
+  const { mutateAsync: sendOTP, isPending: isSendingOTP } = useSendOTP()
 
   const { control, handleSubmit } = useForm<TRegisterForm>({
     resolver: zodResolver(registerSchema),
@@ -36,10 +39,26 @@ const RegisterFormComponent = (props: IRegisterFormProps) => {
         email: data.email,
         password: data.password,
       })
-    } catch {
+
+      try {
+        await sendOTP(data.email)
+        onNeedOTP(data.email, data.password)
+      } catch {
+        Alert.alert(t.game.error, t.auth.sendOtpError)
+      }
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message === 'email_already_used'
+      ) {
+        Alert.alert(t.game.error, t.auth.emailAlreadyUsed)
+        return
+      }
       Alert.alert(t.game.error, t.auth.registerError)
     }
   }
+
+  const busy = isLoading || isSendingOTP
 
   return (
     <View className="gap-5">
@@ -148,9 +167,9 @@ const RegisterFormComponent = (props: IRegisterFormProps) => {
 
       <Button
         onPress={handleSubmit(onSubmit)}
-        disabled={isLoading}
+        disabled={busy}
         icon={
-          isLoading ? (
+          busy ? (
             <ActivityIndicator size="small" color={colors.background} />
           ) : undefined
         }

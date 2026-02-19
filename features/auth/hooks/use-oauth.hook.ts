@@ -2,10 +2,12 @@ import * as WebBrowser from 'expo-web-browser'
 import { useCallback, useRef } from 'react'
 
 import { pb } from '@/features/lanegap/lib/pocketbase'
+import config from '@/lib/config'
 import type { TOAuthProvider } from '@/stores/auth.store'
 import { useAuthStore } from '@/stores/auth.store'
 
-const REDIRECT_URI = 'loltimeflash://oauth'
+const WEB_CALLBACK_URL = `${config.lanegapWebUrl}/api/auth/mobile-callback`
+const MOBILE_SCHEME = 'loltimeflash://oauth'
 
 interface IOAuthProviderInfo {
   name: string
@@ -37,11 +39,11 @@ export const useOAuth = () => {
         providerInfoRef.current = providerInfo
 
         const authUrl = new URL(providerInfo.authURL)
-        authUrl.searchParams.set('redirect_uri', REDIRECT_URI)
+        authUrl.searchParams.set('redirect_uri', WEB_CALLBACK_URL)
 
         const result = await WebBrowser.openAuthSessionAsync(
           authUrl.toString(),
-          REDIRECT_URI,
+          MOBILE_SCHEME,
         )
 
         if (result.type === 'success' && result.url) {
@@ -56,7 +58,7 @@ export const useOAuth = () => {
             provider,
             code,
             providerInfo.codeVerifier,
-            REDIRECT_URI,
+            WEB_CALLBACK_URL,
           )
         } else {
           setLoading(false)

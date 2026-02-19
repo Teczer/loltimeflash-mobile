@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 
@@ -10,20 +10,21 @@ import { GlassButton, TitleText } from '@/components/ui'
 import {
   LoginForm,
   OAuthButtons,
+  OTPScreen,
   ProfileView,
   RegisterForm,
 } from '@/features/auth/components'
-import {
-  BackgroundPicker,
-  LanguagePicker,
-  UsernameForm,
-} from '@/features/settings/components'
-import { AppInfo } from '@/components/app-info.component'
+import { UsernameForm } from '@/features/settings/components'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { useAuthStore } from '@/stores/auth.store'
 
-type TAuthMode = 'login' | 'register'
+type TAuthMode = 'login' | 'register' | 'verify-otp'
+
+interface IPendingCredentials {
+  email: string
+  password: string
+}
 
 export default function ProfileScreen() {
   const { t } = useTranslation()
@@ -31,11 +32,27 @@ export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user)
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const [authMode, setAuthMode] = useState<TAuthMode>('login')
+  const [pendingCredentials, setPendingCredentials] =
+    useState<IPendingCredentials | null>(null)
+
+  const handleNeedOTP = useCallback((email: string, password: string) => {
+    setPendingCredentials({ email, password })
+    setAuthMode('verify-otp')
+  }, [])
+
+  const handleOTPVerified = useCallback(() => {
+    setPendingCredentials(null)
+    setAuthMode('login')
+  }, [])
+
+  const handleBackFromOTP = useCallback(() => {
+    setPendingCredentials(null)
+    setAuthMode('login')
+  }, [])
 
   return (
     <BackgroundImage>
       <StyledSafeAreaView className="flex-1 gap-y-4" edges={['top']}>
-        {/* Header */}
         <View className="flex-row items-center justify-between px-4 py-3">
           <TitleText size="md">{t.auth.profile}</TitleText>
           <GlassButton onPress={() => router.push('/settings')}>
@@ -60,6 +77,13 @@ export default function ProfileScreen() {
                 <UsernameForm />
               </View>
             </>
+          ) : authMode === 'verify-otp' && pendingCredentials ? (
+            <OTPScreen
+              email={pendingCredentials.email}
+              password={pendingCredentials.password}
+              onVerified={handleOTPVerified}
+              onBack={handleBackFromOTP}
+            />
           ) : (
             <View className="gap-6 pt-4">
               <View className="items-center gap-2">
@@ -74,10 +98,12 @@ export default function ProfileScreen() {
               {authMode === 'login' ? (
                 <LoginForm
                   onSwitchToRegister={() => setAuthMode('register')}
+                  onNeedOTP={handleNeedOTP}
                 />
               ) : (
                 <RegisterForm
                   onSwitchToLogin={() => setAuthMode('login')}
+                  onNeedOTP={handleNeedOTP}
                 />
               )}
 
@@ -85,7 +111,6 @@ export default function ProfileScreen() {
             </View>
           )}
 
-          <AppInfo />
         </KeyboardAwareScrollView>
       </StyledSafeAreaView>
     </BackgroundImage>

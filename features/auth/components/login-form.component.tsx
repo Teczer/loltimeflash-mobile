@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { ActivityIndicator, Alert, Pressable, Text, View } from 'react-native'
 
 import { Button, TextInput } from '@/components/ui'
+import { useSendOTP } from '@/features/auth/hooks/use-otp.hook'
 import {
   loginSchema,
   type TLoginForm,
@@ -15,16 +16,18 @@ import { useAuthStore } from '@/stores/auth.store'
 
 interface ILoginFormProps {
   onSwitchToRegister: () => void
+  onNeedOTP: (email: string, password: string) => void
 }
 
 const LoginFormComponent = (props: ILoginFormProps) => {
-  const { onSwitchToRegister } = props
+  const { onSwitchToRegister, onNeedOTP } = props
   const { t } = useTranslation()
   const login = useAuthStore((s) => s.login)
   const isLoading = useAuthStore((s) => s.isLoading)
   const [showPassword, setShowPassword] = useState(false)
+  const { mutateAsync: sendOTP, isPending: isSendingOTP } = useSendOTP()
 
-  const { control, handleSubmit } = useForm<TLoginForm>({
+  const { control, handleSubmit, getValues } = useForm<TLoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   })
@@ -32,10 +35,21 @@ const LoginFormComponent = (props: ILoginFormProps) => {
   const onSubmit = async (data: TLoginForm) => {
     try {
       await login(data)
-    } catch {
+    } catch (error) {
+      if (error instanceof Error && error.message === 'email_not_verified') {
+        try {
+          await sendOTP(data.email)
+          onNeedOTP(data.email, data.password)
+        } catch {
+          Alert.alert(t.game.error, t.auth.sendOtpError)
+        }
+        return
+      }
       Alert.alert(t.game.error, t.auth.loginError)
     }
   }
+
+  const busy = isLoading || isSendingOTP
 
   return (
     <View className="gap-5">
@@ -101,9 +115,9 @@ const LoginFormComponent = (props: ILoginFormProps) => {
 
       <Button
         onPress={handleSubmit(onSubmit)}
-        disabled={isLoading}
+        disabled={busy}
         icon={
-          isLoading ? (
+          busy ? (
             <ActivityIndicator size="small" color={colors.background} />
           ) : undefined
         }

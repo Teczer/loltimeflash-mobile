@@ -155,6 +155,18 @@ export interface ITranslations {
     signInToAccess: string
     signInDescription: string
     account: string
+    verifyEmail: string
+    otpSentTo: string
+    verifyButton: string
+    didntReceive: string
+    resendCode: string
+    otpIncomplete: string
+    otpInvalid: string
+    otpExpired: string
+    emailNotVerified: string
+    emailAlreadyUsed: string
+    sendOtpError: string
+    resendSuccess: string
   }
   notes: {
     myNotes: string
