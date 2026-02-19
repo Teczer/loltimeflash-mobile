@@ -10,21 +10,14 @@ import { GlassButton, TitleText } from '@/components/ui'
 import {
   LoginForm,
   OAuthButtons,
-  OTPScreen,
   ProfileView,
   RegisterForm,
 } from '@/features/auth/components'
-import { UsernameForm } from '@/features/settings/components'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { useAuthStore } from '@/stores/auth.store'
 
-type TAuthMode = 'login' | 'register' | 'verify-otp'
-
-interface IPendingCredentials {
-  email: string
-  password: string
-}
+type TAuthMode = 'login' | 'register'
 
 export default function ProfileScreen() {
   const { t } = useTranslation()
@@ -32,37 +25,65 @@ export default function ProfileScreen() {
   const user = useAuthStore((s) => s.user)
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const [authMode, setAuthMode] = useState<TAuthMode>('login')
-  const [pendingCredentials, setPendingCredentials] =
-    useState<IPendingCredentials | null>(null)
 
-  const handleNeedOTP = useCallback((email: string, password: string) => {
-    setPendingCredentials({ email, password })
-    setAuthMode('verify-otp')
-  }, [])
+  const handleOpenSettings = useCallback(() => {
+    router.push('/settings')
+  }, [router])
 
-  const handleOTPVerified = useCallback(() => {
-    setPendingCredentials(null)
-    setAuthMode('login')
-  }, [])
+  const handleNeedOTP = useCallback(
+    (email: string, password: string, isNewRegistration: boolean) => {
+      router.push({
+        pathname: '/verify-otp',
+        params: {
+          email,
+          password,
+          isNewRegistration: String(isNewRegistration),
+        },
+      })
+    },
+    [router]
+  )
 
-  const handleBackFromOTP = useCallback(() => {
-    setPendingCredentials(null)
-    setAuthMode('login')
-  }, [])
+  if (isAuthenticated && user) {
+    return (
+      <BackgroundImage>
+        <StyledSafeAreaView className="flex-1 gap-y-4" edges={['top']}>
+          <GlassButton
+            onPress={handleOpenSettings}
+            className="absolute right-4 top-14 z-50"
+          >
+            <Ionicons
+              name="settings-outline"
+              size={22}
+              color={colors.foreground}
+            />
+          </GlassButton>
+          <KeyboardAwareScrollView
+            className="flex-1"
+            contentContainerClassName="px-6 pb-8 gap-y-4"
+            showsVerticalScrollIndicator={false}
+            bottomOffset={50}
+          >
+            <ProfileView user={user} />
+          </KeyboardAwareScrollView>
+        </StyledSafeAreaView>
+      </BackgroundImage>
+    )
+  }
 
   return (
     <BackgroundImage>
       <StyledSafeAreaView className="flex-1 gap-y-4" edges={['top']}>
-        <View className="flex-row items-center justify-between px-4 py-3">
-          <TitleText size="md">{t.auth.profile}</TitleText>
-          <GlassButton onPress={() => router.push('/settings')}>
-            <Ionicons
-              name="settings-outline"
-              size={20}
-              color={colors.foreground}
-            />
-          </GlassButton>
-        </View>
+        <GlassButton
+          onPress={handleOpenSettings}
+          className="absolute right-4 top-14 z-50"
+        >
+          <Ionicons
+            name="settings-outline"
+            size={22}
+            color={colors.foreground}
+          />
+        </GlassButton>
 
         <KeyboardAwareScrollView
           className="flex-1"
@@ -70,47 +91,30 @@ export default function ProfileScreen() {
           showsVerticalScrollIndicator={false}
           bottomOffset={50}
         >
-          {isAuthenticated && user ? (
-            <>
-              <ProfileView user={user} />
-              <View className="mt-2 gap-2">
-                <UsernameForm />
-              </View>
-            </>
-          ) : authMode === 'verify-otp' && pendingCredentials ? (
-            <OTPScreen
-              email={pendingCredentials.email}
-              password={pendingCredentials.password}
-              onVerified={handleOTPVerified}
-              onBack={handleBackFromOTP}
-            />
-          ) : (
-            <View className="gap-6 pt-4">
-              <View className="items-center gap-2">
-                <Ionicons
-                  name="person-circle-outline"
-                  size={64}
-                  color={colors.gold}
-                />
-                <TitleText size="sm">{t.auth.signInToAccess}</TitleText>
-              </View>
-
-              {authMode === 'login' ? (
-                <LoginForm
-                  onSwitchToRegister={() => setAuthMode('register')}
-                  onNeedOTP={handleNeedOTP}
-                />
-              ) : (
-                <RegisterForm
-                  onSwitchToLogin={() => setAuthMode('login')}
-                  onNeedOTP={handleNeedOTP}
-                />
-              )}
-
-              <OAuthButtons />
+          <View className="gap-6 pt-4">
+            <View className="items-center gap-2">
+              <Ionicons
+                name="person-circle-outline"
+                size={64}
+                color={colors.gold}
+              />
+              <TitleText size="sm">{t.auth.signInToAccess}</TitleText>
             </View>
-          )}
 
+            {authMode === 'login' ? (
+              <LoginForm
+                onSwitchToRegister={() => setAuthMode('register')}
+                onNeedOTP={handleNeedOTP}
+              />
+            ) : (
+              <RegisterForm
+                onSwitchToLogin={() => setAuthMode('login')}
+                onNeedOTP={handleNeedOTP}
+              />
+            )}
+
+            <OAuthButtons />
+          </View>
         </KeyboardAwareScrollView>
       </StyledSafeAreaView>
     </BackgroundImage>

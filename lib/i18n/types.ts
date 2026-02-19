@@ -41,6 +41,7 @@ export interface ITranslations {
   settings: {
     title: string
     changeUsername: string
+    changePseudo: string
     yourUsername: string
     enterUsername: string
     minLength: string
@@ -178,6 +179,21 @@ export interface ITranslations {
     noNotes: string
     signInForNotes: string
     saved: string
+  }
+  onboarding: {
+    choosePseudo: string
+    pseudoSubtitle: string
+    pseudoPlaceholder: string
+    continue: string
+    skip: string
+    chooseAvatar: string
+    avatarSubtitle: string
+    change: string
+    letsGo: string
+    back: string
+    imageTooLarge: string
+    invalidFormat: string
+    compressing: string
   }
   notFound: {
     oops: string

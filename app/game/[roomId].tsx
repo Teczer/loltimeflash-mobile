@@ -23,6 +23,7 @@ import type { ILiveGameData } from '@/features/game/types/riot.types'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { mapEnemyParticipantsToRoles } from '@/lib/riot-role-mapping.util'
+import { useAuthStore } from '@/stores/auth.store'
 import { useUserStore } from '@/stores/user.store'
 
 const MultiplayerGameContent = () => {
@@ -257,10 +258,12 @@ const MultiplayerGameContent = () => {
 
 export default function MultiplayerGameScreen() {
   const { roomId } = useLocalSearchParams<{ roomId: string }>()
-  const username = useUserStore((state) => state.username)
+  const user = useAuthStore((s) => s.user)
+  const localUsername = useUserStore((s) => s.username)
+  const username = user?.name ?? localUsername ?? 'Guest'
 
   return (
-    <GameProvider roomId={roomId} username={username || 'Guest'}>
+    <GameProvider roomId={roomId} username={username}>
       <MultiplayerGameContent />
     </GameProvider>
   )

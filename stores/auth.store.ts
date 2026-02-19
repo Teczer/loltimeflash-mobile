@@ -47,6 +47,7 @@ interface IAuthActions {
   ) => Promise<void>
   logout: () => void
   updateProfile: (params: { name: string }) => Promise<void>
+  updateAvatar: (uri: string) => Promise<void>
   deleteAccount: () => Promise<void>
   setLoading: (loading: boolean) => void
   setHasHydrated: (hasHydrated: boolean) => void
@@ -186,6 +187,34 @@ export const useAuthStore = create<IAuthState & IAuthActions>()(
         } catch {
           set({ isLoading: false })
           throw new Error('update_failed')
+        }
+      },
+
+      updateAvatar: async (uri: string) => {
+        const state = useAuthStore.getState()
+        if (!state.user) throw new Error('Not authenticated')
+
+        set({ isLoading: true })
+        try {
+          const filename = uri.split('/').pop() || 'avatar.jpg'
+          const response = await fetch(uri)
+          const blob = await response.blob()
+
+          const formData = new FormData()
+          formData.append('avatar', {
+            uri,
+            name: filename,
+            type: blob.type || 'image/jpeg',
+          } as unknown as Blob)
+
+          const record = await pb
+            .collection('users')
+            .update(state.user.id, formData)
+          const updatedUser = mapUser(record)
+          set({ user: updatedUser, isLoading: false })
+        } catch {
+          set({ isLoading: false })
+          throw new Error('avatar_update_failed')
         }
       },
 

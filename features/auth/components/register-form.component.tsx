@@ -2,21 +2,25 @@ import { Ionicons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { memo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { ActivityIndicator, Alert, Pressable, Text, View } from 'react-native'
+import { Alert, Pressable, Text, View } from 'react-native'
 
-import { Button, TextInput } from '@/components/ui'
+import { DynamicButton, TextInput } from '@/components/ui'
+import { useSendOTP } from '@/features/auth/hooks/use-otp.hook'
 import {
   registerSchema,
   type TRegisterForm,
 } from '@/features/auth/schemas/auth.schema'
-import { useSendOTP } from '@/features/auth/hooks/use-otp.hook'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { useAuthStore } from '@/stores/auth.store'
 
 interface IRegisterFormProps {
   onSwitchToLogin: () => void
-  onNeedOTP: (email: string, password: string) => void
+  onNeedOTP: (
+    email: string,
+    password: string,
+    isNewRegistration: boolean
+  ) => void
 }
 
 const RegisterFormComponent = (props: IRegisterFormProps) => {
@@ -29,28 +33,30 @@ const RegisterFormComponent = (props: IRegisterFormProps) => {
 
   const { control, handleSubmit } = useForm<TRegisterForm>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
+    defaultValues: { email: '', password: '', confirmPassword: '' },
   })
+
+  const generateDefaultPseudo = () => {
+    const suffix = Math.floor(1000 + Math.random() * 9000)
+    return `Player_${suffix}`
+  }
 
   const onSubmit = async (data: TRegisterForm) => {
     try {
       await register({
-        name: data.name,
+        name: generateDefaultPseudo(),
         email: data.email,
         password: data.password,
       })
 
       try {
         await sendOTP(data.email)
-        onNeedOTP(data.email, data.password)
+        onNeedOTP(data.email, data.password, true)
       } catch {
         Alert.alert(t.game.error, t.auth.sendOtpError)
       }
     } catch (error) {
-      if (
-        error instanceof Error &&
-        error.message === 'email_already_used'
-      ) {
+      if (error instanceof Error && error.message === 'email_already_used') {
         Alert.alert(t.game.error, t.auth.emailAlreadyUsed)
         return
       }
@@ -63,28 +69,6 @@ const RegisterFormComponent = (props: IRegisterFormProps) => {
   return (
     <View className="gap-5">
       <View className="gap-3">
-        <View className="gap-1.5">
-          <Text className="font-sans-medium text-foreground text-sm">
-            {t.auth.name}
-          </Text>
-          <Controller
-            control={control}
-            name="name"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder={t.auth.enterName}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCapitalize="words"
-                autoCorrect={false}
-                textContentType="name"
-                autoComplete="name"
-              />
-            )}
-          />
-        </View>
-
         <View className="gap-1.5">
           <Text className="font-sans-medium text-foreground text-sm">
             {t.auth.email}
@@ -165,17 +149,14 @@ const RegisterFormComponent = (props: IRegisterFormProps) => {
         </View>
       </View>
 
-      <Button
+      <DynamicButton
         onPress={handleSubmit(onSubmit)}
         disabled={busy}
-        icon={
-          busy ? (
-            <ActivityIndicator size="small" color={colors.background} />
-          ) : undefined
-        }
+        isLoading={busy}
+        loadingText={t.auth.signUp}
       >
         {t.auth.signUp}
-      </Button>
+      </DynamicButton>
 
       <Pressable onPress={onSwitchToLogin} className="items-center py-2">
         <Text className="text-muted-foreground font-sans text-sm">

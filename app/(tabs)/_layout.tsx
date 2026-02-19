@@ -10,6 +10,11 @@ import {
 } from 'expo-router/unstable-native-tabs'
 import { Platform } from 'react-native'
 
+import LanegapLogo from '@/assets/images/lanegap.svg'
+import {
+  ProfileTabIcon,
+  ProfileTabIconNative,
+} from '@/components/profile-tab-icon.component'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
@@ -57,7 +62,7 @@ export default function TabLayout() {
           options={{
             title: t.tabs.laneGap,
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="book" size={24} color={color} />
+              <LanegapLogo width={24} height={24} color={color} />
             ),
           }}
         />
@@ -65,8 +70,8 @@ export default function TabLayout() {
           name="profile"
           options={{
             title: t.tabs.profile,
-            tabBarIcon: ({ color }) => (
-              <FontAwesome name="user-circle" size={24} color={color} />
+            tabBarIcon: ({ color, focused }) => (
+              <ProfileTabIcon color={color} focused={focused} />
             ),
           }}
         />
@@ -115,21 +120,7 @@ export default function TabLayout() {
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="profile">
         <Label>{t.tabs.profile}</Label>
-        {Platform.select({
-          ios: (
-            <Icon
-              sf={{
-                default: 'person.crop.circle',
-                selected: 'person.crop.circle.fill',
-              }}
-            />
-          ),
-          android: (
-            <Icon
-              src={<VectorIcon family={MaterialIcons} name="account-circle" />}
-            />
-          ),
-        })}
+        <ProfileTabIconNative />
       </NativeTabs.Trigger>
     </NativeTabs>
   )

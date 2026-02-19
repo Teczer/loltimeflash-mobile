@@ -2,9 +2,9 @@ import { Ionicons } from '@expo/vector-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { memo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { ActivityIndicator, Alert, Pressable, Text, View } from 'react-native'
+import { Alert, Pressable, Text, View } from 'react-native'
 
-import { Button, TextInput } from '@/components/ui'
+import { DynamicButton, TextInput } from '@/components/ui'
 import { useSendOTP } from '@/features/auth/hooks/use-otp.hook'
 import {
   loginSchema,
@@ -16,7 +16,7 @@ import { useAuthStore } from '@/stores/auth.store'
 
 interface ILoginFormProps {
   onSwitchToRegister: () => void
-  onNeedOTP: (email: string, password: string) => void
+  onNeedOTP: (email: string, password: string, isNewRegistration: boolean) => void
 }
 
 const LoginFormComponent = (props: ILoginFormProps) => {
@@ -39,7 +39,7 @@ const LoginFormComponent = (props: ILoginFormProps) => {
       if (error instanceof Error && error.message === 'email_not_verified') {
         try {
           await sendOTP(data.email)
-          onNeedOTP(data.email, data.password)
+          onNeedOTP(data.email, data.password, false)
         } catch {
           Alert.alert(t.game.error, t.auth.sendOtpError)
         }
@@ -113,17 +113,14 @@ const LoginFormComponent = (props: ILoginFormProps) => {
         </View>
       </View>
 
-      <Button
+      <DynamicButton
         onPress={handleSubmit(onSubmit)}
         disabled={busy}
-        icon={
-          busy ? (
-            <ActivityIndicator size="small" color={colors.background} />
-          ) : undefined
-        }
+        isLoading={busy}
+        loadingText={t.auth.signIn}
       >
         {t.auth.signIn}
-      </Button>
+      </DynamicButton>
 
       <Pressable onPress={onSwitchToRegister} className="items-center py-2">
         <Text className="text-muted-foreground font-sans text-sm">

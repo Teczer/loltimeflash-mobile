@@ -77,6 +77,20 @@ function RootLayoutNav() {
               name="lanegap/[championId]"
               options={{ fullScreenGestureEnabled: true }}
             />
+            <Stack.Screen
+              name="verify-otp"
+              options={{
+                gestureEnabled: false,
+                animation: 'fade',
+              }}
+            />
+            <Stack.Screen
+              name="onboarding"
+              options={{
+                gestureEnabled: false,
+                animation: 'fade',
+              }}
+            />
             <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           </Stack>
         </QueryProvider>
