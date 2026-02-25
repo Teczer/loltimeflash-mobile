@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
@@ -126,6 +126,7 @@ const SoloGameContent = () => {
           isOpen={isSheetOpen}
           onClose={() => setIsSheetOpen(false)}
           title={t.game.fetchLiveGame}
+          snapPoints={['30%', '50%', '90%']}
         >
           <SummonerInput onGameDataFetched={handleGameDataFetched} />
         </BottomSheet>

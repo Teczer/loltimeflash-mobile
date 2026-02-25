@@ -19,5 +19,4 @@ export interface IBackgroundPickerModalProps {
   championName: string
   skinIndex: number
   onSelectSkin: (championName: string, skinIndex: number) => void
-  onReset: () => void
 }

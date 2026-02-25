@@ -1,4 +1,4 @@
-export { BottomSheet } from './bottom-sheet.component'
+export { BottomSheet } from './bottom-sheet'
 export { Button } from './button.component'
 export { DynamicButton } from './dynamic-button.component'
 export { GlassButton } from './glass-button.component'

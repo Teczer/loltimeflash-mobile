@@ -3,6 +3,8 @@ export { CustomToggle } from './custom-toggle.component';
 export { FlashButton } from './flash-button.component';
 export { ItemToggle } from './item-toggle.component';
 export { RoleCard } from './role-card.component';
+export { RoomCodeCopyButton } from './room-code-copy-button.component';
+export { RoomSettingsSheet } from './room-settings';
 export { SettingsCard } from './settings-card.component';
 export { SettingsSection } from './settings-section.component';
 export { SummonerInput } from './summoner-input.component';

@@ -1,5 +1,4 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { isLiquidGlassAvailable } from 'expo-glass-effect'
 import { Tabs } from 'expo-router'
 import {
@@ -8,7 +7,6 @@ import {
   NativeTabs,
   VectorIcon,
 } from 'expo-router/unstable-native-tabs'
-import { Platform } from 'react-native'
 
 import LanegapLogo from '@/assets/images/lanegap.svg'
 import {
@@ -18,12 +16,20 @@ import {
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 
+import { TABS_CONFIG } from './tabs.config'
+
 const isGlassEnabled = isLiquidGlassAvailable()
+
+const TAB_BAR_STYLE = {
+  backgroundColor: colors.background,
+  borderTopColor: '#666666',
+  borderTopWidth: 0.2,
+  paddingTop: 8,
+} as const
 
 export default function TabLayout() {
   const { t } = useTranslation()
 
-  // Fallback to JavaScript Tabs if liquid glass is not available
   if (!isGlassEnabled) {
     return (
       <Tabs
@@ -31,45 +37,40 @@ export default function TabLayout() {
           headerShown: false,
           tabBarActiveTintColor: 'white',
           tabBarInactiveTintColor: colors.mutedForeground,
-          tabBarStyle: {
-            backgroundColor: colors.background,
-            borderTopColor: '#666666',
-            borderTopWidth: 0.2,
-            paddingTop: 8,
-          },
+          tabBarStyle: TAB_BAR_STYLE,
         }}
       >
         <Tabs.Screen
-          name="index"
+          name={TABS_CONFIG.INDEX.name}
           options={{
-            title: t.tabs.solo,
+            title: t.tabs[TABS_CONFIG.INDEX.titleKey],
             tabBarIcon: ({ color }) => (
               <FontAwesome name="user" size={24} color={color} />
             ),
           }}
         />
         <Tabs.Screen
-          name="multiplayer"
+          name={TABS_CONFIG.MULTIPLAYER.name}
           options={{
-            title: t.tabs.multi,
+            title: t.tabs[TABS_CONFIG.MULTIPLAYER.titleKey],
             tabBarIcon: ({ color }) => (
               <FontAwesome name="users" size={24} color={color} />
             ),
           }}
         />
         <Tabs.Screen
-          name="lanegap"
+          name={TABS_CONFIG.LANEGAP.name}
           options={{
-            title: t.tabs.laneGap,
+            title: t.tabs[TABS_CONFIG.LANEGAP.titleKey],
             tabBarIcon: ({ color }) => (
               <LanegapLogo width={24} height={24} color={color} />
             ),
           }}
         />
         <Tabs.Screen
-          name="profile"
+          name={TABS_CONFIG.PROFILE.name}
           options={{
-            title: t.tabs.profile,
+            title: t.tabs[TABS_CONFIG.PROFILE.titleKey],
             tabBarIcon: ({ color, focused }) => (
               <ProfileTabIcon color={color} focused={focused} />
             ),
@@ -79,47 +80,22 @@ export default function TabLayout() {
     )
   }
 
-  // NativeTabs with liquid glass effect
   return (
     <NativeTabs tintColor="white">
-      <NativeTabs.Trigger name="index">
-        <Label>{t.tabs.solo}</Label>
-        {Platform.select({
-          ios: <Icon sf={{ default: 'person', selected: 'person.fill' }} />,
-          android: (
-            <Icon src={<VectorIcon family={MaterialIcons} name="flash-on" />} />
-          ),
-        })}
+      <NativeTabs.Trigger name={TABS_CONFIG.INDEX.name}>
+        <Label>{t.tabs[TABS_CONFIG.INDEX.titleKey]}</Label>
+        <Icon src={<VectorIcon family={FontAwesome} name="user" />} />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="multiplayer">
-        <Label>{t.tabs.multi}</Label>
-        {Platform.select({
-          ios: <Icon sf={{ default: 'person.3', selected: 'person.3.fill' }} />,
-          android: (
-            <Icon src={<VectorIcon family={MaterialIcons} name="people" />} />
-          ),
-        })}
+      <NativeTabs.Trigger name={TABS_CONFIG.MULTIPLAYER.name}>
+        <Label>{t.tabs[TABS_CONFIG.MULTIPLAYER.titleKey]}</Label>
+        <Icon src={<VectorIcon family={FontAwesome} name="users" />} />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="lanegap">
-        <Label>{t.tabs.laneGap}</Label>
-        {Platform.select({
-          ios: (
-            <Icon
-              sf={{
-                default: 'book.pages',
-                selected: 'book.pages.fill',
-              }}
-            />
-          ),
-          android: (
-            <Icon
-              src={<VectorIcon family={MaterialIcons} name="library-books" />}
-            />
-          ),
-        })}
+      <NativeTabs.Trigger name={TABS_CONFIG.LANEGAP.name}>
+        <Label>{t.tabs[TABS_CONFIG.LANEGAP.titleKey]}</Label>
+        <Icon src={<VectorIcon family={FontAwesome} name="book" />} />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="profile">
-        <Label>{t.tabs.profile}</Label>
+      <NativeTabs.Trigger name={TABS_CONFIG.PROFILE.name}>
+        <Label>{t.tabs[TABS_CONFIG.PROFILE.titleKey]}</Label>
         <ProfileTabIconNative />
       </NativeTabs.Trigger>
     </NativeTabs>

@@ -29,6 +29,7 @@ const RegisterFormComponent = (props: IRegisterFormProps) => {
   const register = useAuthStore((s) => s.register)
   const isLoading = useAuthStore((s) => s.isLoading)
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const { mutateAsync: sendOTP, isPending: isSendingOTP } = useSendOTP()
 
   const { control, handleSubmit } = useForm<TRegisterForm>({
@@ -109,16 +110,17 @@ const RegisterFormComponent = (props: IRegisterFormProps) => {
                   secureTextEntry={!showPassword}
                   textContentType="newPassword"
                   autoComplete="new-password"
+                  style={{ paddingRight: 44 }}
                 />
               )}
             />
             <Pressable
               onPress={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2"
+              className="absolute right-3 top-1/2 z-10 -translate-y-1/2"
               hitSlop={8}
             >
               <Ionicons
-                name={showPassword ? 'eye-off' : 'eye'}
+                name={showPassword ? 'eye' : 'eye-off'}
                 size={20}
                 color={colors.mutedForeground}
               />
@@ -130,22 +132,36 @@ const RegisterFormComponent = (props: IRegisterFormProps) => {
           <Text className="font-sans-medium text-foreground text-sm">
             {t.auth.confirmPassword}
           </Text>
-          <Controller
-            control={control}
-            name="confirmPassword"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder={t.auth.confirmYourPassword}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                secureTextEntry={!showPassword}
-                textContentType="newPassword"
-                autoComplete="new-password"
-                onSubmitEditing={handleSubmit(onSubmit)}
+          <View className="relative">
+            <Controller
+              control={control}
+              name="confirmPassword"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder={t.auth.confirmYourPassword}
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  secureTextEntry={!showConfirmPassword}
+                  textContentType="newPassword"
+                  autoComplete="new-password"
+                  onSubmitEditing={handleSubmit(onSubmit)}
+                  style={{ paddingRight: 44 }}
+                />
+              )}
+            />
+            <Pressable
+              onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 z-10 -translate-y-1/2"
+              hitSlop={8}
+            >
+              <Ionicons
+                name={showConfirmPassword ? 'eye' : 'eye-off'}
+                size={20}
+                color={colors.mutedForeground}
               />
-            )}
-          />
+            </Pressable>
+          </View>
         </View>
       </View>
 

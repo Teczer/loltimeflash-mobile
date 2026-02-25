@@ -56,6 +56,35 @@ export interface ITranslations {
     languageSubtitle: string
     french: string
     english: string
+    accountTitle: string
+    profileTitle: string
+    personalInfo: string
+    changePassword: string
+    save: string
+    avatar: string
+    modify: string
+    avatarDescription: string
+    avatarHint: string
+    name: string
+    nameDescription: string
+    nameHint: string
+    email: string
+    emailDescription: string
+    emailHint: string
+    verified: string
+    password: string
+    passwordDescription: string
+    currentPassword: string
+    newPassword: string
+    confirmPassword: string
+    passwordHint: string
+    deleteAccount: string
+    deleteAccountDescription: string
+    deleteAccountWarning: string
+    deleteConfirmTitle: string
+    deleteConfirmMessage: string
+    deleteConfirmPlaceholder: string
+    confirmDelete: string
   }
   game: {
     connectingToServer: string

@@ -12,7 +12,12 @@ const LANGUAGE_OPTIONS: { value: TLanguage; flag: string }[] = [
   { value: 'en', flag: '🇬🇧' },
 ]
 
-export const LanguagePicker = () => {
+interface ILanguagePickerProps {
+  compact?: boolean
+}
+
+export const LanguagePicker = (props: ILanguagePickerProps) => {
+  const { compact = false } = props
   const { t } = useTranslation()
   const { language, setLanguage } = useLanguageStore()
 
@@ -23,9 +28,11 @@ export const LanguagePicker = () => {
 
   return (
     <View className="gap-y-4">
-      <Text className="font-sans-bold text-foreground text-lg">
-        {t.settings.language}
-      </Text>
+      {!compact && (
+        <Text className="font-sans-bold text-foreground text-lg">
+          {t.settings.language}
+        </Text>
+      )}
 
       <View className="flex-row gap-3">
         {LANGUAGE_OPTIONS.map((option) => {

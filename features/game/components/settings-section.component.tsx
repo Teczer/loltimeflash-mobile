@@ -20,7 +20,7 @@ export const SettingsSection = ({
   <View className={className}>
     <View className="mb-3 flex-row items-center gap-2">
       <Ionicons name={icon} size={16} color={iconColor} />
-      <Text className="text-sm font-semibold text-white">{title}</Text>
+      <Text className="text-foreground font-sans-bold text-sm">{title}</Text>
     </View>
     {children}
   </View>

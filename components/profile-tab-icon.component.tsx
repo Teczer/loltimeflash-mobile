@@ -9,7 +9,7 @@ import { colors } from '@/lib/colors'
 import { getAvatarUrl } from '@/lib/pocketbase.utils'
 import { useAuthStore } from '@/stores/auth.store'
 
-const SIZE = 30
+const USER_AVATAR_SIZE = 30
 const BORDER_WIDTH = 1
 
 interface IProfileTabIconProps {
@@ -22,7 +22,7 @@ export const ProfileTabIcon = memo((props: IProfileTabIconProps) => {
   const user = useAuthStore((s) => s.user)
 
   if (!user?.avatar) {
-    return <FontAwesome name="user-circle" size={SIZE} color={color} />
+    return <FontAwesome name="user-circle" size={24} color={color} />
   }
 
   const borderColor = focused ? '#FFFFFF' : colors.mutedForeground
@@ -30,9 +30,9 @@ export const ProfileTabIcon = memo((props: IProfileTabIconProps) => {
   return (
     <View
       style={{
-        width: SIZE,
-        height: SIZE,
-        borderRadius: SIZE / 2,
+        width: USER_AVATAR_SIZE,
+        height: USER_AVATAR_SIZE,
+        borderRadius: USER_AVATAR_SIZE / 2,
         borderWidth: BORDER_WIDTH,
         borderColor,
         overflow: 'hidden',
@@ -40,7 +40,7 @@ export const ProfileTabIcon = memo((props: IProfileTabIconProps) => {
     >
       <Image
         source={{ uri: avatarUrl }}
-        style={{ width: SIZE, height: SIZE }}
+        style={{ width: USER_AVATAR_SIZE, height: USER_AVATAR_SIZE }}
         resizeMode="cover"
       />
     </View>
@@ -59,9 +59,9 @@ export const ProfileTabIconNative = memo(() => {
     return (
       <View
         style={{
-          width: SIZE,
-          height: SIZE,
-          borderRadius: SIZE / 2,
+          width: USER_AVATAR_SIZE,
+          height: USER_AVATAR_SIZE,
+          borderRadius: USER_AVATAR_SIZE / 2,
           borderWidth: BORDER_WIDTH,
           borderColor,
           overflow: 'hidden',
@@ -69,7 +69,7 @@ export const ProfileTabIconNative = memo(() => {
       >
         <Image
           source={{ uri: avatarUrl }}
-          style={{ width: SIZE, height: SIZE }}
+          style={{ width: USER_AVATAR_SIZE, height: USER_AVATAR_SIZE }}
           resizeMode="cover"
         />
       </View>

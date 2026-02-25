@@ -48,6 +48,10 @@ interface IAuthActions {
   logout: () => void
   updateProfile: (params: { name: string }) => Promise<void>
   updateAvatar: (uri: string) => Promise<void>
+  updatePassword: (params: {
+    currentPassword: string
+    newPassword: string
+  }) => Promise<void>
   deleteAccount: () => Promise<void>
   setLoading: (loading: boolean) => void
   setHasHydrated: (hasHydrated: boolean) => void
@@ -215,6 +219,24 @@ export const useAuthStore = create<IAuthState & IAuthActions>()(
         } catch {
           set({ isLoading: false })
           throw new Error('avatar_update_failed')
+        }
+      },
+
+      updatePassword: async ({ currentPassword, newPassword }) => {
+        const state = useAuthStore.getState()
+        if (!state.user) throw new Error('Not authenticated')
+
+        set({ isLoading: true })
+        try {
+          await pb.collection('users').update(state.user.id, {
+            oldPassword: currentPassword,
+            password: newPassword,
+            passwordConfirm: newPassword,
+          })
+          set({ isLoading: false })
+        } catch {
+          set({ isLoading: false })
+          throw new Error('password_update_failed')
         }
       },
 

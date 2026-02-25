@@ -1,32 +1,32 @@
-import { Ionicons } from '@expo/vector-icons'
-import { memo } from 'react'
-import { Alert, Image, Text, View } from 'react-native'
+import { memo, useCallback, useState } from 'react'
+import { Alert, Text, View } from 'react-native'
 
-import { Button, TitleText } from '@/components/ui'
+import { AnimatedHeaderScrollView } from '@/components/organisms/animated-header-scrollview'
+import { BottomSheet, DynamicButton } from '@/components/ui'
+import {
+  ProfileAvatarSection,
+  ProfileInfoSections,
+  ProfilePasswordFormContent,
+  ProfilePersonalFormContent,
+} from '@/features/auth/components/profile'
 import { useTranslation } from '@/hooks/use-translation.hook'
-import { colors } from '@/lib/colors'
-import { getAvatarUrl } from '@/lib/pocketbase.utils'
 import type { IUser } from '@/stores/auth.store'
 import { useAuthStore } from '@/stores/auth.store'
 
+type TSheetType = 'personal' | 'password' | null
+
 interface IProfileViewProps {
   user: IUser
+  rightComponent?: React.ReactNode
 }
 
 const ProfileViewComponent = (props: IProfileViewProps) => {
-  const { user } = props
-  const { t, language } = useTranslation()
+  const { user, rightComponent } = props
+  const { t } = useTranslation()
   const logout = useAuthStore((s) => s.logout)
-  const deleteAccount = useAuthStore((s) => s.deleteAccount)
+  const [openSheet, setOpenSheet] = useState<TSheetType>(null)
 
-  const avatarUrl = getAvatarUrl(user)
-
-  const memberDate = new Date(user.created).toLocaleDateString(
-    language === 'fr' ? 'fr-FR' : 'en-US',
-    { year: 'numeric', month: 'long' },
-  )
-
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     Alert.alert(t.auth.logout, t.auth.logoutConfirm, [
       { text: t.auth.cancel, style: 'cancel' },
       {
@@ -35,63 +35,72 @@ const ProfileViewComponent = (props: IProfileViewProps) => {
         onPress: () => logout(),
       },
     ])
+  }, [t, logout])
+
+  const getSheetTitle = () => {
+    switch (openSheet) {
+      case 'personal':
+        return t.settings.personalInfo
+      case 'password':
+        return t.settings.changePassword
+      default:
+        return ''
+    }
   }
 
-  const handleDeleteAccount = () => {
-    Alert.alert(t.auth.deleteAccountConfirm, t.auth.deleteAccountWarning, [
-      { text: t.auth.cancel, style: 'cancel' },
-      {
-        text: t.auth.deleteAccount,
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await deleteAccount()
-          } catch {
-            Alert.alert(t.game.error)
-          }
-        },
-      },
-    ])
+  const getSnapPoints = (): [string, string] => {
+    if (openSheet === 'personal') return ['30%', '90%']
+    if (openSheet === 'password') return ['50%', '90%']
+    return ['50%', '90%']
   }
 
   return (
-    <View className="gap-6">
-      {/* Profile Header */}
-      <View className="items-center gap-3 pt-4">
-        <View className="size-20 items-center justify-center overflow-hidden rounded-full border-2 border-white/20 bg-white/10">
-          {avatarUrl ? (
-            <Image
-              source={{ uri: avatarUrl }}
-              className="size-20"
-              resizeMode="cover"
-            />
-          ) : (
-            <Ionicons name="person" size={36} color={colors.mutedForeground} />
-          )}
-        </View>
-
-        <View className="items-center gap-1">
-          <TitleText size="md">{user.name}</TitleText>
-          <Text className="text-muted-foreground font-sans text-sm">
-            {user.email}
+    <>
+      <AnimatedHeaderScrollView
+        headerOnly
+        rightComponent={rightComponent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+      >
+        <View className="gap-2">
+          <ProfileAvatarSection user={user} />
+          <Text className="text-foreground mb-4 text-center text-2xl font-bold">
+            {user.name}
           </Text>
-          <Text className="text-muted-foreground font-sans text-xs">
-            {t.auth.member.replace('{date}', memberDate)}
-          </Text>
+
+          <ProfileInfoSections
+            user={user}
+            onEditName={() => setOpenSheet('personal')}
+            onEditPassword={() => setOpenSheet('password')}
+          />
+          <DynamicButton
+            variant="primary"
+            onPress={handleLogout}
+            className="mt-4"
+          >
+            {t.auth.logout}
+          </DynamicButton>
         </View>
-      </View>
+      </AnimatedHeaderScrollView>
 
-      {/* Actions */}
-      <View className="gap-3">
-        <Button variant="outline" onPress={handleLogout}>
-          {t.auth.logout}
-        </Button>
-
-        <Button variant="destructive" onPress={handleDeleteAccount}>
-          {t.auth.deleteAccount}
-        </Button>
-      </View>
-    </View>
+      <BottomSheet
+        isOpen={openSheet !== null}
+        onClose={() => setOpenSheet(null)}
+        title={getSheetTitle()}
+        snapPoints={getSnapPoints()}
+      >
+        {openSheet === 'personal' && (
+          <ProfilePersonalFormContent
+            user={user}
+            onClose={() => setOpenSheet(null)}
+          />
+        )}
+        {openSheet === 'password' && (
+          <ProfilePasswordFormContent onClose={() => setOpenSheet(null)} />
+        )}
+      </BottomSheet>
+    </>
   )
 }
 

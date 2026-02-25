@@ -1,5 +1,6 @@
 export { LoginForm } from './login-form.component'
 export { OAuthButtons } from './oauth-buttons.component'
+export { ProfileAuthView } from './profile-auth-view.component'
 export { OTPActions } from './otp-actions.component'
 export { OTPHeader } from './otp-header.component'
 export { OTPInput } from './otp-input.component'

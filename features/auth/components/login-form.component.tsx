@@ -95,16 +95,17 @@ const LoginFormComponent = (props: ILoginFormProps) => {
                   textContentType="password"
                   autoComplete="password"
                   onSubmitEditing={handleSubmit(onSubmit)}
+                  style={{ paddingRight: 44 }}
                 />
               )}
             />
             <Pressable
               onPress={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2"
+              className="absolute right-3 top-1/2 z-10 -translate-y-1/2"
               hitSlop={8}
             >
               <Ionicons
-                name={showPassword ? 'eye-off' : 'eye'}
+                name={showPassword ? 'eye' : 'eye-off'}
                 size={20}
                 color={colors.mutedForeground}
               />
