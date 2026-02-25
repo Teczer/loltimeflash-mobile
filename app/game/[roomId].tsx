@@ -7,14 +7,12 @@ import { Pressable, Text, View } from 'react-native'
 
 import { BackgroundImage } from '@/components/background-image.component'
 import { StyledSafeAreaView } from '@/components/styled'
-import { BottomSheet, GlassButton } from '@/components/ui'
+import { GlassButton } from '@/components/ui'
 import {
   ConnectionIndicator,
-  CustomToggle,
   RoleCard,
-  SettingsCard,
-  SettingsSection,
-  SummonerInput,
+  RoomCodeCopyButton,
+  RoomSettingsSheet,
 } from '@/features/game/components'
 import { LEAGUE_ROLES } from '@/features/game/constants/game.constants'
 import { GameProvider, useGameContext } from '@/features/game/contexts'
@@ -23,6 +21,7 @@ import type { ILiveGameData } from '@/features/game/types/riot.types'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { mapEnemyParticipantsToRoles } from '@/lib/riot-role-mapping.util'
+import { useAuthStore } from '@/stores/auth.store'
 import { useUserStore } from '@/stores/user.store'
 
 const MultiplayerGameContent = () => {
@@ -82,23 +81,12 @@ const MultiplayerGameContent = () => {
             <Ionicons name="arrow-back" size={22} color={colors.foreground} />
           </Pressable>
 
-          <Pressable
+          <RoomCodeCopyButton
+            roomId={roomId || ''}
+            connectionStatus={connectionStatus}
+            copied={copied}
             onPress={handleCopyCode}
-            className="flex-row items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 active:bg-white/10"
-          >
-            <View className="flex-row items-center gap-1">
-              <ConnectionIndicator status={connectionStatus} size="sm" />
-              <Text className="font-mono text-sm tracking-wider text-white/80">
-                {roomId}
-              </Text>
-            </View>
-            <View className="h-4 w-px bg-white/20" />
-            <Ionicons
-              name={copied ? 'checkmark' : 'copy-outline'}
-              size={16}
-              color={copied ? colors.success : colors.mutedForeground}
-            />
-          </Pressable>
+          />
 
           <GlassButton size={40} onPress={() => setIsSheetOpen(true)}>
             <Ionicons name="people" size={20} color={colors.foreground} />
@@ -136,8 +124,12 @@ const MultiplayerGameContent = () => {
               role={LEAGUE_ROLES[2]}
               data={gameState.roles[LEAGUE_ROLES[2].name]}
               onFlashPress={() => handleFlashPress(LEAGUE_ROLES[2].name)}
-              onToggleBoots={() => toggleItem(LEAGUE_ROLES[2].name, 'lucidityBoots')}
-              onAdjustTimer={(seconds) => adjustTimer(LEAGUE_ROLES[2].name, seconds)}
+              onToggleBoots={() =>
+                toggleItem(LEAGUE_ROLES[2].name, 'lucidityBoots')
+              }
+              onAdjustTimer={(seconds) =>
+                adjustTimer(LEAGUE_ROLES[2].name, seconds)
+              }
             />
           </View>
 
@@ -156,100 +148,37 @@ const MultiplayerGameContent = () => {
           </View>
         </View>
 
-        <BottomSheet
+        <RoomSettingsSheet
           isOpen={isSheetOpen}
           onClose={() => setIsSheetOpen(false)}
           title={t.game.roomSettings}
-        >
-          {/* Live Game Fetch */}
-          <SettingsSection
-            icon="game-controller"
-            iconColor={colors.success}
-            title={t.game.fetchLiveGame}
-          >
-            <SummonerInput onGameDataFetched={handleGameDataFetched} />
-          </SettingsSection>
-
-          {/* Users Section */}
-          <SettingsSection
-            icon="people"
-            iconColor={colors.gold}
-            title={t.game.connectedUsers.replace('{count}', String(gameState.users.length))}
-          >
-            {gameState.users.length > 0 ? (
-              <View className="flex-row flex-wrap gap-2">
-                {gameState.users.map((user) => (
-                  <View
-                    key={user}
-                    className="flex-row items-center gap-1 rounded-full bg-white/10 py-1.5 pl-2 pr-3"
-                  >
-                    <ConnectionIndicator
-                      status="connected"
-                      size="sm"
-                      animate={false}
-                    />
-                    <Text className="text-sm text-white">{user}</Text>
-                  </View>
-                ))}
-              </View>
-            ) : (
-              <Text className="text-sm text-white/50">
-                {t.game.noUsersConnected}
-              </Text>
-            )}
-          </SettingsSection>
-
-          {/* Room Code Section */}
-          <SettingsSection
-            icon="key"
-            iconColor={colors.goldLight}
-            title={t.game.roomCode}
-          >
-            <SettingsCard
-              leftElement={
-                <ConnectionIndicator status={connectionStatus} size="lg" />
-              }
-              title={roomId || ''}
-              subtitle={isConnected ? t.common.connected : t.common.disconnected}
-              onPress={handleCopyCode}
-              rightElement={
-                <View className="flex-row items-center gap-2 rounded-lg bg-white/10 px-3 py-1.5">
-                  <Ionicons
-                    name={copied ? 'checkmark' : 'copy-outline'}
-                    size={16}
-                    color={copied ? colors.success : colors.foreground}
-                  />
-                  <Text
-                    className={`text-sm ${copied ? 'text-success' : 'text-white'}`}
-                  >
-                    {copied ? t.common.copied : t.common.copy}
-                  </Text>
-                </View>
-              }
-            />
-          </SettingsSection>
-
-          {/* Sound Section */}
-          <SettingsSection
-            icon="musical-notes"
-            iconColor={colors.info}
-            title={t.game.sound}
-            className=""
-          >
-            <SettingsCard
-              icon={audio.volume === 'on' ? 'volume-high' : 'volume-mute'}
-              title={audio.volume === 'on' ? t.game.soundOn : t.game.soundOff}
-              subtitle={t.game.flashNotificationSound}
-              variant={audio.volume === 'on' ? 'gold' : 'muted'}
-              rightElement={
-                <CustomToggle
-                  value={audio.volume === 'on'}
-                  onValueChange={audio.toggleVolume}
-                />
-              }
-            />
-          </SettingsSection>
-        </BottomSheet>
+          roomId={roomId || ''}
+          users={gameState.users}
+          isConnected={isConnected}
+          copied={copied}
+          volume={audio.volume}
+          onCopyCode={handleCopyCode}
+          onGameDataFetched={handleGameDataFetched}
+          onVolumeChange={(value) => {
+            const target = value ? 'on' : 'off'
+            if (audio.volume !== target) audio.toggleVolume()
+          }}
+          fetchLiveGameLabel={t.game.fetchLiveGame}
+          connectedUsersLabel={t.game.connectedUsers.replace(
+            '{count}',
+            String(gameState.users.length)
+          )}
+          noUsersConnectedLabel={t.game.noUsersConnected}
+          roomCodeLabel={t.game.roomCode}
+          connectedLabel={t.common.connected}
+          disconnectedLabel={t.common.disconnected}
+          copyLabel={t.common.copy}
+          copiedLabel={t.common.copied}
+          soundLabel={t.game.sound}
+          soundOnLabel={t.game.soundOn}
+          soundOffLabel={t.game.soundOff}
+          flashNotificationSoundLabel={t.game.flashNotificationSound}
+        />
       </StyledSafeAreaView>
     </BackgroundImage>
   )
@@ -257,10 +186,12 @@ const MultiplayerGameContent = () => {
 
 export default function MultiplayerGameScreen() {
   const { roomId } = useLocalSearchParams<{ roomId: string }>()
-  const username = useUserStore((state) => state.username)
+  const user = useAuthStore((s) => s.user)
+  const localUsername = useUserStore((s) => s.username)
+  const username = user?.name ?? localUsername ?? 'Guest'
 
   return (
-    <GameProvider roomId={roomId} username={username || 'Guest'}>
+    <GameProvider roomId={roomId} username={username}>
       <MultiplayerGameContent />
     </GameProvider>
   )

@@ -22,6 +22,9 @@ const config = {
    * Current patch version
    */
   patchVersion: process.env.EXPO_PUBLIC_PATCH_VERSION || '26.03',
+
+  lanegapWebUrl:
+    process.env.EXPO_PUBLIC_LANEGAP_WEB_URL || 'https://lanegap.loltimeflash.com',
 }
 
 export default config

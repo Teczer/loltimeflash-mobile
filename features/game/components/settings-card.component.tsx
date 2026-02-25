@@ -36,7 +36,7 @@ export const SettingsCard = ({
   const config = VARIANT_CONFIG[variant]
 
   const content = (
-    <View className="min-h-[72px] flex-row items-center justify-between rounded-xl border border-white/10 bg-white/5 p-4">
+    <View className="border-input min-h-[72px] flex-row items-center justify-between rounded-xl border bg-white/5 p-4">
       <View className="flex-row items-center gap-3">
         {leftElement || (
           icon && (
@@ -46,9 +46,11 @@ export const SettingsCard = ({
           )
         )}
         <View>
-          <Text className="font-medium text-white">{title}</Text>
+          <Text className="text-foreground font-sans font-medium">{title}</Text>
           {subtitle && (
-            <Text className="text-xs text-white/50">{subtitle}</Text>
+            <Text className="text-muted-foreground font-sans text-xs">
+              {subtitle}
+            </Text>
           )}
         </View>
       </View>

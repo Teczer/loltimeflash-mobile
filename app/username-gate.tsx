@@ -10,6 +10,7 @@ import { GlassButton } from '@/components/ui'
 import { UsernameForm } from '@/features/settings/components'
 import { colors } from '@/lib/colors'
 import { useUserStore } from '@/stores'
+import { useAuthStore } from '@/stores/auth.store'
 
 export default function UsernameGateScreen() {
   const router = useRouter()
@@ -17,9 +18,11 @@ export default function UsernameGateScreen() {
     redirect: 'create' | 'join'
     roomId?: string
   }>()
-  const username = useUserStore((s) => s.username)
+  const user = useAuthStore((s) => s.user)
+  const localUsername = useUserStore((s) => s.username)
+  const username = user?.name ?? localUsername
 
-  // When username is set, redirect to the intended destination
+  // When username is set (account or local), redirect to the intended destination
   useEffect(() => {
     if (username) {
       if (redirect === 'create') {

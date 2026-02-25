@@ -1,0 +1,6 @@
+export { ProfileAvatarSection } from './profile-avatar-section.component'
+export { ProfileDeleteFormContent } from './profile-delete-form-content.component'
+export { ProfileInfoSections } from './profile-info-sections.component'
+export { ProfilePasswordFormContent } from './profile-password-form-content.component'
+export { ProfilePersonalFormContent } from './profile-personal-form-content.component'
+export { ProfileSectionRow } from './profile-section-row.component'

@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons'
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
@@ -44,7 +44,11 @@ export default function MultiplayerScreen() {
           <View className="flex-row items-center gap-4">
             <View className="bg-muted-foreground h-px w-16" />
             <View className="rounded-full bg-white/10 px-4 py-2">
-              <Ionicons name="cloud" size={20} color={colors.mutedForeground} />
+              <FontAwesome
+                name="users"
+                size={20}
+                color={colors.mutedForeground}
+              />
             </View>
             <View className="bg-muted-foreground h-px w-16" />
           </View>

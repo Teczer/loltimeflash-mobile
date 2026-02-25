@@ -8,6 +8,7 @@ import { Button, TextInput } from '@/components/ui'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { generateLobbyCode } from '@/lib/utils'
+import { useAuthStore } from '@/stores/auth.store'
 import { useUserStore } from '@/stores'
 
 import { type TCreateLobbyFormData } from '@/features/lobby/schemas'
@@ -24,7 +25,9 @@ export const CreateLobbyForm = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
-  const username = useUserStore((s) => s.username)
+  const user = useAuthStore((s) => s.user)
+  const localUsername = useUserStore((s) => s.username)
+  const username = user?.name ?? localUsername
 
   const { control, setValue } = useForm<TCreateLobbyFormData>({
     defaultValues: {

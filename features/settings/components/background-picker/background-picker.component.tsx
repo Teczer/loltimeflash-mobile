@@ -9,7 +9,7 @@ import { BackgroundPickerModal } from '@/features/settings/components/background
 import { BackgroundPreview } from '@/features/settings/components/background-picker/background-preview.component'
 
 export const BackgroundPicker = () => {
-  const { championName, skinIndex, setBackground, reset } = useBackgroundStore()
+  const { championName, skinIndex, setBackground } = useBackgroundStore()
   const { t } = useTranslation()
   const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -22,7 +22,9 @@ export const BackgroundPicker = () => {
 
   return (
     <View className="gap-y-4">
-      <Text className="font-sans-bold text-foreground text-lg">{t.settings.background}</Text>
+      <Text className="font-sans-bold text-foreground text-lg">
+        {t.settings.background}
+      </Text>
 
       <BackgroundPreview
         image={currentImage}
@@ -35,7 +37,6 @@ export const BackgroundPicker = () => {
         championName={championName}
         skinIndex={skinIndex}
         onSelectSkin={setBackground}
-        onReset={reset}
       />
     </View>
   )

@@ -1,46 +1,51 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { ImageSourcePropType } from 'react-native';
+import { ImageSourcePropType } from 'react-native'
+import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
-import { mmkvStorage } from '@/lib/mmkvStorage';
-import { getChampion, DEFAULT_CHAMPION, DEFAULT_SKIN_INDEX } from '@/assets/champions';
+import {
+  DEFAULT_CHAMPION,
+  DEFAULT_SKIN_INDEX,
+  getChampion,
+} from '@/assets/champions'
+import { mmkvStorage } from '@/lib/mmkvStorage'
 
 interface IBackgroundState {
-  championName: string;
-  skinIndex: number;
+  championName: string
+  skinIndex: number
 }
 
 interface IBackgroundActions {
-  setBackground: (championName: string, skinIndex: number) => void;
-  reset: () => void;
+  setBackground: (championName: string, skinIndex: number) => void
 }
 
 const DEFAULT_STATE: IBackgroundState = {
   championName: DEFAULT_CHAMPION,
   skinIndex: DEFAULT_SKIN_INDEX,
-};
+}
 
-export const useBackgroundStore = create<IBackgroundState & IBackgroundActions>()(
+export const useBackgroundStore = create<
+  IBackgroundState & IBackgroundActions
+>()(
   persist(
     (set) => ({
       ...DEFAULT_STATE,
-      setBackground: (championName, skinIndex) => set({ championName, skinIndex }),
-      reset: () => set(DEFAULT_STATE),
+      setBackground: (championName, skinIndex) =>
+        set({ championName, skinIndex }),
     }),
     {
       name: 'background-storage',
       storage: createJSONStorage(() => mmkvStorage),
     }
   )
-);
+)
 
 // Helper hook to get the actual image source
 export const useBackgroundImage = (): ImageSourcePropType | null => {
-  const { championName, skinIndex } = useBackgroundStore();
-  const champion = getChampion(championName);
-  
-  if (!champion) return null;
-  
-  const skin = champion.skins.find((s) => s.index === skinIndex);
-  return skin?.source || champion.skins[0]?.source || null;
-};
+  const { championName, skinIndex } = useBackgroundStore()
+  const champion = getChampion(championName)
+
+  if (!champion) return null
+
+  const skin = champion.skins.find((s) => s.index === skinIndex)
+  return skin?.source || champion.skins[0]?.source || null
+}

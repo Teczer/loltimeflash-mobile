@@ -6,7 +6,7 @@ import { Keyboard, Text, View } from 'react-native'
 
 import { CHAMPIONS, type IChampion } from '@/assets/champions'
 import { BackgroundImage } from '@/components/background-image.component'
-import { StyledSafeAreaView } from '@/components/styled'
+import { AnimatedHeaderScrollView } from '@/components/organisms/animated-header-scrollview'
 import { GlassButton, TextInput } from '@/components/ui'
 import {
   ChampionEmptyResult,
@@ -19,7 +19,6 @@ import { championPlaysLane, type TLane } from '@/features/lanegap/data'
 import { useLaneGapStore } from '@/features/lanegap/stores'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
-import { ScrollView } from 'react-native'
 
 interface ILaneGapFormData {
   search: string
@@ -81,104 +80,105 @@ export default function LaneGapScreen() {
     [router, addRecent]
   )
 
-  const handleOpenSettings = () => {
+  const handleOpenSettings = useCallback(() => {
     router.push('/settings')
-  }
+  }, [router])
 
   const isSearching = searchQuery.trim().length > 0
 
   return (
     <BackgroundImage variant="fast">
-      <StyledSafeAreaView className="flex-1" edges={['top']}>
-        <GlassButton
-          onPress={handleOpenSettings}
-          className="absolute right-4 top-14 z-50"
-        >
-          <Ionicons
-            name="settings-outline"
-            size={22}
-            color={colors.foreground}
-          />
-        </GlassButton>
-        <ScrollView
-          className="flex-1"
-          contentContainerClassName="gap-4 px-4 pb-4"
-          contentInsetAdjustmentBehavior="automatic"
+      <View className="flex-1">
+        <AnimatedHeaderScrollView
+          headerOnly
+          rightComponent={
+            <GlassButton onPress={handleOpenSettings}>
+              <Ionicons
+                name="settings-outline"
+                size={22}
+                color={colors.foreground}
+              />
+            </GlassButton>
+          }
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
-          onScrollBeginDrag={Keyboard.dismiss}
         >
-          <LaneGapHeader championCount={filteredChampions.length} />
+          <View className="gap-4">
+            <LaneGapHeader championCount={filteredChampions.length} />
 
-          <Controller
-            control={control}
-            name="search"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder={t.laneGap.searchPlaceholder}
-                value={value}
-                onChangeText={onChange}
-                onBlur={onBlur}
-                autoCapitalize="none"
-                autoCorrect={false}
-                clearable
-                returnKeyType="search"
-                onSubmitEditing={Keyboard.dismiss}
+            <Controller
+              control={control}
+              name="search"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  placeholder={t.laneGap.searchPlaceholder}
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  clearable
+                  returnKeyType="search"
+                  onSubmitEditing={Keyboard.dismiss}
+                />
+              )}
+            />
+
+            <LaneFilter
+              selectedLane={selectedLane}
+              onSelectLane={(lane) => setValue('lane', lane)}
+            />
+
+            {!isSearching && favoriteChampionsList.length > 0 && (
+              <ChampionSection
+                type="favorites"
+                champions={favoriteChampionsList}
+                onChampionPress={handleChampionPress}
+                horizontal
               />
             )}
-          />
 
-          <LaneFilter
-            selectedLane={selectedLane}
-            onSelectLane={(lane) => setValue('lane', lane)}
-          />
-
-          {!isSearching && favoriteChampionsList.length > 0 && (
-            <ChampionSection
-              type="favorites"
-              champions={favoriteChampionsList}
-              onChampionPress={handleChampionPress}
-              horizontal
-            />
-          )}
-
-          {!isSearching && recentChampionsList.length > 0 && (
-            <ChampionSection
-              type="recent"
-              champions={recentChampionsList}
-              onChampionPress={handleChampionPress}
-              horizontal
-            />
-          )}
-
-          {/* Enemy Champions Section */}
-          <View className="gap-2">
-            <View className="flex-row items-center gap-2">
-              <Ionicons name="locate" size={14} color={colors.danger} />
-              <Text className="font-sans-bold text-foreground/80 text-sm">
-                {isSearching
-                  ? t.laneGap.results.replace('{count}', String(filteredChampions.length))
-                  : t.laneGap.enemyChampions}
-              </Text>
-            </View>
-
-            {filteredChampions.length === 0 ? (
-              <ChampionEmptyResult />
-            ) : (
-              <View className="flex-row flex-wrap justify-start">
-                {filteredChampions.map((champion) => (
-                  <ChampionItem
-                    key={champion.name}
-                    champion={champion}
-                    onPress={() => handleChampionPress(champion)}
-                  />
-                ))}
-              </View>
+            {!isSearching && recentChampionsList.length > 0 && (
+              <ChampionSection
+                type="recent"
+                champions={recentChampionsList}
+                onChampionPress={handleChampionPress}
+                horizontal
+              />
             )}
+
+            {/* Enemy Champions Section */}
+            <View className="gap-2">
+              <View className="flex-row items-center gap-2">
+                <Ionicons name="locate" size={14} color={colors.danger} />
+                <Text className="font-sans-bold text-foreground/80 text-sm">
+                  {isSearching
+                    ? t.laneGap.results.replace(
+                        '{count}',
+                        String(filteredChampions.length)
+                      )
+                    : t.laneGap.enemyChampions}
+                </Text>
+              </View>
+
+              {filteredChampions.length === 0 ? (
+                <ChampionEmptyResult />
+              ) : (
+                <View className="flex-row flex-wrap justify-start">
+                  {filteredChampions.map((champion) => (
+                    <ChampionItem
+                      key={champion.name}
+                      champion={champion}
+                      onPress={() => handleChampionPress(champion)}
+                    />
+                  ))}
+                </View>
+              )}
+            </View>
           </View>
-        </ScrollView>
-      </StyledSafeAreaView>
+        </AnimatedHeaderScrollView>
+      </View>
     </BackgroundImage>
   )
 }

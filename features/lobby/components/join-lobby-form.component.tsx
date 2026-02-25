@@ -8,6 +8,7 @@ import { Button, TextInput } from '@/components/ui'
 import { LOBBY_CODE_LENGTH } from '@/features/game/constants/game.constants'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
+import { useAuthStore } from '@/stores/auth.store'
 import { useUserStore } from '@/stores'
 
 import {
@@ -18,7 +19,9 @@ import {
 export const JoinLobbyForm = () => {
   const router = useRouter()
   const { t } = useTranslation()
-  const username = useUserStore((s) => s.username)
+  const user = useAuthStore((s) => s.user)
+  const localUsername = useUserStore((s) => s.username)
+  const username = user?.name ?? localUsername
 
   const {
     control,

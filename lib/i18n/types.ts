@@ -21,6 +21,7 @@ export interface ITranslations {
     solo: string
     multi: string
     laneGap: string
+    profile: string
   }
   home: {
     welcome: string
@@ -40,6 +41,7 @@ export interface ITranslations {
   settings: {
     title: string
     changeUsername: string
+    changePseudo: string
     yourUsername: string
     enterUsername: string
     minLength: string
@@ -54,6 +56,35 @@ export interface ITranslations {
     languageSubtitle: string
     french: string
     english: string
+    accountTitle: string
+    profileTitle: string
+    personalInfo: string
+    changePassword: string
+    save: string
+    avatar: string
+    modify: string
+    avatarDescription: string
+    avatarHint: string
+    name: string
+    nameDescription: string
+    nameHint: string
+    email: string
+    emailDescription: string
+    emailHint: string
+    verified: string
+    password: string
+    passwordDescription: string
+    currentPassword: string
+    newPassword: string
+    confirmPassword: string
+    passwordHint: string
+    deleteAccount: string
+    deleteAccountDescription: string
+    deleteAccountWarning: string
+    deleteConfirmTitle: string
+    deleteConfirmMessage: string
+    deleteConfirmPlaceholder: string
+    confirmDelete: string
   }
   game: {
     connectingToServer: string
@@ -116,6 +147,82 @@ export interface ITranslations {
     contactSupport: string
     sendEmail: string
     disclaimer: string
+  }
+  auth: {
+    profile: string
+    signIn: string
+    signUp: string
+    logout: string
+    logoutConfirm: string
+    cancel: string
+    email: string
+    password: string
+    confirmPassword: string
+    name: string
+    enterEmail: string
+    enterPassword: string
+    confirmYourPassword: string
+    enterName: string
+    noAccount: string
+    alreadyAccount: string
+    orContinueWith: string
+    google: string
+    discord: string
+    loginSuccess: string
+    registerSuccess: string
+    loginError: string
+    registerError: string
+    passwordMismatch: string
+    invalidEmail: string
+    passwordTooShort: string
+    nameTooShort: string
+    welcomeBack: string
+    member: string
+    editProfile: string
+    deleteAccount: string
+    deleteAccountConfirm: string
+    deleteAccountWarning: string
+    signInToAccess: string
+    signInDescription: string
+    account: string
+    verifyEmail: string
+    otpSentTo: string
+    verifyButton: string
+    didntReceive: string
+    resendCode: string
+    otpIncomplete: string
+    otpInvalid: string
+    otpExpired: string
+    emailNotVerified: string
+    emailAlreadyUsed: string
+    sendOtpError: string
+    resendSuccess: string
+  }
+  notes: {
+    myNotes: string
+    addNote: string
+    editNote: string
+    deleteNote: string
+    deleteNoteConfirm: string
+    notePlaceholder: string
+    noNotes: string
+    signInForNotes: string
+    saved: string
+  }
+  onboarding: {
+    choosePseudo: string
+    pseudoSubtitle: string
+    pseudoPlaceholder: string
+    continue: string
+    skip: string
+    chooseAvatar: string
+    avatarSubtitle: string
+    change: string
+    letsGo: string
+    back: string
+    imageTooLarge: string
+    invalidFormat: string
+    compressing: string
   }
   notFound: {
     oops: string

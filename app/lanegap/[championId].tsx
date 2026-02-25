@@ -11,6 +11,7 @@ import {
   CounterPickCard,
   ItemSpikeItem,
   LevelSpikeItem,
+  PersonalNotes,
   SectionCard,
   TierLegend,
   TipItem,
@@ -173,6 +174,8 @@ export default function ChampionDetailScreen() {
                 ))}
               </View>
             </SectionCard>
+
+            <PersonalNotes championId={championId || ''} />
           </ScrollView>
         )}
       </StyledSafeAreaView>

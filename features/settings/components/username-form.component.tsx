@@ -14,6 +14,7 @@ import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
 import { MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH } from '@/lib/constants'
 import { useUserStore } from '@/stores'
+import { useAuthStore } from '@/stores/auth.store'
 
 import { ValidationRule } from '@/features/settings/components/validation-rule.component'
 import {
@@ -27,6 +28,7 @@ interface IUsernameFormProps {
 
 const UsernameFormComponent = (props: IUsernameFormProps) => {
   const { withHeightAnimation = true } = props
+  const user = useAuthStore((s) => s.user)
   const { username, setUsername } = useUserStore()
   const { t } = useTranslation()
   const contentHeight = useSharedValue(0)
@@ -34,9 +36,7 @@ const UsernameFormComponent = (props: IUsernameFormProps) => {
 
   const { control, handleSubmit, reset } = useForm<TUsernameFormData>({
     resolver: zodResolver(usernameSchema),
-    defaultValues: {
-      username: '',
-    },
+    defaultValues: { username: '' },
   })
 
   const inputValue = useWatch({ control, name: 'username' })
@@ -71,8 +71,14 @@ const UsernameFormComponent = (props: IUsernameFormProps) => {
     [contentHeight]
   )
 
-  const minLengthMessage = t.settings.minLength.replace('{min}', String(MIN_USERNAME_LENGTH))
-  const maxLengthMessage = t.settings.maxLength.replace('{max}', String(MAX_USERNAME_LENGTH))
+  const minLengthMessage = t.settings.minLength.replace(
+    '{min}',
+    String(MIN_USERNAME_LENGTH)
+  )
+  const maxLengthMessage = t.settings.maxLength.replace(
+    '{max}',
+    String(MAX_USERNAME_LENGTH)
+  )
 
   const validationRulesContent = (
     <View className="gap-1">
@@ -86,6 +92,10 @@ const UsernameFormComponent = (props: IUsernameFormProps) => {
       />
     </View>
   )
+
+  if (user) {
+    return null
+  }
 
   return (
     <View className="items-center gap-y-4">
@@ -133,10 +143,8 @@ const UsernameFormComponent = (props: IUsernameFormProps) => {
         />
       </View>
 
-      {/* Validation rules */}
       {withHeightAnimation ? (
         <View>
-          {/* Invisible layer for height measurement */}
           <View
             style={{ position: 'absolute', opacity: 0 }}
             onLayout={handleContentLayout}
@@ -144,8 +152,6 @@ const UsernameFormComponent = (props: IUsernameFormProps) => {
           >
             {validationRulesContent}
           </View>
-
-          {/* Animated with height + opacity */}
           <Animated.View style={heightAnimatedStyle}>
             {validationRulesContent}
           </Animated.View>
