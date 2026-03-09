@@ -22,6 +22,7 @@ export interface IAnimatedHeaderProps {
   headerOnly?: boolean
   showsVerticalScrollIndicator?: boolean
   contentContainerStyle?: object
+  extraBottomPadding?: number
   keyboardShouldPersistTaps?: 'always' | 'never' | 'handled'
   keyboardDismissMode?: 'none' | 'on-drag' | 'interactive'
   headerBackgroundGradient?: IGradientConfig

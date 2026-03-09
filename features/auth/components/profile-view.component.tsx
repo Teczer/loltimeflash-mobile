@@ -18,10 +18,11 @@ type TSheetType = 'personal' | 'password' | null
 interface IProfileViewProps {
   user: IUser
   rightComponent?: React.ReactNode
+  extraBottomPadding?: number
 }
 
 const ProfileViewComponent = (props: IProfileViewProps) => {
-  const { user, rightComponent } = props
+  const { user, rightComponent, extraBottomPadding = 0 } = props
   const { t } = useTranslation()
   const logout = useAuthStore((s) => s.logout)
   const [openSheet, setOpenSheet] = useState<TSheetType>(null)
@@ -62,6 +63,7 @@ const ProfileViewComponent = (props: IProfileViewProps) => {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        extraBottomPadding={extraBottomPadding}
       >
         <View className="gap-2">
           <ProfileAvatarSection user={user} />

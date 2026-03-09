@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons'
+import { isLiquidGlassAvailable } from 'expo-glass-effect'
 import { useRouter } from 'expo-router'
 import { useCallback } from 'react'
 import { View } from 'react-native'
@@ -8,6 +9,11 @@ import { GlassButton } from '@/components/ui'
 import { ProfileAuthView, ProfileView } from '@/features/auth/components'
 import { colors } from '@/lib/colors'
 import { useAuthStore } from '@/stores/auth.store'
+
+const IOS_NATIVE_TAB_BAR_HEIGHT = 49
+const extraBottomPadding = isLiquidGlassAvailable()
+  ? IOS_NATIVE_TAB_BAR_HEIGHT
+  : 0
 
 export default function ProfileScreen() {
   const router = useRouter()
@@ -38,6 +44,7 @@ export default function ProfileScreen() {
         <View className="flex-1">
           <ProfileView
             user={user}
+            extraBottomPadding={extraBottomPadding}
             rightComponent={
               <GlassButton onPress={handleOpenSettings}>
                 <Ionicons
@@ -57,6 +64,7 @@ export default function ProfileScreen() {
     <ProfileAuthView
       onOpenSettings={handleOpenSettings}
       onNeedOTP={handleNeedOTP}
+      extraBottomPadding={extraBottomPadding}
     />
   )
 }

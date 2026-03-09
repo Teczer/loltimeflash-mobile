@@ -38,6 +38,7 @@ export const AnimatedHeaderScrollView = memo<IAnimatedHeaderProps>(
     headerOnly = false,
     showsVerticalScrollIndicator = false,
     contentContainerStyle,
+    extraBottomPadding = 0,
     keyboardShouldPersistTaps,
     keyboardDismissMode,
     headerBackgroundGradient = {
@@ -290,7 +291,7 @@ export const AnimatedHeaderScrollView = memo<IAnimatedHeaderProps>(
               paddingTop: headerOnly
                 ? insets.top + HEADER_HEIGHT
                 : insets.top + spacing.md,
-              paddingBottom: insets.bottom + spacing.xl,
+              paddingBottom: insets.bottom + spacing.xl + extraBottomPadding,
             },
             contentContainerStyle,
           ]}

@@ -11,7 +11,7 @@ import {
 import LanegapLogo from '@/assets/images/lanegap.svg'
 import {
   ProfileTabIcon,
-  ProfileTabIconNative,
+  useProfileNativeTabIcon,
 } from '@/components/profile-tab-icon.component'
 import { useTranslation } from '@/hooks/use-translation.hook'
 import { colors } from '@/lib/colors'
@@ -29,6 +29,7 @@ const TAB_BAR_STYLE = {
 
 export default function TabLayout() {
   const { t } = useTranslation()
+  const profileNativeTabIcon = useProfileNativeTabIcon()
 
   if (!isGlassEnabled) {
     return (
@@ -45,7 +46,11 @@ export default function TabLayout() {
           options={{
             title: t.tabs[TABS_CONFIG.INDEX.titleKey],
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="user" size={24} color={color} />
+              <FontAwesome
+                name={TABS_CONFIG.INDEX.icons.fa}
+                size={24}
+                color={color}
+              />
             ),
           }}
         />
@@ -54,7 +59,11 @@ export default function TabLayout() {
           options={{
             title: t.tabs[TABS_CONFIG.MULTIPLAYER.titleKey],
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="users" size={24} color={color} />
+              <FontAwesome
+                name={TABS_CONFIG.MULTIPLAYER.icons.fa}
+                size={24}
+                color={color}
+              />
             ),
           }}
         />
@@ -84,19 +93,33 @@ export default function TabLayout() {
     <NativeTabs tintColor="white">
       <NativeTabs.Trigger name={TABS_CONFIG.INDEX.name}>
         <Label>{t.tabs[TABS_CONFIG.INDEX.titleKey]}</Label>
-        <Icon src={<VectorIcon family={FontAwesome} name="user" />} />
+        <Icon
+          src={
+            <VectorIcon
+              family={FontAwesome}
+              name={TABS_CONFIG.INDEX.icons.fa}
+            />
+          }
+        />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name={TABS_CONFIG.MULTIPLAYER.name}>
         <Label>{t.tabs[TABS_CONFIG.MULTIPLAYER.titleKey]}</Label>
-        <Icon src={<VectorIcon family={FontAwesome} name="users" />} />
+        <Icon
+          src={
+            <VectorIcon
+              family={FontAwesome}
+              name={TABS_CONFIG.MULTIPLAYER.icons.fa}
+            />
+          }
+        />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name={TABS_CONFIG.LANEGAP.name}>
         <Label>{t.tabs[TABS_CONFIG.LANEGAP.titleKey]}</Label>
-        <Icon src={<VectorIcon family={FontAwesome} name="book" />} />
+        <Icon src={<LanegapLogo width={24} height={24} />} />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name={TABS_CONFIG.PROFILE.name}>
         <Label>{t.tabs[TABS_CONFIG.PROFILE.titleKey]}</Label>
-        <ProfileTabIconNative />
+        {profileNativeTabIcon}
       </NativeTabs.Trigger>
     </NativeTabs>
   )

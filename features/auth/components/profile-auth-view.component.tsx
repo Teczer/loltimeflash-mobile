@@ -22,13 +22,15 @@ interface IProfileAuthViewProps {
     password: string,
     isNewRegistration: boolean
   ) => void
+  extraBottomPadding?: number
 }
 
 export const ProfileAuthView = memo((props: IProfileAuthViewProps) => {
-  const { onOpenSettings, onNeedOTP } = props
+  const { onOpenSettings, onNeedOTP, extraBottomPadding = 0 } = props
   const { t } = useTranslation()
   const insets = useSafeAreaInsets()
   const [authMode, setAuthMode] = useState<TAuthMode>('login')
+  const verticalPadding = insets.top + 56
 
   const handleSwitchToRegister = useCallback(() => {
     setAuthMode('register')
@@ -58,8 +60,8 @@ export const ProfileAuthView = memo((props: IProfileAuthViewProps) => {
           contentContainerStyle={{
             flexGrow: 1,
             paddingHorizontal: 24,
-            paddingTop: insets.top + 56,
-            paddingBottom: insets.bottom + 24,
+            paddingTop: verticalPadding,
+            paddingBottom: verticalPadding + extraBottomPadding,
             justifyContent: 'center',
           }}
           keyboardShouldPersistTaps="handled"
